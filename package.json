@@ -6,7 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:types": "bun run scripts/pull-types.ts",
+    "db:migrate": "supabase db push",
+    "db:reset": "supabase db reset",
+    "grant:owner": "bun run scripts/grant-owner.ts",
+    "grant:dev": "bun run scripts/grant-dev.ts"
   },
   "dependencies": {
     "next": "16.2.9",
@@ -14,12 +24,11 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
