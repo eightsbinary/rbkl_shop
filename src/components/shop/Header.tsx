@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
+import { CartIcon } from '@/components/cart/CartIcon';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function Header() {
@@ -14,13 +15,14 @@ export function Header() {
         >
           rainbykello
         </Link>
-        <nav className="flex items-center gap-8 text-sm text-ink-soft">
+        <nav className="flex items-center gap-6 text-sm text-ink-soft">
           <Link
             href={`/${locale}/shop`}
             className="hover:text-ink transition-colors duration-150 ease-out-soft"
           >
             {t('shop')}
           </Link>
+          <CartIcon label={t('cart')} />
           <LocaleSwitcher />
         </nav>
       </div>

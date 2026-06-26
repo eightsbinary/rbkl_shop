@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { Label } from '@/components/ui/Label';
 import type { Database } from '@/db/types.gen';
 
@@ -59,9 +59,11 @@ export function VariantSelector({
         <p className="font-serif text-2xl text-ink">฿{price.toLocaleString()}</p>
       </div>
 
-      <Button size="lg" disabled={!ready || !inStock} className="w-full">
-        {!ready ? t('selectSize') : !inStock ? t('outOfStock') : t('addToCart')}
-      </Button>
+      <AddToCartButton
+        variantId={matched?.id ?? null}
+        ready={ready}
+        outOfStock={ready && !inStock}
+      />
     </div>
   );
 }

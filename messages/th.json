@@ -34,5 +34,58 @@
   },
   "locale": {
     "switchToOther": "EN"
+  },
+  "cart": {
+    "title": "ตะกร้า",
+    "empty": "ตะกร้าว่างเปล่า",
+    "subtotal": "ราคารวมก่อนค่าจัดส่ง",
+    "checkout": "ชำระเงิน"
+  },
+  "checkout": {
+    "title": "ชำระเงิน",
+    "contact": "ข้อมูลติดต่อ",
+    "email": "อีเมล",
+    "shipping": "ที่อยู่จัดส่ง",
+    "fullName": "ชื่อ-นามสกุล",
+    "line1": "ที่อยู่",
+    "line2": "ที่อยู่ (เพิ่มเติม)",
+    "city": "เมือง",
+    "postalCode": "รหัสไปรษณีย์",
+    "country": "ประเทศ",
+    "phone": "เบอร์โทรศัพท์",
+    "summary": "สรุปคำสั่งซื้อ",
+    "subtotal": "ยอดรวม",
+    "discount": "ส่วนลด",
+    "shippingCost": "ค่าจัดส่ง",
+    "total": "รวมทั้งสิ้น",
+    "placeOrder": "ชำระเงิน",
+    "discountCode": "โค้ดส่วนลด (ถ้ามี)"
+  },
+  "order": {
+    "title": "คำสั่งซื้อ",
+    "number": "หมายเลขคำสั่งซื้อ",
+    "placed": "สั่งซื้อแล้ว",
+    "paymentReceived": "ได้รับเงินแล้ว",
+    "preparing": "กำลังจัดเตรียม",
+    "shipped": "จัดส่งแล้ว",
+    "delivered": "ได้รับสินค้า",
+    "trackingLabel": "หมายเลขติดตาม",
+    "items": "รายการสินค้า",
+    "receiptLink": "ใบเสร็จ",
+    "thankYou": "ขอบคุณที่อุดหนุนค่ะ ✿"
+  },
+  "receipt": {
+    "title": "ใบเสร็จรับเงิน",
+    "shopName": "rainbykello",
+    "orderNumber": "เลขที่",
+    "date": "วันที่",
+    "shipTo": "จัดส่งไปที่",
+    "subtotal": "ยอดรวม",
+    "discount": "ส่วนลด",
+    "shipping": "ค่าจัดส่ง",
+    "total": "รวมทั้งสิ้น",
+    "paymentMethod": "วิธีการชำระเงิน",
+    "thankYou": "ขอบคุณที่อุดหนุนค่ะ",
+    "print": "พิมพ์"
   }
 }

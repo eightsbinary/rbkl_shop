@@ -34,5 +34,58 @@
   },
   "locale": {
     "switchToOther": "TH"
+  },
+  "cart": {
+    "title": "cart",
+    "empty": "your cart is empty",
+    "subtotal": "subtotal",
+    "checkout": "checkout"
+  },
+  "checkout": {
+    "title": "checkout",
+    "contact": "contact",
+    "email": "email",
+    "shipping": "shipping address",
+    "fullName": "full name",
+    "line1": "address",
+    "line2": "address (line 2)",
+    "city": "city",
+    "postalCode": "postal code",
+    "country": "country",
+    "phone": "phone",
+    "summary": "order summary",
+    "subtotal": "subtotal",
+    "discount": "discount",
+    "shippingCost": "shipping",
+    "total": "total",
+    "placeOrder": "place order",
+    "discountCode": "discount code (optional)"
+  },
+  "order": {
+    "title": "order",
+    "number": "order number",
+    "placed": "order placed",
+    "paymentReceived": "payment received",
+    "preparing": "preparing your order",
+    "shipped": "shipped",
+    "delivered": "delivered",
+    "trackingLabel": "tracking",
+    "items": "items",
+    "receiptLink": "receipt",
+    "thankYou": "thank you for supporting ✿"
+  },
+  "receipt": {
+    "title": "receipt",
+    "shopName": "rainbykello",
+    "orderNumber": "no.",
+    "date": "date",
+    "shipTo": "ship to",
+    "subtotal": "subtotal",
+    "discount": "discount",
+    "shipping": "shipping",
+    "total": "total",
+    "paymentMethod": "payment method",
+    "thankYou": "thank you for supporting",
+    "print": "print"
   }
 }
