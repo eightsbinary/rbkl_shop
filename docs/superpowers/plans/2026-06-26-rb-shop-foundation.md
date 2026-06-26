@@ -339,73 +339,60 @@ git commit -m "test: configure Vitest with happy-dom + smoke test"
 
 ---
 
-## Task 4: Configure Tailwind with Soft Studio tokens
+## Task 4: Configure Tailwind v4 with Soft Studio tokens
+
+**Note:** `bun create next-app` ships **Tailwind v4** (not v3). v4 moves theme tokens into CSS via `@theme` and uses `@import "tailwindcss"` instead of `@tailwind` directives. There is **no `tailwind.config.ts`** by default — config lives in CSS.
 
 **Files:**
-- Modify: `tailwind.config.ts`, `src/app/globals.css`, `src/app/layout.tsx`
+- Modify: `src/app/globals.css`, `src/app/layout.tsx`
 - Create: `src/lib/brand.ts`
+- Delete (if scaffold created it): `tailwind.config.ts` is not used in v4; if scaffold created it, leave alone — v4 ignores it unless you set up a config file explicitly.
 
-- [ ] **Step 1: Replace `tailwind.config.ts`**
+- [ ] **Step 1: Rewrite `src/app/globals.css` with v4 syntax**
 
-```ts
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
-  content: ['./src/**/*.{ts,tsx,mdx}'],
-  theme: {
-    container: { center: true, padding: '1.5rem', screens: { '2xl': '1280px' } },
-    extend: {
-      colors: {
-        // Soft Studio palette (LOCKED — see spec §7 Option A)
-        ink: { DEFAULT: '#1F1A17', soft: '#3A3330' },
-        paper: { DEFAULT: '#FAF7F2', warm: '#F2EDE5' },
-        rose: { DEFAULT: '#C9A0A0', deep: '#A87E7E', soft: '#E6D0D0' },
-        // Semantic
-        muted: '#7A7370',
-        line: '#E5DED3',
-        success: '#5A8A6C',
-        warn: '#C28A3D',
-        error: '#B7484A',
-      },
-      fontFamily: {
-        serif: ['var(--font-fraunces)', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      },
-      borderRadius: { xs: '2px', sm: '4px', md: '8px', lg: '12px' },
-      transitionTimingFunction: { 'out-soft': 'cubic-bezier(0.16, 1, 0.3, 1)' },
-      transitionDuration: { 150: '150ms', 220: '220ms', 260: '260ms' },
-    },
-  },
-  plugins: [],
-};
-
-export default config;
-```
-
-- [ ] **Step 2: Update `src/app/globals.css`**
-
-Replace contents:
+Replace contents with:
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Soft Studio palette — LOCKED (spec §7 Option A) */
+  --color-ink: #1F1A17;
+  --color-ink-soft: #3A3330;
+  --color-paper: #FAF7F2;
+  --color-paper-warm: #F2EDE5;
+  --color-rose: #C9A0A0;
+  --color-rose-deep: #A87E7E;
+  --color-rose-soft: #E6D0D0;
+  --color-muted: #7A7370;
+  --color-line: #E5DED3;
+  --color-success: #5A8A6C;
+  --color-warn: #C28A3D;
+  --color-error: #B7484A;
+
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 @layer base {
-  :root {
-    color-scheme: light;
-  }
+  :root { color-scheme: light; }
   html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-  body {
-    @apply bg-paper text-ink font-sans;
-  }
-  ::selection { background: theme('colors.rose.soft'); color: theme('colors.ink.DEFAULT'); }
+  body { background-color: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
+  ::selection { background: var(--color-rose-soft); color: var(--color-ink); }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 }
 ```
 
-- [ ] **Step 3: Wire fonts in `src/app/layout.tsx`**
+- [ ] **Step 2: Wire fonts in `src/app/layout.tsx`**
 
 Replace contents:
 ```tsx
@@ -438,7 +425,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- [ ] **Step 4: Replace `src/app/page.tsx` with a Soft Studio placeholder**
+- [ ] **Step 3: Replace `src/app/page.tsx` with a Soft Studio placeholder**
 
 ```tsx
 export default function Page() {
@@ -454,7 +441,7 @@ export default function Page() {
 }
 ```
 
-- [ ] **Step 5: Create `src/lib/brand.ts`**
+- [ ] **Step 4: Create `src/lib/brand.ts`**
 
 ```ts
 // Brand tokens reused by emails, receipts, social images.
@@ -484,18 +471,18 @@ export const BRAND = {
 export type Brand = typeof BRAND;
 ```
 
-- [ ] **Step 6: Verify build and visual smoke check**
+- [ ] **Step 5: Verify build and visual smoke check**
 
 Run: `bun run build`
 Expected: build succeeds with no type errors.
 
 Run: `bun run dev` → open http://localhost:3000 → confirm: warm off-white background, serif heading, dusty-rose-friendly palette. Kill with `Ctrl+C`.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 git add .
-git commit -m "feat(ui): Tailwind tokens + Fraunces/Inter fonts (Soft Studio)"
+git commit -m "feat(ui): Tailwind v4 tokens + Fraunces/Inter fonts (Soft Studio)"
 ```
 
 ---

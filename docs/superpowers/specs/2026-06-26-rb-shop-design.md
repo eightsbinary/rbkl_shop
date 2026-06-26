@@ -38,7 +38,7 @@ A clean, minimal, premium ecommerce site that lets one creator (rainbykello) sel
 
 | Layer | Choice | Why |
 |---|---|---|
-| Framework | **Next.js 15 (App Router) + TypeScript strict** | Server Actions for CSRF-safe forms; middleware for auth gating; Vercel-native; mature ecosystem |
+| Framework | **Next.js 16 (App Router) + TypeScript strict** | Server Actions for CSRF-safe forms; middleware for auth gating; Vercel-native; mature ecosystem. (Originally specced as 15; bumped to 16 during Plan 1 Task 1 since `bun create next-app` ships 16 by default — APIs we depend on are unchanged.) |
 | UI | **Tailwind CSS + shadcn/ui primitives** | Composable, no runtime CSS-in-JS, accessible primitives, easy theming |
 | Database | **Supabase Postgres (free tier)** | 500 MB DB; Row-Level Security at DB layer; one-product convenience for DB+Auth+Storage |
 | Auth | **Supabase Auth (magic link)** — *to confirm in §8* | Passwordless = less to leak; same provider as DB so RLS sees `auth.uid()` natively |
