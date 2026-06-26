@@ -12,11 +12,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:types": "bun run scripts/pull-types.ts",
+    "db:types": "$npm_execpath run scripts/pull-types.ts",
     "db:migrate": "supabase db push",
     "db:reset": "supabase db reset",
-    "grant:owner": "bun run scripts/grant-owner.ts",
-    "grant:dev": "bun run scripts/grant-dev.ts"
+    "grant:owner": "$npm_execpath run scripts/grant-owner.ts",
+    "grant:dev": "$npm_execpath run scripts/grant-dev.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

@@ -12,6 +12,106 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      product_images: {
+        Row: {
+          alt: Json
+          created_at: string
+          id: string
+          product_id: string
+          sort: number
+          storage_path: string
+          url_1600: string
+          url_400: string
+          url_800: string
+        }
+        Insert: {
+          alt?: Json
+          created_at?: string
+          id?: string
+          product_id: string
+          sort?: number
+          storage_path: string
+          url_1600: string
+          url_400: string
+          url_800: string
+        }
+        Update: {
+          alt?: Json
+          created_at?: string
+          id?: string
+          product_id?: string
+          sort?: number
+          storage_path?: string
+          url_1600?: string
+          url_400?: string
+          url_800?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          base_price_thb: number
+          category: string | null
+          created_at: string
+          description: Json
+          hero_image_id: string | null
+          id: string
+          is_featured: boolean
+          name: Json
+          slug: string
+          status: Database["public"]["Enums"]["product_status"]
+          updated_at: string
+          version: number
+          weight_grams: number
+        }
+        Insert: {
+          base_price_thb: number
+          category?: string | null
+          created_at?: string
+          description?: Json
+          hero_image_id?: string | null
+          id?: string
+          is_featured?: boolean
+          name: Json
+          slug: string
+          status?: Database["public"]["Enums"]["product_status"]
+          updated_at?: string
+          version?: number
+          weight_grams?: number
+        }
+        Update: {
+          base_price_thb?: number
+          category?: string | null
+          created_at?: string
+          description?: Json
+          hero_image_id?: string | null
+          id?: string
+          is_featured?: boolean
+          name?: Json
+          slug?: string
+          status?: Database["public"]["Enums"]["product_status"]
+          updated_at?: string
+          version?: number
+          weight_grams?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_hero_image_fk"
+            columns: ["hero_image_id"]
+            isOneToOne: false
+            referencedRelation: "product_images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -39,6 +139,88 @@ export type Database = {
         }
         Relationships: []
       }
+      variant_options: {
+        Row: {
+          id: string
+          name: string
+          product_id: string
+          sort: number
+          values: string[]
+        }
+        Insert: {
+          id?: string
+          name: string
+          product_id: string
+          sort?: number
+          values: string[]
+        }
+        Update: {
+          id?: string
+          name?: string
+          product_id?: string
+          sort?: number
+          values?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "variant_options_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      variants: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          option_values: Json
+          price_thb: number | null
+          product_id: string
+          sku: string
+          stock_available: number
+          stock_reserved: number
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          option_values: Json
+          price_thb?: number | null
+          product_id: string
+          sku: string
+          stock_available?: number
+          stock_reserved?: number
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          option_values?: Json
+          price_thb?: number | null
+          product_id?: string
+          sku?: string
+          stock_available?: number
+          stock_reserved?: number
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -52,6 +234,7 @@ export type Database = {
       is_owner_or_dev: { Args: never; Returns: boolean }
     }
     Enums: {
+      product_status: "draft" | "active" | "archived"
       user_role: "customer" | "owner" | "dev"
     }
     CompositeTypes: {
@@ -180,6 +363,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      product_status: ["draft", "active", "archived"],
       user_role: ["customer", "owner", "dev"],
     },
   },
