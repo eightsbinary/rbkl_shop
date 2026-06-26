@@ -5,8 +5,7 @@ export interface SlugifyOptions {
 export function slugify(input: string, opts: SlugifyOptions = {}): string {
   const slug = input
     .normalize('NFKD')
-    // biome-ignore lint/suspicious/noMisleadingCharacterClass: stripping diacritics from NFKD output
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[̀-ͯ]/g, '') // strip combining diacritics
     .toLowerCase()
     .replace(/['’`"]/g, '')
     .replace(/[^a-z0-9-]+/g, '-')
