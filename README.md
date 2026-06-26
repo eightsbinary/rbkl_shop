@@ -2,7 +2,7 @@
 
 Single-creator ecommerce store for [rainbykello](https://www.twitch.tv/rainbykello).
 
-**Status:** Foundation (Plan 1 of 6). No public UI yet.
+**Status:** Plan 3 of 6 complete — Foundation + Catalog + Checkout (mock payment) all green.
 **Spec:** [docs/superpowers/specs/2026-06-26-rb-shop-design.md](docs/superpowers/specs/2026-06-26-rb-shop-design.md)
 **Plans:** [docs/superpowers/plans/](docs/superpowers/plans/)
 
@@ -81,6 +81,26 @@ scripts/     One-shot CLI scripts (run locally with `bun run scripts/*.ts`)
 | `dev` | Everything `owner` does + role management, audit, diagnostics |
 
 Only a `dev` can grant or revoke roles. The first `dev` is bootstrapped via `scripts/grant-dev.ts` (DB credentials required) — there is no in-app way to claim it.
+
+## Demo flow (end-to-end with the mock payment provider)
+
+1. `bun run dev` and open http://localhost:3000 (redirects to `/th`).
+2. Visit `/admin` → log in (magic link arrives in [Mailpit](http://127.0.0.1:54324)).
+3. Create a product → set Active + Featured → upload an image → Save.
+4. Visit `/th/shop` → pick a product → choose size/color → "หยิบใส่ตะกร้า".
+5. Cart drawer slides in → click "ชำระเงิน".
+6. Fill name / email / address → Submit.
+7. Mock simulator page → click "Simulate successful payment".
+8. Land on `/th/order/[id]?t=…` → shipping timeline shows "Payment received".
+9. Click "ใบเสร็จ" → printable receipt → browser print to PDF.
+10. Back in `/admin/products` → variant stock is decremented.
+
+## Build runtime split
+
+`bun run build` runs `node ./node_modules/next/dist/bin/next build` because Bun's
+runtime hits a hooks-dispatcher null on Next.js 16's `/_global-error`
+prerender. Bun handles install / dev / scripts / tests / lint / typecheck;
+Node handles only `next build` (which matches Vercel's production runtime).
 
 ## Branch
 
