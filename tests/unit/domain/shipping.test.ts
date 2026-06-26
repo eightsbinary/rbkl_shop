@@ -42,9 +42,11 @@ describe('computeShippingCost', () => {
   });
 
   it('ignores inactive zones', () => {
-    const thInactive = [{ ...zones[0]!, isActive: false }, zones[1]!, zones[2]!];
+    const [first, second, third] = zones;
+    if (!first || !second || !third) throw new Error('zones must have 3 entries');
+    const thInactive = [{ ...first, isActive: false }, second, third];
     expect(computeShippingCost('TH', thInactive)).toEqual({
-      zone: zones[2],
+      zone: third,
       cost: money(650),
     });
   });
