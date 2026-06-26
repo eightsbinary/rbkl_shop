@@ -12,6 +12,233 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      discount_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          ends_at: string
+          id: string
+          kind: string
+          max_uses: number | null
+          min_subtotal_thb: number
+          starts_at: string
+          updated_at: string
+          uses: number
+          value: number
+          version: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          ends_at: string
+          id?: string
+          kind: string
+          max_uses?: number | null
+          min_subtotal_thb?: number
+          starts_at: string
+          updated_at?: string
+          uses?: number
+          value: number
+          version?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          ends_at?: string
+          id?: string
+          kind?: string
+          max_uses?: number | null
+          min_subtotal_thb?: number
+          starts_at?: string
+          updated_at?: string
+          uses?: number
+          value?: number
+          version?: number
+        }
+        Relationships: []
+      }
+      order_events: {
+        Row: {
+          actor: string
+          created_at: string
+          id: string
+          order_id: string
+          payload: Json
+          type: string
+        }
+        Insert: {
+          actor: string
+          created_at?: string
+          id?: string
+          order_id: string
+          payload?: Json
+          type: string
+        }
+        Update: {
+          actor?: string
+          created_at?: string
+          id?: string
+          order_id?: string
+          payload?: Json
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          line_total_thb: number
+          order_id: string
+          product_snapshot: Json
+          qty: number
+          unit_price_thb: number
+          variant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          line_total_thb: number
+          order_id: string
+          product_snapshot: Json
+          qty: number
+          unit_price_thb: number
+          variant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          line_total_thb?: number
+          order_id?: string
+          product_snapshot?: Json
+          qty?: number
+          unit_price_thb?: number
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          customer_email: string
+          customer_id: string | null
+          delivered_at: string | null
+          discount_thb: number
+          estimated_delivery_date: string | null
+          id: string
+          last_event_id: string | null
+          locale: string
+          notes_internal: string | null
+          notes_to_buyer: string | null
+          number: string
+          paid_at: string | null
+          payment_charge_id: string | null
+          payment_method: string | null
+          payment_provider: string
+          ship_status: Database["public"]["Enums"]["ship_status"]
+          shipped_at: string | null
+          shipping_address: Json
+          shipping_thb: number
+          status: Database["public"]["Enums"]["order_status"]
+          subtotal_thb: number
+          total_thb: number
+          tracking_carrier: string | null
+          tracking_number: string | null
+          tracking_url: string | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          customer_email: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          discount_thb?: number
+          estimated_delivery_date?: string | null
+          id?: string
+          last_event_id?: string | null
+          locale: string
+          notes_internal?: string | null
+          notes_to_buyer?: string | null
+          number: string
+          paid_at?: string | null
+          payment_charge_id?: string | null
+          payment_method?: string | null
+          payment_provider: string
+          ship_status?: Database["public"]["Enums"]["ship_status"]
+          shipped_at?: string | null
+          shipping_address: Json
+          shipping_thb?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal_thb: number
+          total_thb: number
+          tracking_carrier?: string | null
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          customer_email?: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          discount_thb?: number
+          estimated_delivery_date?: string | null
+          id?: string
+          last_event_id?: string | null
+          locale?: string
+          notes_internal?: string | null
+          notes_to_buyer?: string | null
+          number?: string
+          paid_at?: string | null
+          payment_charge_id?: string | null
+          payment_method?: string | null
+          payment_provider?: string
+          ship_status?: Database["public"]["Enums"]["ship_status"]
+          shipped_at?: string | null
+          shipping_address?: Json
+          shipping_thb?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          subtotal_thb?: number
+          total_thb?: number
+          tracking_carrier?: string | null
+          tracking_number?: string | null
+          tracking_url?: string | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           alt: Json
@@ -139,6 +366,45 @@ export type Database = {
         }
         Relationships: []
       }
+      shipping_zones: {
+        Row: {
+          code: string
+          countries: string[]
+          created_at: string
+          flat_rate_thb: number
+          id: string
+          is_active: boolean
+          name: Json
+          sort: number
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          code: string
+          countries: string[]
+          created_at?: string
+          flat_rate_thb: number
+          id?: string
+          is_active?: boolean
+          name: Json
+          sort?: number
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          code?: string
+          countries?: string[]
+          created_at?: string
+          flat_rate_thb?: number
+          id?: string
+          is_active?: boolean
+          name?: Json
+          sort?: number
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
       variant_options: {
         Row: {
           id: string
@@ -234,7 +500,14 @@ export type Database = {
       is_owner_or_dev: { Args: never; Returns: boolean }
     }
     Enums: {
+      order_status:
+        | "awaiting_payment"
+        | "paid"
+        | "failed"
+        | "cancelled"
+        | "refunded"
       product_status: "draft" | "active" | "archived"
+      ship_status: "pending" | "preparing" | "shipped" | "delivered"
       user_role: "customer" | "owner" | "dev"
     }
     CompositeTypes: {
@@ -363,7 +636,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      order_status: [
+        "awaiting_payment",
+        "paid",
+        "failed",
+        "cancelled",
+        "refunded",
+      ],
       product_status: ["draft", "active", "archived"],
+      ship_status: ["pending", "preparing", "shipped", "delivered"],
       user_role: ["customer", "owner", "dev"],
     },
   },
