@@ -11,17 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+
+      # Node is required for `next build` — Bun's runtime trips Next.js 16's
+      # prerender pipeline with a React hooks-dispatcher null error. Vercel
+      # itself uses Node for builds, so this matches production.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install
         run: bun install --frozen-lockfile
+
       - name: Lint
         run: bun run lint
+
       - name: Type check
         run: bun run typecheck
+
       - name: Test
         run: bun run test
+
       - name: Build
         env:
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
