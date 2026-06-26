@@ -2,7 +2,7 @@
 
 **Project:** `rb_shop` — single-creator ecommerce store for the Thai streamer/creator **rainbykello**
 **Author:** Design session, 2026-06-26
-**Status:** Draft — awaiting user review
+**Status:** Approved — ready for implementation plan (round 3 — D1 locked: Soft Studio; D8 deferred)
 **Branch:** `develop`
 
 ---
@@ -546,9 +546,9 @@ Buyer can also see: a *notes_to_buyer* field if the owner left a message ("packe
 
 ## 7. Aesthetic direction
 
-You said you'll pick when reviewing this doc. All three share the same minimal/premium intent — they differ in mood. Each gets the same 3-column product grid you specified.
+**LOCKED: Option A — Soft Studio.** The other two are kept here for reference only; all UI work proceeds against A.
 
-### Option A — Soft Studio (warm, intimate, boutique)
+### Option A — Soft Studio (warm, intimate, boutique) ✅ CHOSEN
 - **Background:** warm off-white `#FAF7F2`
 - **Type:** Fraunces (display serif) + Inter (body)
 - **Accent:** dusty rose `#C9A0A0`
@@ -631,14 +631,14 @@ These are the choices I won't make silently. Each has my recommendation; please 
 
 | # | Decision | Options | My recommendation |
 |---|---|---|---|
-| D1 | Aesthetic direction | A / B / C from §7 | *Need user pick* |
+| D1 | Aesthetic direction | A / B / C from §7 | **LOCKED: A — Soft Studio** |
 | D2 | Variant axes | (a) Size only, (b) Size + Color, (c) Fully flexible up to 3 axes | **(b) Size + Color** — covers 95% of merch; (c) adds UI complexity for rare cases |
 | D3 | Shipping cost model | (a) Flat per zone (TH / SEA / Worldwide), (b) Weight-tiered per zone, (c) Free over threshold + flat | **(a) Flat per zone** — simplest, easy to tune in admin; weight-tiered if products vary wildly in weight |
 | D4 | Customer accounts | (a) Magic link only, (b) Email + password, (c) Add Google/Twitch SSO later | **(a) Magic link** — nothing to leak; lower friction than passwords |
 | D5 | Cart persistence | (a) localStorage only, (b) localStorage + DB-backed on login | **(a) localStorage** for v1 — simpler, no extra schema; upgrade later if needed |
 | D6 | Order lookup for guests | (a) Email + order number, (b) Magic link to order page | **(b) Magic link** — better security than guessable email+number combo |
 | D7 | Currencies displayed | (a) THB only (auto FX shown), (b) Multi-currency display, charge THB | **(a) THB only** — FFP settles THB; multi-currency UX is hard to get right |
-| D8 | Domain & email-from | TBD by user — do you have `rainbykello.shop`, etc.? | Need user input |
+| D8 | Domain & email-from | TBD by user — do you have `rainbykello.shop`, etc.? | **DEFERRED to end of Phase 1.** Demo uses Vercel preview subdomain + Resend shared sender. Domain decision required before public launch. |
 | D9 | Sentry / error tracking | (a) Sentry free tier (5K events/mo), (b) Skip, rely on Vercel logs | **(a) Sentry** — invaluable on first launch |
 | D10 | Legal pages | (a) Use templates (privacy, terms, returns, shipping) — user reviews, (b) User provides | **(a)** with strong recommendation user has a Thai lawyer review before launch |
 | D11 | Owner-account hardening level | (a) Magic link only, (b) Magic link + TOTP, (c) Magic link + TOTP + IP allowlist, (d) Magic link + TOTP + step-up auth on destructive actions | **(d)** — strongest practical default; IP allowlist is opt-in later |
