@@ -1,5 +1,5 @@
 import 'server-only';
-import { createServerSupabase } from '@/db/client';
+import { createServerSupabase } from '@/db/server';
 import type { Database } from '@/db/types.gen';
 
 type ProductRow = Database['public']['Tables']['products']['Row'];

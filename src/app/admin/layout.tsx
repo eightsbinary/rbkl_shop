@@ -2,7 +2,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { getCurrentRole } from '@/db/auth';
-import { createServerSupabase } from '@/db/client';
+import { createServerSupabase } from '@/db/server';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const h = await headers();

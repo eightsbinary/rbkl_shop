@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { ForbiddenError, requireOwnerOrDev } from '@/db/auth';
-import { createServerSupabase } from '@/db/client';
+import { createServerSupabase } from '@/db/server';
 
 export async function POST(request: NextRequest) {
   try {

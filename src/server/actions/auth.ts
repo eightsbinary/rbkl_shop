@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { createServerSupabase } from '@/db/client';
+import { createServerSupabase } from '@/db/server';
 
 export async function requestMagicLink(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim();

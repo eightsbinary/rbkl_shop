@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
 import { requireOwnerOrDev } from '@/db/auth';
-import { createServerSupabase } from '@/db/client';
+import { createServerSupabase } from '@/db/server';
 import { slugify } from '@/domain/slugify';
 import { generateVariants, type VariantAxis } from '@/domain/variant-matrix';
 
