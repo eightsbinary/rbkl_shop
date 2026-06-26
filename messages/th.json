@@ -1,0 +1,38 @@
+{
+  "brand": {
+    "name": "rainbykello",
+    "tagline": "ทำอย่างใส่ใจ ส่งอย่างอบอุ่น"
+  },
+  "nav": {
+    "shop": "ร้านค้า",
+    "about": "เกี่ยวกับ",
+    "cart": "ตะกร้า"
+  },
+  "landing": {
+    "heroLine1": "ทำอย่างใส่ใจ",
+    "heroLine2": "ส่งอย่างอบอุ่น",
+    "featuredTitle": "คอลเลกชันล่าสุด",
+    "viewAll": "ดูทั้งหมด"
+  },
+  "shop": {
+    "title": "ร้านค้า",
+    "emptyState": "ยังไม่มีสินค้าในขณะนี้",
+    "soldOut": "ขายหมดแล้ว",
+    "notify": "แจ้งเตือนเมื่อกลับมาขาย"
+  },
+  "pdp": {
+    "addToCart": "หยิบใส่ตะกร้า",
+    "size": "ขนาด",
+    "color": "สี",
+    "selectSize": "เลือกขนาด",
+    "selectColor": "เลือกสี",
+    "outOfStock": "ขายหมด"
+  },
+  "footer": {
+    "copyright": "© รังบายเคลโล่",
+    "follow": "ติดตาม"
+  },
+  "locale": {
+    "switchToOther": "EN"
+  }
+}

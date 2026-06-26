@@ -1,0 +1,38 @@
+{
+  "brand": {
+    "name": "rainbykello",
+    "tagline": "made slowly, shipped warmly"
+  },
+  "nav": {
+    "shop": "shop",
+    "about": "about",
+    "cart": "cart"
+  },
+  "landing": {
+    "heroLine1": "made slowly,",
+    "heroLine2": "shipped warmly",
+    "featuredTitle": "latest drop",
+    "viewAll": "view all"
+  },
+  "shop": {
+    "title": "shop",
+    "emptyState": "nothing in the shop right now",
+    "soldOut": "sold out",
+    "notify": "notify me when back"
+  },
+  "pdp": {
+    "addToCart": "add to cart",
+    "size": "size",
+    "color": "color",
+    "selectSize": "select size",
+    "selectColor": "select color",
+    "outOfStock": "out of stock"
+  },
+  "footer": {
+    "copyright": "© rainbykello",
+    "follow": "follow"
+  },
+  "locale": {
+    "switchToOther": "TH"
+  }
+}
