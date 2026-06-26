@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabase } from '@/db/server';
 import { MockProvider } from '@/domain/payment/adapters/MockProvider';
+import type { VerifiedEvent } from '@/domain/payment/ChargeInput';
 
 export async function POST(
   request: NextRequest,
@@ -12,7 +13,7 @@ export async function POST(
   }
   const provider = new MockProvider();
 
-  let event;
+  let event: VerifiedEvent;
   try {
     event = await provider.verifyNotification(request.clone());
   } catch (e) {

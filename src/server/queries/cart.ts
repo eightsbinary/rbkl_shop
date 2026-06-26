@@ -29,7 +29,7 @@ export async function previewCart(variantIds: string[]): Promise<CartPreviewLine
     .map((v) => {
       if (!v.is_active) return null;
       const p = Array.isArray(v.product) ? v.product[0] : v.product;
-      if (!p || p.status !== 'active') return null;
+      if (p?.status !== 'active') return null;
       const heroAny = (p as { hero_image?: unknown }).hero_image;
       const hero = Array.isArray(heroAny) ? heroAny[0] : heroAny;
       return {

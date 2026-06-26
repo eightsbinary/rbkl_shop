@@ -56,9 +56,9 @@ export async function placeOrder(raw: PlaceOrderInputT) {
   const itemRows: ItemDraft[] = [];
   for (const line of input.lines) {
     const v = variants.find((x) => x.id === line.variantId);
-    if (!v || !v.is_active) return { error: 'Variant unavailable' };
+    if (!v?.is_active) return { error: 'Variant unavailable' };
     const p = Array.isArray(v.product) ? v.product[0] : v.product;
-    if (!p || p.status !== 'active') return { error: 'Product unavailable' };
+    if (p?.status !== 'active') return { error: 'Product unavailable' };
     if (v.stock_available < line.qty) return { error: 'Not enough stock' };
     const unit = v.price_thb ?? p.base_price_thb;
     const lineTotal = unit * line.qty;
