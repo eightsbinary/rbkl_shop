@@ -27,7 +27,11 @@
     "selectSize": "เลือกขนาด",
     "selectColor": "เลือกสี",
     "outOfStock": "ขายหมด",
-    "added": "เพิ่มแล้ว"
+    "added": "เพิ่มแล้ว",
+    "notifyMe": "แจ้งเตือนเมื่อมีสินค้า",
+    "notifyEmailPlaceholder": "อีเมลของคุณ",
+    "notifyDone": "เราจะส่งอีเมลแจ้งเมื่อสินค้ากลับมา",
+    "notifyError": "เกิดข้อผิดพลาด — ลองอีกครั้ง"
   },
   "footer": {
     "copyright": "© รังบายเคลโล่",

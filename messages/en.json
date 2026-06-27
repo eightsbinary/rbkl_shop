@@ -27,7 +27,11 @@
     "selectSize": "select size",
     "selectColor": "select color",
     "outOfStock": "out of stock",
-    "added": "added"
+    "added": "added",
+    "notifyMe": "notify me when available",
+    "notifyEmailPlaceholder": "your email",
+    "notifyDone": "we'll email you when it's back",
+    "notifyError": "something went wrong — try again"
   },
   "footer": {
     "copyright": "© rainbykello",

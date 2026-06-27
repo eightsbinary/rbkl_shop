@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { WaitlistButton } from '@/components/shop/WaitlistButton';
 import { Label } from '@/components/ui/Label';
 import type { Database } from '@/db/types.gen';
 
@@ -59,11 +60,11 @@ export function VariantSelector({
         <p className="font-serif text-2xl text-ink">฿{price.toLocaleString()}</p>
       </div>
 
-      <AddToCartButton
-        variantId={matched?.id ?? null}
-        ready={ready}
-        outOfStock={ready && !inStock}
-      />
+      {ready && !inStock ? (
+        <WaitlistButton variantId={matched?.id ?? null} />
+      ) : (
+        <AddToCartButton variantId={matched?.id ?? null} ready={ready} outOfStock={false} />
+      )}
     </div>
   );
 }
