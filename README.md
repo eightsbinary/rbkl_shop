@@ -155,6 +155,19 @@ sheet with the service-account email as **Editor**, then set:
 
 Trigger from `/admin/sync` (dev role only) with "Sync now" (debounced 5 min).
 
+## Security hardening
+
+- **Headers/CSP:** `src/proxy.ts` sets HSTS, `X-Frame-Options: DENY`,
+  `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, and a
+  pragmatic CSP (`src/lib/security/headers.ts`). Dev mode allows the HMR
+  websocket; production is tighter.
+- **Rate limiting:** `enforceRateLimit` (`src/lib/rate-limit/`) guards checkout,
+  waitlist, and login. Uses Upstash Redis when `UPSTASH_REDIS_REST_URL/TOKEN`
+  are set, else an in-memory dev fallback. Fails open if the backend errors.
+- **Turnstile:** `verifyTurnstile` gates the same three forms. With no
+  `TURNSTILE_SECRET_KEY` it's a dev bypass; the `<TurnstileWidget>` renders
+  nothing without `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Set both for production.
+
 ## Build runtime split
 
 `bun run build` runs `node ./node_modules/next/dist/bin/next build` because Bun's
