@@ -27,7 +27,11 @@ export class SheetsClient {
 
   /** Read a whole tab (range = tab name) as a 2-D string grid. */
   async getValues(tab: string): Promise<string[][]> {
-    const url = `${BASE}/${this.spreadsheetId}/values/${encodeURIComponent(tab)}`;
+    // UNFORMATTED_VALUE so locale number formatting (e.g. '1,000') can't cause
+    // spurious diffs against the DB snapshot's plain string serialization.
+    const url =
+      `${BASE}/${this.spreadsheetId}/values/${encodeURIComponent(tab)}` +
+      `?valueRenderOption=UNFORMATTED_VALUE`;
     const res = await fetch(url, { headers: { Authorization: `Bearer ${await this.token()}` } });
     if (!res.ok) throw new Error(`Sheets getValues ${tab} failed: ${res.status}`);
     const json = (await res.json()) as { values?: string[][] };

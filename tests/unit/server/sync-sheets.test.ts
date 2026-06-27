@@ -22,7 +22,7 @@ beforeEach(() => {
 
 describe('runSheetSyncCycle (pure cycle)', () => {
   it('applies an allow-listed sheet edit and reports counts', async () => {
-    const { runSheetSyncCycle } = await import('@/server/actions/sync-sheets');
+    const { runSheetSyncCycle } = await import('@/server/sheets/cycle');
     read.mockResolvedValue({
       table: 'variants',
       rows: [

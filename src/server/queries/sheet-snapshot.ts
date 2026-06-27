@@ -113,12 +113,14 @@ export async function applyOps(table: SyncTable, ops: ApplyOp[]): Promise<void> 
       if ('status' in op.changes) payload.status = op.changes.status;
       const pq = svc.from('products');
       // biome-ignore lint/suspicious/noExplicitAny: dynamic Supabase payload — columns are runtime-determined
-      await pq.update(payload as any).eq('id', op.pk);
+      const { error } = await pq.update(payload as any).eq('id', op.pk);
+      if (error) throw new Error(`products update ${op.pk} failed: ${error.message}`);
     } else if (table === 'variants') {
-      await svc
+      const { error } = await svc
         .from('variants')
         .update({ ...toDbPayload(table, op.changes), version: op.nextVersion })
         .eq('id', op.pk);
+      if (error) throw new Error(`variants update ${op.pk} failed: ${error.message}`);
     } else {
       const payload = { ...toDbPayload(table, op.changes), version: op.nextVersion } as Json;
       // Recompute derived tracking_url when carrier/number changed.
@@ -134,7 +136,8 @@ export async function applyOps(table: SyncTable, ops: ApplyOp[]): Promise<void> 
       }
       const oq = svc.from('orders');
       // biome-ignore lint/suspicious/noExplicitAny: dynamic Supabase payload — columns are runtime-determined
-      await oq.update(payload as any).eq('id', op.pk);
+      const { error } = await oq.update(payload as any).eq('id', op.pk);
+      if (error) throw new Error(`orders update ${op.pk} failed: ${error.message}`);
     }
   }
 }
