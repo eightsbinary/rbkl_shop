@@ -366,6 +366,83 @@ export type Database = {
         }
         Relationships: []
       }
+      sheet_sync_rejects: {
+        Row: {
+          attempted_value: string | null
+          column_name: string
+          created_at: string
+          id: string
+          reason: string
+          row_pk: string
+          run_id: string
+          table_name: string
+        }
+        Insert: {
+          attempted_value?: string | null
+          column_name: string
+          created_at?: string
+          id?: string
+          reason: string
+          row_pk: string
+          run_id: string
+          table_name: string
+        }
+        Update: {
+          attempted_value?: string | null
+          column_name?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          row_pk?: string
+          run_id?: string
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sheet_sync_rejects_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "sheet_sync_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sheet_sync_runs: {
+        Row: {
+          error: string | null
+          finished_at: string | null
+          id: string
+          rows_applied: number
+          rows_pulled: number
+          rows_rejected: number
+          started_at: string
+          status: string
+          trigger: string
+        }
+        Insert: {
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          rows_applied?: number
+          rows_pulled?: number
+          rows_rejected?: number
+          started_at?: string
+          status: string
+          trigger: string
+        }
+        Update: {
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          rows_applied?: number
+          rows_pulled?: number
+          rows_rejected?: number
+          started_at?: string
+          status?: string
+          trigger?: string
+        }
+        Relationships: []
+      }
       shipping_zones: {
         Row: {
           code: string
