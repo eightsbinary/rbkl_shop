@@ -34,3 +34,38 @@ export async function listAdminOrders(status?: OrderStatus): Promise<AdminOrderR
   const { data } = await query;
   return data ?? [];
 }
+
+type OrderRow = Database['public']['Tables']['orders']['Row'];
+type OrderItemRow = Database['public']['Tables']['order_items']['Row'];
+type OrderEventRow = Database['public']['Tables']['order_events']['Row'];
+
+export interface AdminOrderDetail {
+  order: OrderRow;
+  items: Pick<
+    OrderItemRow,
+    'id' | 'qty' | 'unit_price_thb' | 'line_total_thb' | 'product_snapshot'
+  >[];
+  events: Pick<OrderEventRow, 'id' | 'type' | 'payload' | 'actor' | 'created_at'>[];
+}
+
+/** Full order detail for the admin order page: order, line items, audit trail. */
+export async function getAdminOrder(id: string): Promise<AdminOrderDetail | null> {
+  const supa = await createServerSupabase();
+  const { data: order } = await supa.from('orders').select('*').eq('id', id).maybeSingle();
+  if (!order) return null;
+
+  const [{ data: items }, { data: events }] = await Promise.all([
+    supa
+      .from('order_items')
+      .select('id, qty, unit_price_thb, line_total_thb, product_snapshot')
+      .eq('order_id', id)
+      .order('created_at', { ascending: true }),
+    supa
+      .from('order_events')
+      .select('id, type, payload, actor, created_at')
+      .eq('order_id', id)
+      .order('created_at', { ascending: true }),
+  ]);
+
+  return { order, items: items ?? [], events: events ?? [] };
+}
