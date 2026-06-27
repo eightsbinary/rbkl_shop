@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
+import { TurnstileWidget } from '@/components/security/TurnstileWidget';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 
@@ -12,6 +13,7 @@ export function WaitlistButton({ variantId }: { variantId: string | null }) {
   const locale = useLocale();
   const [email, setEmail] = useState('');
   const [state, setState] = useState<State>('idle');
+  const [token, setToken] = useState('');
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -21,7 +23,7 @@ export function WaitlistButton({ variantId }: { variantId: string | null }) {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ variantId, email, locale }),
+        body: JSON.stringify({ variantId, email, locale, turnstileToken: token }),
       });
       setState(res.ok ? 'done' : 'error');
     } catch {
@@ -53,6 +55,7 @@ export function WaitlistButton({ variantId }: { variantId: string | null }) {
           {t('notifyMe')}
         </Button>
       </div>
+      <TurnstileWidget onToken={setToken} />
       {state === 'error' && <p className="text-sm text-error">{t('notifyError')}</p>}
     </form>
   );
