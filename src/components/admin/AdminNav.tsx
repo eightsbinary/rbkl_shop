@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { getCurrentRole } from '@/db/auth';
+import { createServerSupabase } from '@/db/server';
 import { signOutAdmin } from '@/server/actions/auth';
 
 const NAV_LINKS = [
@@ -11,7 +13,11 @@ const NAV_LINKS = [
 const linkClass =
   'relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100';
 
-export function AdminNav() {
+export async function AdminNav() {
+  const supa = await createServerSupabase();
+  const role = await getCurrentRole(supa);
+  const links = role === 'dev' ? [...NAV_LINKS, { href: '/admin/sync', label: 'Sync' }] : NAV_LINKS;
+
   return (
     <header className="border-b border-line bg-paper">
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
@@ -19,7 +25,7 @@ export function AdminNav() {
           admin
         </Link>
         <nav className="flex items-center gap-6 text-sm text-ink-soft">
-          {NAV_LINKS.map((l) => (
+          {links.map((l) => (
             <Link key={l.href} href={l.href} className={linkClass}>
               {l.label}
             </Link>

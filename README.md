@@ -140,6 +140,21 @@ the matching header get `401`. Trigger locally with:
 curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/release-stale
 ```
 
+## Google Sheets sync (dev-only)
+
+A safe two-way sync between the DB and a Google Sheet for products, variants, and
+orders. The DB is authoritative; the sheet is overwritten with a fresh snapshot
+every run. Only allow-listed columns can be written back; everything else is
+read-only and stale edits are rejected (logged in the run history).
+
+Setup: create a Google Cloud service account, download its JSON key, share your
+sheet with the service-account email as **Editor**, then set:
+
+    GOOGLE_SERVICE_ACCOUNT_JSON='{"client_email":"...","private_key":"..."}'
+    GOOGLE_SHEETS_SPREADSHEET_ID=<id from the sheet URL>
+
+Trigger from `/admin/sync` (dev role only) with "Sync now" (debounced 5 min).
+
 ## Build runtime split
 
 `bun run build` runs `node ./node_modules/next/dist/bin/next build` because Bun's
