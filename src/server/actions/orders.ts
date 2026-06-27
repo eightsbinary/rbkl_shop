@@ -7,6 +7,8 @@ import type { Json } from '@/db/types.gen';
 import { generateOrderNumber } from '@/domain/order-number';
 import { MockProvider } from '@/domain/payment/adapters/MockProvider';
 import { signOrderToken } from '@/lib/order-token';
+import { clientIp, enforceRateLimit } from '@/lib/rate-limit';
+import { verifyTurnstile } from '@/lib/turnstile';
 
 const ShippingAddress = z.object({
   fullName: z.string().min(1),
@@ -24,11 +26,18 @@ const PlaceOrderInput = z.object({
   address: ShippingAddress,
   lines: z.array(z.object({ variantId: z.string().uuid(), qty: z.number().int().positive() })),
   discountCode: z.string().optional(),
+  turnstileToken: z.string().optional(),
 });
 
 export type PlaceOrderInputT = z.infer<typeof PlaceOrderInput>;
 
 export async function placeOrder(raw: PlaceOrderInputT) {
+  const ip = await clientIp();
+  const rl = await enforceRateLimit('checkout', ip, { max: 8, windowMs: 60_000 });
+  if (!rl.ok) return { error: 'Too many checkout attempts — please wait a minute.' };
+  if (!(await verifyTurnstile(raw.turnstileToken ?? '', ip))) {
+    return { error: 'Verification failed — please retry.' };
+  }
   const parsed = PlaceOrderInput.safeParse(raw);
   if (!parsed.success) return { error: 'Invalid checkout data' };
   const input = parsed.data;

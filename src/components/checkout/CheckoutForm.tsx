@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
+import { TurnstileWidget } from '@/components/security/TurnstileWidget';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -26,6 +27,7 @@ export function CheckoutForm({ zones }: { zones: Zone[] }) {
   const clearCart = useCart((s) => s.clear);
 
   const [preview, setPreview] = useState<CartPreviewLine[]>([]);
+  const [token, setToken] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
@@ -86,6 +88,7 @@ export function CheckoutForm({ zones }: { zones: Zone[] }) {
       },
       lines: lines.map((l) => ({ variantId: l.variantId, qty: l.qty })),
       discountCode: form.discountCode || undefined,
+      turnstileToken: token,
     });
     setBusy(false);
     if (!('ok' in r)) {
@@ -201,6 +204,8 @@ export function CheckoutForm({ zones }: { zones: Zone[] }) {
         </section>
 
         {error && <p className="text-sm text-error">{error}</p>}
+
+        <TurnstileWidget onToken={setToken} />
 
         <Button type="submit" size="lg" disabled={busy} className="w-full lg:w-auto">
           {busy ? '…' : t('placeOrder')}
