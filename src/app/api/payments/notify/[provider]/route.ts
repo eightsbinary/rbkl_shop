@@ -1,7 +1,13 @@
+import OrderPaid from 'emails/OrderPaid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabase } from '@/db/server';
+import { formatMoney, money } from '@/domain/money';
 import { MockProvider } from '@/domain/payment/adapters/MockProvider';
 import type { VerifiedEvent } from '@/domain/payment/ChargeInput';
+import { sendEmail } from '@/lib/email';
+import { signOrderToken } from '@/lib/order-token';
+
+const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export async function POST(
   request: NextRequest,
@@ -26,7 +32,7 @@ export async function POST(
   const supa = createServiceRoleSupabase();
   const { data: order } = await supa
     .from('orders')
-    .select('id, status, total_thb, last_event_id')
+    .select('id, status, total_thb, last_event_id, number, customer_email, locale')
     .eq('id', event.orderId)
     .maybeSingle();
   if (!order) return NextResponse.json({ error: 'Unknown order' }, { status: 404 });
@@ -50,7 +56,7 @@ export async function POST(
 
     const { data: items } = await supa
       .from('order_items')
-      .select('variant_id, qty')
+      .select('variant_id, qty, product_snapshot')
       .eq('order_id', order.id);
     for (const it of items ?? []) {
       if (!it.variant_id) continue;
@@ -72,6 +78,29 @@ export async function POST(
       payload: { eventId: event.eventId, chargeId: event.chargeId },
       actor: 'system',
     });
+
+    // Confirmation email — best-effort; never block the paid transition on it.
+    try {
+      const locale = order.locale === 'th' ? 'th' : 'en';
+      const emailItems = (items ?? []).map((it) => {
+        const snap = it.product_snapshot as { name?: { th?: string; en?: string } } | null;
+        const name = snap?.name?.[locale] ?? snap?.name?.en ?? snap?.name?.th ?? 'item';
+        return { name, qty: it.qty };
+      });
+      const orderUrl = `${siteUrl()}/${locale}/order/${order.id}?t=${signOrderToken(order.id, order.customer_email)}`;
+      await sendEmail({
+        to: order.customer_email,
+        subject: `Payment received — order ${order.number}`,
+        react: OrderPaid({
+          orderNumber: order.number,
+          orderUrl,
+          items: emailItems,
+          totalLabel: formatMoney(money(order.total_thb), locale),
+        }),
+      });
+    } catch (err) {
+      console.error('[payments/notify] confirmation email failed', err);
+    }
   } else if (event.status === 'failed' || event.status === 'expired') {
     await supa
       .from('orders')
