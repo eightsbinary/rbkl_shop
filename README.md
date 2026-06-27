@@ -2,13 +2,13 @@
 
 Single-creator ecommerce store for [rainbykello](https://www.twitch.tv/rainbykello).
 
-**Status:** Plan 3 of 6 complete — Foundation + Catalog + Checkout (mock payment) all green.
+**Status:** Plan 4 of 6 complete — Foundation + Catalog + Checkout + Operations (orders/fulfillment, discounts, waitlist, transactional email, cron) all green.
 **Spec:** [docs/superpowers/specs/2026-06-26-rb-shop-design.md](docs/superpowers/specs/2026-06-26-rb-shop-design.md)
 **Plans:** [docs/superpowers/plans/](docs/superpowers/plans/)
 
 ## Stack
 
-Next.js 16 (App Router) · TypeScript strict · Tailwind v4 · Supabase (Postgres + Auth + Storage + RLS) · Bun · Biome · Vitest · Zod.
+Next.js 16 (App Router) · TypeScript strict · Tailwind v4 · Supabase (Postgres + Auth + Storage + RLS) · Resend + React Email · Vercel Cron · Bun · Biome · Vitest · Zod.
 
 ## Prerequisites
 
@@ -56,10 +56,12 @@ If you don't have Docker / Supabase CLI yet, the app still **builds and tests cl
 
 ```
 src/
-  app/       Next.js routes
-  domain/    Pure logic (no I/O) — Money, pricing, stock, discount, shipping
+  app/       Next.js routes (incl. /admin, /api/cron/*, /api/waitlist)
+  domain/    Pure logic (no I/O) — Money, pricing, stock, discount, shipping, carriers, stale-orders
   db/        Supabase client factories + role-check helpers + generated types
-  lib/       Cross-cutting: env validation, brand tokens
+  lib/       Cross-cutting: env validation, brand tokens, email, order-token
+  server/    Server actions + queries (admin orders/waitlists, discounts, ship-order)
+emails/      React Email templates (OrderPaid, OrderShipped, WaitlistRestock)
 tests/unit/  Vitest unit tests mirroring src/
 supabase/    Migrations + RLS policies + seed
 scripts/     One-shot CLI scripts (run locally with `bun run scripts/*.ts`)
@@ -94,6 +96,49 @@ Only a `dev` can grant or revoke roles. The first `dev` is bootstrapped via `scr
 8. Land on `/th/order/[id]?t=…` → shipping timeline shows "Payment received".
 9. Click "ใบเสร็จ" → printable receipt → browser print to PDF.
 10. Back in `/admin/products` → variant stock is decremented.
+11. `/admin/orders` → the order shows status **paid** / shipping **preparing**. Open it.
+12. Fill the ship form (carrier + tracking number) → "Mark as shipped". The buyer's
+    `/order/[id]` page now shows **Shipped** with a tracking link, and a shipping
+    email is sent (logged to console unless `RESEND_API_KEY` is set).
+13. `/admin/discounts` → create a code; it applies at checkout.
+14. On a sold-out variant's product page, the "notify me" form adds a waitlist
+    entry visible under `/admin/waitlists`.
+
+## Transactional email (Resend)
+
+Order confirmation, shipping, and waitlist-restock emails go through a thin
+`src/lib/email.ts` abstraction. Templates live in `emails/` as
+[React Email](https://react.email) components.
+
+- **No key set →** `sendEmail` logs a dry-run line to the console and returns
+  `{ ok: true, dryRun: true }`. Local dev and the test suite never send real mail.
+- **To send for real →** set `RESEND_API_KEY` (free tier: 3K emails/mo). Optionally
+  override the sender with `RESEND_FROM` (defaults to Resend's shared
+  `onboarding@resend.dev`).
+
+```bash
+RESEND_API_KEY=re_...                       # optional — omit for dry-run logging
+RESEND_FROM="rainbykello <onboarding@resend.dev>"   # optional
+NEXT_PUBLIC_SITE_URL=https://your-domain    # used for links in emails (defaults to localhost:3000)
+```
+
+## Background jobs (Vercel Cron)
+
+Two hourly-ish jobs run as `GET` handlers under `src/app/api/cron/`, gated by a
+shared bearer secret:
+
+| Route | Schedule (`vercel.json`) | Does |
+|---|---|---|
+| `/api/cron/release-stale` | every 30 min | Cancels `awaiting_payment` orders older than 30 min and releases their reserved stock |
+| `/api/cron/notify-waitlist` | hourly | Emails up to 20 oldest waiters per restocked variant, 4-hour gap between batches |
+
+Set `CRON_SECRET` in the environment; Vercel injects it as
+`Authorization: Bearer <CRON_SECRET>` on scheduled invocations. Requests without
+the matching header get `401`. Trigger locally with:
+
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/release-stale
+```
 
 ## Build runtime split
 
