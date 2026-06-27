@@ -1,3 +1,4 @@
+export * from './carriers';
 export * from './discount';
 export * from './money';
 export * from './pricing';
