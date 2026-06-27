@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { TurnstileWidget } from '@/components/security/TurnstileWidget';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -11,6 +12,7 @@ type Status = 'idle' | 'sent' | { error: string };
 export default function AdminLoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
+  const [token, setToken] = useState('');
 
   return (
     <div className="mx-auto max-w-md py-24 space-y-8 px-6">
@@ -32,6 +34,8 @@ export default function AdminLoginPage() {
           <Label htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
+        <TurnstileWidget onToken={setToken} />
+        <input type="hidden" name="turnstileToken" value={token} />
         <Button type="submit" disabled={submitting} className="w-full">
           {submitting ? 'Sending…' : 'Send magic link'}
         </Button>
