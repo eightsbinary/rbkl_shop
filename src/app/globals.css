@@ -24,6 +24,7 @@
   --radius-lg: 12px;
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.45, 0.6, 1);
 }
 
 @layer base {
@@ -56,5 +57,68 @@
       /* biome-ignore lint/complexity/noImportantStyles: accessibility override must defeat author-level transitions */
       transition: none !important;
     }
+  }
+}
+
+/* ── Motion system ───────────────────────────────────────────────────────────
+   Shared micro-interaction primitives. Entrance animations use `both` so the
+   element holds its start frame until its (optionally staggered) delay elapses,
+   preventing a flash of final state. All of these are disabled automatically by
+   the prefers-reduced-motion rule above. */
+
+@keyframes rb-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rb-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rb-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rb-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@layer utilities {
+  .animate-rise {
+    animation: rb-rise 0.5s var(--ease-out-soft) both;
+  }
+
+  .animate-fade {
+    animation: rb-fade 0.45s var(--ease-out-soft) both;
+  }
+
+  .animate-pop {
+    animation: rb-pop 0.42s var(--ease-spring) both;
   }
 }

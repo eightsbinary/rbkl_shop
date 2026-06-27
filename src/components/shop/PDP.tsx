@@ -11,7 +11,7 @@ export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 
   return (
     <article className="container mx-auto px-6 py-16">
       <div className="grid gap-12 lg:grid-cols-2">
-        <div className="space-y-4">
+        <div className="animate-rise space-y-4">
           {data.images.length > 0 ? (
             data.images.map((img) => {
               const altObj = img.alt as { th?: string; en?: string };
@@ -30,7 +30,10 @@ export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 
             <div className="aspect-square w-full rounded-md bg-line" />
           )}
         </div>
-        <div className="space-y-8 lg:sticky lg:top-24 lg:self-start">
+        <div
+          className="animate-rise space-y-8 lg:sticky lg:top-24 lg:self-start"
+          style={{ animationDelay: '90ms' }}
+        >
           <header className="space-y-3">
             <h1 className="font-serif text-4xl text-ink">{name}</h1>
             {desc && <p className="whitespace-pre-line text-ink-soft leading-relaxed">{desc}</p>}

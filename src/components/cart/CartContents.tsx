@@ -53,7 +53,7 @@ export function CartContents() {
             l.variantId;
           const optDesc = p ? Object.values(p.optionValues).join(' / ') : '';
           return (
-            <li key={l.variantId} className="flex items-start justify-between gap-3">
+            <li key={l.variantId} className="animate-rise flex items-start justify-between gap-3">
               <div className="space-y-1">
                 <p className="text-sm text-ink">{name}</p>
                 <p className="text-xs text-muted">{optDesc}</p>
@@ -63,7 +63,7 @@ export function CartContents() {
                 <button
                   type="button"
                   onClick={() => setQty(l.variantId, l.qty - 1)}
-                  className="h-8 w-8 rounded border border-line"
+                  className="h-8 w-8 rounded border border-line transition-all duration-150 ease-out-soft hover:border-ink hover:bg-paper-warm active:scale-90"
                   aria-label="decrease"
                 >
                   −
@@ -72,7 +72,7 @@ export function CartContents() {
                 <button
                   type="button"
                   onClick={() => setQty(l.variantId, l.qty + 1)}
-                  className="h-8 w-8 rounded border border-line"
+                  className="h-8 w-8 rounded border border-line transition-all duration-150 ease-out-soft hover:border-ink hover:bg-paper-warm active:scale-90"
                   aria-label="increase"
                 >
                   +
@@ -80,7 +80,7 @@ export function CartContents() {
                 <button
                   type="button"
                   onClick={() => remove(l.variantId)}
-                  className="text-muted hover:text-error text-sm"
+                  className="text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-error active:scale-90"
                   aria-label="remove"
                 >
                   ×

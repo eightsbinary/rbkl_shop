@@ -12,7 +12,7 @@ export function LocaleSwitcher() {
   return (
     <Link
       href={next || `/${other}`}
-      className="text-xs uppercase tracking-[0.2em] text-muted hover:text-ink transition-colors duration-150 ease-out-soft"
+      className="inline-block text-xs uppercase tracking-[0.2em] text-muted transition-all duration-150 ease-out-soft hover:-translate-y-px hover:text-ink active:scale-90"
     >
       {other.toUpperCase()}
     </Link>

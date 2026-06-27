@@ -28,7 +28,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       type={rest.type ?? 'button'}
-      className={`inline-flex items-center justify-center rounded-md font-medium tracking-tight transition-all duration-150 ease-out-soft active:translate-y-0 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-md font-medium tracking-tight transition-all duration-150 ease-out-soft hover:-translate-y-px active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:scale-100 disabled:cursor-not-allowed disabled:opacity-50 ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...rest}
     />
   );

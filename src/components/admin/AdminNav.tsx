@@ -9,11 +9,17 @@ export function AdminNav() {
           admin
         </Link>
         <nav className="flex items-center gap-6 text-sm text-ink-soft">
-          <Link href="/admin/products" className="hover:text-ink transition-colors">
+          <Link
+            href="/admin/products"
+            className="relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100"
+          >
             Products
           </Link>
           <form action={signOutAdmin}>
-            <button type="submit" className="text-muted hover:text-ink transition-colors">
+            <button
+              type="submit"
+              className="text-muted transition-colors duration-150 ease-out-soft hover:text-ink active:scale-95"
+            >
               Sign out
             </button>
           </form>

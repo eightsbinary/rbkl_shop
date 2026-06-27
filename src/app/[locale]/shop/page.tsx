@@ -11,7 +11,7 @@ export default async function ShopPage({ params }: { params: Promise<{ locale: L
 
   return (
     <section className="container mx-auto px-6 py-16 space-y-12">
-      <h1 className="font-serif text-4xl text-ink">{t('title')}</h1>
+      <h1 className="animate-rise font-serif text-4xl text-ink">{t('title')}</h1>
       {products.length === 0 ? (
         <p className="text-muted">{t('emptyState')}</p>
       ) : (

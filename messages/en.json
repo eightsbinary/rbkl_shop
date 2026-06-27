@@ -26,7 +26,8 @@
     "color": "color",
     "selectSize": "select size",
     "selectColor": "select color",
-    "outOfStock": "out of stock"
+    "outOfStock": "out of stock",
+    "added": "added"
   },
   "footer": {
     "copyright": "© rainbykello",

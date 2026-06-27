@@ -41,10 +41,10 @@ export function VariantSelector({
                   key={v}
                   type="button"
                   onClick={() => setSelection({ ...selection, [opt.name]: v })}
-                  className={`h-11 min-w-11 rounded-md border px-3 text-sm transition-all duration-150 ease-out-soft ${
+                  className={`h-11 min-w-11 rounded-md border px-3 text-sm transition-all duration-150 ease-out-soft active:scale-95 ${
                     isSelected
-                      ? 'border-ink bg-ink text-paper'
-                      : 'border-line bg-paper text-ink hover:border-rose'
+                      ? 'border-ink bg-ink text-paper shadow-sm'
+                      : 'border-line bg-paper text-ink hover:-translate-y-px hover:border-rose'
                   }`}
                 >
                   {v}

@@ -37,12 +37,15 @@ export function ShippingTimeline({ order }: { order: Order }) {
           <li key={key} className="flex items-start gap-3">
             <span
               aria-hidden
+              style={reached ? { animationDelay: `${idx * 110}ms` } : undefined}
               className={`mt-1 inline-block h-3 w-3 rounded-full border ${
-                reached ? 'border-ink bg-ink' : 'border-line bg-paper'
+                reached
+                  ? 'animate-pop border-ink bg-ink shadow-[0_0_0_4px_var(--color-rose-soft)]'
+                  : 'border-line bg-paper'
               }`}
             />
             <div className="flex-1">
-              <p className={reached ? 'text-ink' : 'text-muted'}>{t(key)}</p>
+              <p className={reached ? 'font-medium text-ink' : 'text-muted'}>{t(key)}</p>
               {ts && (
                 <p className="text-xs text-muted">
                   {new Date(ts).toLocaleString('en-GB', {

@@ -17,9 +17,9 @@ export function AddToCartButton({
   const t = useTranslations('pdp');
   const add = useCart((s) => s.add);
   const setOpen = useCart((s) => s.setOpen);
-  const [pending, setPending] = useState(false);
+  const [added, setAdded] = useState(false);
 
-  const disabled = !ready || outOfStock || !variantId || pending;
+  const disabled = !ready || outOfStock || !variantId;
 
   return (
     <Button
@@ -28,13 +28,26 @@ export function AddToCartButton({
       disabled={disabled}
       onClick={() => {
         if (!variantId) return;
-        setPending(true);
         add({ variantId, qty: 1 });
         setOpen(true);
-        setTimeout(() => setPending(false), 220);
+        setAdded(true);
+        setTimeout(() => setAdded(false), 1300);
       }}
     >
-      {!ready ? t('selectSize') : outOfStock ? t('outOfStock') : t('addToCart')}
+      {added ? (
+        <span className="inline-flex items-center gap-2">
+          <span key="check" className="animate-pop inline-block" aria-hidden>
+            ✓
+          </span>
+          {t('added')}
+        </span>
+      ) : !ready ? (
+        t('selectSize')
+      ) : outOfStock ? (
+        t('outOfStock')
+      ) : (
+        t('addToCart')
+      )}
     </Button>
   );
 }

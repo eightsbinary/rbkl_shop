@@ -14,15 +14,18 @@ export function ProductCard({
   const alt = altObj?.[locale] ?? altObj?.en ?? name;
 
   return (
-    <Link href={`/${locale}/product/${product.slug}`} className="group block space-y-3">
-      <div className="aspect-square overflow-hidden rounded-md bg-paper-warm">
+    <Link
+      href={`/${locale}/product/${product.slug}`}
+      className="group block space-y-3 transition-transform duration-220 ease-out-soft hover:-translate-y-1"
+    >
+      <div className="aspect-square overflow-hidden rounded-md bg-paper-warm shadow-sm transition-shadow duration-220 ease-out-soft group-hover:shadow-lg">
         {product.heroImage ? (
           <Image
             src={product.heroImage.url_800}
             alt={alt}
             width={800}
             height={800}
-            className="h-full w-full object-cover transition-transform duration-220 ease-out-soft group-hover:scale-[1.02]"
+            className="h-full w-full object-cover transition-transform duration-300 ease-out-soft group-hover:scale-[1.04]"
           />
         ) : (
           <div className="h-full w-full bg-line" />

@@ -26,7 +26,8 @@
     "color": "สี",
     "selectSize": "เลือกขนาด",
     "selectColor": "เลือกสี",
-    "outOfStock": "ขายหมด"
+    "outOfStock": "ขายหมด",
+    "added": "เพิ่มแล้ว"
   },
   "footer": {
     "copyright": "© รังบายเคลโล่",

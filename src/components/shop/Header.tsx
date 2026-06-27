@@ -18,7 +18,7 @@ export function Header() {
         <nav className="flex items-center gap-6 text-sm text-ink-soft">
           <Link
             href={`/${locale}/shop`}
-            className="hover:text-ink transition-colors duration-150 ease-out-soft"
+            className="relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100"
           >
             {t('shop')}
           </Link>
