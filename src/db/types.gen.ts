@@ -487,6 +487,41 @@ export type Database = {
           },
         ]
       }
+      waitlist_entries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          locale: string
+          notified_at: string | null
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          locale: string
+          notified_at?: string | null
+          variant_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          locale?: string
+          notified_at?: string | null
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waitlist_entries_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
