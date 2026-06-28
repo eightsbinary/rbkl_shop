@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
-import { requireOwnerOrDev } from '@/db/auth';
+import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase } from '@/db/server';
 import { slugify } from '@/domain/slugify';
 import { generateVariants, type VariantAxis } from '@/domain/variant-matrix';
@@ -74,6 +74,8 @@ async function syncVariants(
 export async function saveProduct(raw: ProductInputT) {
   const supa = await createServerSupabase();
   await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
   const input = ProductInput.parse(raw);
 
   const slug =
@@ -126,6 +128,8 @@ export async function saveProduct(raw: ProductInputT) {
 export async function archiveProduct(id: string) {
   const supa = await createServerSupabase();
   await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
   const { error } = await supa.from('products').update({ status: 'archived' }).eq('id', id);
   if (error) return { error: error.message };
   revalidatePath('/[locale]', 'page');

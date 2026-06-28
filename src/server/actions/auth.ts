@@ -34,3 +34,22 @@ export async function signOutAdmin() {
   await supa.auth.signOut();
   redirect('/admin/login');
 }
+
+export async function resendStepUpLink(): Promise<{ ok: true } | { error: string }> {
+  const supa = await createServerSupabase();
+  const { data } = await supa.auth.getUser();
+  const email = data.user?.email;
+  if (!email) return { error: 'Not signed in' };
+
+  const ip = await clientIp();
+  const rl = await enforceRateLimit('stepup-ip', ip, { max: 5, windowMs: 600_000 });
+  if (!rl.ok) return { error: 'Too many attempts — please wait.' };
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const { error } = await supa.auth.signInWithOtp({
+    email,
+    options: { emailRedirectTo: `${siteUrl}/admin` },
+  });
+  if (error) return { error: error.message };
+  return { ok: true };
+}

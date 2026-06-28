@@ -3,7 +3,7 @@
 import OrderShipped from 'emails/OrderShipped';
 import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
-import { requireOwnerOrDev } from '@/db/auth';
+import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase, createServiceRoleSupabase } from '@/db/server';
 import { buildTrackingUrl } from '@/domain/carriers';
 import { sendEmail } from '@/lib/email';
@@ -24,6 +24,8 @@ export type ShipOrderInput = z.infer<typeof ShipInput>;
 export async function shipOrder(raw: ShipOrderInput) {
   const supa = await createServerSupabase();
   await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
 
   const parsed = ShipInput.safeParse(raw);
   if (!parsed.success) return { error: 'Invalid shipping details' };

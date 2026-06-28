@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
-import { requireOwnerOrDev } from '@/db/auth';
+import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase, createServiceRoleSupabase } from '@/db/server';
 
 const DiscountInput = z
@@ -50,6 +50,8 @@ function toRow(input: z.infer<typeof DiscountInput>) {
 export async function createDiscount(raw: DiscountInputRaw): Promise<ActionResult> {
   const supa = await createServerSupabase();
   await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
   const parsed = DiscountInput.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Invalid input' };
 
@@ -71,6 +73,8 @@ export async function createDiscount(raw: DiscountInputRaw): Promise<ActionResul
 export async function updateDiscount(id: string, raw: DiscountInputRaw): Promise<ActionResult> {
   const supa = await createServerSupabase();
   await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
   const parsed = DiscountInput.safeParse(raw);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Invalid input' };
 
