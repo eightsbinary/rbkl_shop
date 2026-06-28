@@ -41,6 +41,16 @@ export async function POST(
     .eq('id', event.orderId)
     .maybeSingle();
   if (!order) return NextResponse.json({ error: 'Unknown order' }, { status: 404 });
+
+  // Order-level idempotency: only an awaiting-payment order accepts a paid/failed
+  // transition. A second distinct event for an already-terminal order is skipped
+  // (no double stock decrement / duplicate email). Exotic late captures after a
+  // terminal status are intentionally not reconciled here — that's the real PSP
+  // adapter's job (Plan 6c).
+  if (order.status !== 'awaiting_payment') {
+    return NextResponse.json({ ok: true, skipped: true });
+  }
+
   if (order.total_thb !== event.amountThb) {
     return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 });
   }

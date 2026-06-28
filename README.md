@@ -182,7 +182,10 @@ production to keep local admin frictionless.
 `/api/payments/notify/[provider]` rejects events older than 5 minutes
 (`isFresh`, `occurredAt` on the event) and dedups via an atomic insert into
 `processed_webhook_events` (`unique (provider, event_id)`) — also closing a
-double-process race in the previous read-then-check.
+double-process race in the previous read-then-check. It is also idempotent at the
+order level: the paid/failed transition is only applied from `awaiting_payment`,
+so a second *distinct* event for an already-terminal order returns
+`{ ok: true, skipped: true }` without re-decrementing stock or re-sending email.
 
 ### Admin CSP
 
