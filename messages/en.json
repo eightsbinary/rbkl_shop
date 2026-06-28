@@ -11,8 +11,16 @@
   "landing": {
     "heroLine1": "made slowly,",
     "heroLine2": "shipped warmly",
-    "featuredTitle": "latest drop",
-    "viewAll": "view all"
+    "heroSubtitle": "Merchandise made slowly and shipped warmly, from rainbykello.",
+    "heroCta": "Explore new arrivals",
+    "featuredTitle": "Curated Pieces",
+    "viewAll": "view all",
+    "viewCollection": "View entire collection",
+    "journalTitle": "The Studio Journal",
+    "journalSubtitle": "Sign up for infrequent dispatches on new arrivals, restocks, and studio process. No noise, just warmth.",
+    "journalPlaceholder": "Email address",
+    "journalCta": "Subscribe",
+    "journalThanks": "Thanks — you're on the list."
   },
   "shop": {
     "title": "shop",

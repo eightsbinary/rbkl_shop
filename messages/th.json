@@ -11,8 +11,16 @@
   "landing": {
     "heroLine1": "ทำอย่างใส่ใจ",
     "heroLine2": "ส่งอย่างอบอุ่น",
-    "featuredTitle": "คอลเลกชันล่าสุด",
-    "viewAll": "ดูทั้งหมด"
+    "heroSubtitle": "สินค้าที่ทำอย่างพิถีพิถันและจัดส่งด้วยความอบอุ่น จาก rainbykello",
+    "heroCta": "ดูสินค้ามาใหม่",
+    "featuredTitle": "ชิ้นงานคัดสรร",
+    "viewAll": "ดูทั้งหมด",
+    "viewCollection": "ดูคอลเลกชันทั้งหมด",
+    "journalTitle": "สตูดิโอ เจอร์นัล",
+    "journalSubtitle": "สมัครรับข่าวสารสินค้ามาใหม่ การเติมสต็อก และเบื้องหลังงานสตูดิโอ",
+    "journalPlaceholder": "อีเมล",
+    "journalCta": "สมัคร",
+    "journalThanks": "ขอบคุณ — คุณอยู่ในรายชื่อแล้ว"
   },
   "shop": {
     "title": "ร้านค้า",
