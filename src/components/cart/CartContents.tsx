@@ -2,93 +2,34 @@
 
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { CartLineItem } from '@/components/cart/CartLineItem';
 import { Button } from '@/components/ui/Button';
-import { useCart } from '@/lib/cart-store';
-import type { CartPreviewLine } from '@/server/queries/cart';
+import { useCartPreview } from '@/lib/use-cart-preview';
 
 export function CartContents() {
   const t = useTranslations('cart');
-  const locale = useLocale();
-  const lines = useCart((s) => s.lines);
-  const setQty = useCart((s) => s.setQty);
-  const remove = useCart((s) => s.remove);
-  const setOpen = useCart((s) => s.setOpen);
-  const [preview, setPreview] = useState<CartPreviewLine[]>([]);
-
-  useEffect(() => {
-    if (lines.length === 0) {
-      setPreview([]);
-      return;
-    }
-    const ids = lines.map((l) => l.variantId);
-    fetch('/api/cart/preview', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ ids }),
-    })
-      .then((r) => r.json() as Promise<CartPreviewLine[]>)
-      .then(setPreview)
-      .catch(() => setPreview([]));
-  }, [lines]);
+  const locale = useLocale() as 'th' | 'en';
+  const { lines, preview, subtotal, setQty, remove, setOpen } = useCartPreview();
 
   if (lines.length === 0) {
     return <p className="text-muted">{t('empty')}</p>;
   }
 
-  const subtotal = lines.reduce((acc, l) => {
-    const p = preview.find((x) => x.variantId === l.variantId);
-    return acc + (p?.unitPriceThb ?? 0) * l.qty;
-  }, 0);
-
   return (
     <div className="flex h-full flex-col">
-      <ul className="flex-1 space-y-4 overflow-y-auto">
-        {lines.map((l) => {
-          const p = preview.find((x) => x.variantId === l.variantId);
-          const name =
-            p?.productName[locale as 'th' | 'en'] ??
-            p?.productName.en ??
-            p?.productName.th ??
-            l.variantId;
-          const optDesc = p ? Object.values(p.optionValues).join(' / ') : '';
-          return (
-            <li key={l.variantId} className="animate-rise flex items-start justify-between gap-3">
-              <div className="space-y-1">
-                <p className="text-sm text-ink">{name}</p>
-                <p className="text-xs text-muted">{optDesc}</p>
-                {p && <p className="text-xs text-muted">฿{p.unitPriceThb.toLocaleString()}</p>}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setQty(l.variantId, l.qty - 1)}
-                  className="h-8 w-8 rounded border border-line transition-all duration-150 ease-out-soft hover:border-ink hover:bg-paper-warm active:scale-90"
-                  aria-label="decrease"
-                >
-                  −
-                </button>
-                <span className="w-6 text-center">{l.qty}</span>
-                <button
-                  type="button"
-                  onClick={() => setQty(l.variantId, l.qty + 1)}
-                  className="h-8 w-8 rounded border border-line transition-all duration-150 ease-out-soft hover:border-ink hover:bg-paper-warm active:scale-90"
-                  aria-label="increase"
-                >
-                  +
-                </button>
-                <button
-                  type="button"
-                  onClick={() => remove(l.variantId)}
-                  className="text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-error active:scale-90"
-                  aria-label="remove"
-                >
-                  ×
-                </button>
-              </div>
-            </li>
-          );
-        })}
+      <ul className="flex-1 divide-y divide-line overflow-y-auto">
+        {lines.map((l) => (
+          <li key={l.variantId}>
+            <CartLineItem
+              line={l}
+              preview={preview.find((p) => p.variantId === l.variantId)}
+              locale={locale}
+              setQty={setQty}
+              remove={remove}
+              compact
+            />
+          </li>
+        ))}
       </ul>
       <div className="space-y-3 border-t border-line pt-4">
         <div className="flex justify-between text-sm">
@@ -96,7 +37,9 @@ export function CartContents() {
           <span className="text-ink">฿{subtotal.toLocaleString()}</span>
         </div>
         <Link href={`/${locale}/checkout`} onClick={() => setOpen(false)}>
-          <Button className="w-full">{t('checkout')}</Button>
+          <Button variant="solid" className="w-full">
+            {t('checkout')}
+          </Button>
         </Link>
       </div>
     </div>
