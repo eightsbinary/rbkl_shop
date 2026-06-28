@@ -33,4 +33,37 @@ describe('securityHeaders', () => {
     expect(prod).not.toContain('ws:');
     expect(prod).not.toContain("'unsafe-eval'");
   });
+
+  it('uses a nonce and drops script unsafe-inline when a nonce is provided', () => {
+    const csp =
+      securityHeaders({
+        isDev: false,
+        supabaseHost: 'https://abc.supabase.co',
+        nonce: 'abc123',
+      })['Content-Security-Policy'] ?? '';
+    expect(csp).toContain("'nonce-abc123'");
+    const scriptSrc = csp.split('; ').find((d) => d.startsWith('script-src')) ?? '';
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(scriptSrc).toContain('https://challenges.cloudflare.com');
+  });
+
+  it('keeps style-src unsafe-inline even with a nonce', () => {
+    const csp =
+      securityHeaders({
+        isDev: false,
+        supabaseHost: 'https://abc.supabase.co',
+        nonce: 'abc123',
+      })['Content-Security-Policy'] ?? '';
+    const styleSrc = csp.split('; ').find((d) => d.startsWith('style-src')) ?? '';
+    expect(styleSrc).toContain("'unsafe-inline'");
+  });
+
+  it('falls back to script unsafe-inline without a nonce', () => {
+    const csp =
+      securityHeaders({ isDev: false, supabaseHost: 'https://abc.supabase.co' })[
+        'Content-Security-Policy'
+      ] ?? '';
+    const scriptSrc = csp.split('; ').find((d) => d.startsWith('script-src')) ?? '';
+    expect(scriptSrc).toContain("'unsafe-inline'");
+  });
 });

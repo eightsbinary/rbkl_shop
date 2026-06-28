@@ -14,26 +14,42 @@ function supabaseHost(): string {
   }
 }
 
-function withSecurity(response: NextResponse): NextResponse {
-  const headers = securityHeaders({
-    isDev: process.env.NODE_ENV !== 'production',
-    supabaseHost: supabaseHost(),
-  });
-  for (const [k, v] of Object.entries(headers)) response.headers.set(k, v);
-  return response;
+function makeNonce(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return btoa(String.fromCharCode(...bytes));
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isAdmin = pathname.startsWith('/admin');
+  const isApi = pathname.startsWith('/api');
 
-  const headers = new Headers(request.headers);
-  headers.set('x-pathname', pathname);
+  // Nonce CSP only on /admin (already dynamic + auth-gated). Storefront and /api
+  // keep the pragmatic CSP so storefront pages stay statically cacheable.
+  const nonce = isAdmin ? makeNonce() : undefined;
+  const headerMap = securityHeaders({
+    isDev: process.env.NODE_ENV !== 'production',
+    supabaseHost: supabaseHost(),
+    nonce,
+  });
 
-  if (pathname.startsWith('/admin') || pathname.startsWith('/api')) {
-    return withSecurity(NextResponse.next({ request: { headers } }));
+  const reqHeaders = new Headers(request.headers);
+  reqHeaders.set('x-pathname', pathname);
+  if (nonce) {
+    // Next reads the nonce from the CSP request header and applies it to its
+    // own bootstrap scripts.
+    reqHeaders.set('x-nonce', nonce);
+    reqHeaders.set('Content-Security-Policy', headerMap['Content-Security-Policy'] ?? '');
   }
 
-  return withSecurity(intlMiddleware(request) as NextResponse);
+  const response =
+    isAdmin || isApi
+      ? NextResponse.next({ request: { headers: reqHeaders } })
+      : (intlMiddleware(request) as NextResponse);
+
+  for (const [k, v] of Object.entries(headerMap)) response.headers.set(k, v);
+  return response;
 }
 
 export const config = {

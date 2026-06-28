@@ -1,16 +1,22 @@
 export interface HeaderOpts {
   isDev: boolean;
   supabaseHost: string;
+  nonce?: string;
 }
 
 /** HTTP security headers + a pragmatic CSP. In dev, the CSP also allows the
- *  Next HMR websocket and eval; production omits both. */
-export function securityHeaders({ isDev, supabaseHost }: HeaderOpts): Record<string, string> {
+ *  Next HMR websocket and eval; production omits both. When a `nonce` is given
+ *  (admin routes), script-src uses the nonce and drops 'unsafe-inline'; style-src
+ *  keeps 'unsafe-inline' (React style attributes can't be nonced). */
+export function securityHeaders({
+  isDev,
+  supabaseHost,
+  nonce,
+}: HeaderOpts): Record<string, string> {
   const turnstile = 'https://challenges.cloudflare.com';
   const connect = ["'self'", supabaseHost, turnstile, isDev ? 'ws: wss:' : ''].filter(Boolean);
-  const script = ["'self'", "'unsafe-inline'", turnstile, isDev ? "'unsafe-eval'" : ''].filter(
-    Boolean,
-  );
+  const scriptInline = nonce ? `'nonce-${nonce}'` : "'unsafe-inline'";
+  const script = ["'self'", scriptInline, turnstile, isDev ? "'unsafe-eval'" : ''].filter(Boolean);
 
   const csp = [
     "default-src 'self'",
