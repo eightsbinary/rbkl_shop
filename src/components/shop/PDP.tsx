@@ -1,44 +1,60 @@
 import Image from 'next/image';
 import type { ProductDetailData } from '@/server/queries/products';
-import { VariantSelector } from './VariantSelector';
+import { BuyPanel } from './BuyPanel';
+
+function imgAlt(img: { alt: unknown }, locale: 'th' | 'en', fallback: string): string {
+  const a = img.alt as { th?: string; en?: string } | null;
+  return a?.[locale] ?? a?.en ?? fallback;
+}
 
 export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 'en' }) {
   const nameObj = data.product.name as { th?: string; en?: string };
   const descObj = data.product.description as { th?: string; en?: string };
   const name = nameObj[locale] ?? nameObj.en ?? nameObj.th ?? data.product.slug;
   const desc = descObj[locale] ?? descObj.en ?? '';
+  const [main, ...rest] = data.images;
+  const details = rest.slice(0, 2);
 
   return (
-    <article className="container mx-auto px-6 py-16">
-      <div className="grid gap-12 lg:grid-cols-2">
-        <div className="animate-rise space-y-4">
-          {data.images.length > 0 ? (
-            data.images.map((img) => {
-              const altObj = img.alt as { th?: string; en?: string };
-              return (
-                <Image
-                  key={img.id}
-                  src={img.url_1600}
-                  alt={altObj?.[locale] ?? altObj?.en ?? name}
-                  width={1600}
-                  height={1600}
-                  className="w-full rounded-md bg-paper-warm object-cover"
-                />
-              );
-            })
+    <article className="container mx-auto px-6 py-16 lg:px-16">
+      <div className="grid gap-12 lg:grid-cols-12">
+        <div className="space-y-2 lg:col-span-7">
+          {main ? (
+            <div className="aspect-[4/5] w-full overflow-hidden bg-field">
+              <Image
+                src={main.url_1600}
+                alt={imgAlt(main, locale, name)}
+                width={1600}
+                height={2000}
+                priority
+                className="h-full w-full object-cover"
+              />
+            </div>
           ) : (
-            <div className="aspect-square w-full rounded-md bg-line" />
+            <div className="aspect-[4/5] w-full bg-field" />
+          )}
+          {details.length > 0 && (
+            <div className="grid grid-cols-2 gap-2">
+              {details.map((img) => (
+                <div key={img.id} className="aspect-square w-full overflow-hidden bg-field">
+                  <Image
+                    src={img.url_800}
+                    alt={imgAlt(img, locale, name)}
+                    width={800}
+                    height={800}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </div>
-        <div
-          className="animate-rise space-y-8 lg:sticky lg:top-24 lg:self-start"
-          style={{ animationDelay: '90ms' }}
-        >
-          <header className="space-y-3">
-            <h1 className="font-serif text-4xl text-ink">{name}</h1>
-            {desc && <p className="whitespace-pre-line text-ink-soft leading-relaxed">{desc}</p>}
-          </header>
-          <VariantSelector
+
+        <div className="lg:col-span-5">
+          <BuyPanel
+            name={name}
+            description={desc}
+            category={data.product.category}
             options={data.options}
             variants={data.variants}
             basePriceThb={data.product.base_price_thb}
