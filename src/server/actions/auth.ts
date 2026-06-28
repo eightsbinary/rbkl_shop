@@ -23,9 +23,15 @@ export async function requestMagicLink(formData: FormData) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const { error } = await supa.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${siteUrl}/api/auth/callback?next=/admin` },
+    options: {
+      emailRedirectTo: `${siteUrl}/api/auth/callback?next=/admin`,
+      // Only pre-provisioned admin accounts get a link — no self-signup.
+      shouldCreateUser: false,
+    },
   });
-  if (error) return { error: error.message };
+  // Always report success: never reveal whether the address is a provisioned
+  // admin (anti-enumeration). A non-admin email simply receives nothing.
+  if (error) console.error('[auth] magic-link request failed:', error.message);
   return { ok: true };
 }
 
@@ -48,7 +54,10 @@ export async function resendStepUpLink(): Promise<{ ok: true } | { error: string
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const { error } = await supa.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${siteUrl}/api/auth/callback?next=/admin` },
+    options: {
+      emailRedirectTo: `${siteUrl}/api/auth/callback?next=/admin`,
+      shouldCreateUser: false,
+    },
   });
   if (error) return { error: error.message };
   return { ok: true };

@@ -231,7 +231,7 @@ wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.local/bin/supaba
 - [ ] **Step 3: Re-bootstrap dev user**
 
 ```bash
-wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- eightsbinary@gmail.com"
+wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- dev@example.com"
 ```
 
 - [ ] **Step 4: Commit**

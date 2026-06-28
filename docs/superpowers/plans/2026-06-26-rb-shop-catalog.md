@@ -565,10 +565,10 @@ Expected: 4 migrations apply cleanly.
 wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && cat > /tmp/bootstrap-dev.ts <<'EOF'
 import { createClient } from '@supabase/supabase-js';
 const supa = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { autoRefreshToken: false, persistSession: false } });
-const { data: created } = await supa.auth.admin.createUser({ email: 'eightsbinary@gmail.com', email_confirm: true });
+const { data: created } = await supa.auth.admin.createUser({ email: 'dev@example.com', email_confirm: true });
 console.log('User:', created.user!.id);
 EOF
-~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- eightsbinary@gmail.com"
+~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- dev@example.com"
 ```
 Expected: dev role granted.
 
@@ -673,7 +673,7 @@ grant select, insert, update, delete
 - [ ] **Step 3: Apply + bootstrap**
 
 ```bash
-wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.local/bin/supabase db reset 2>&1 | tail -5 && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- eightsbinary@gmail.com"
+wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.local/bin/supabase db reset 2>&1 | tail -5 && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- dev@example.com"
 ```
 
 - [ ] **Step 4: Commit**
@@ -725,7 +725,7 @@ using (bucket_id = 'product-images' and public.is_owner_or_dev());
 - [ ] **Step 2: Apply + bootstrap**
 
 ```bash
-wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.local/bin/supabase db reset 2>&1 | tail -5 && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- eightsbinary@gmail.com"
+wsl -d Ubuntu -- bash -lc "cd /home/ton/workspace/rb_shop && ~/.local/bin/supabase db reset 2>&1 | tail -5 && ~/.bun/bin/bun run /tmp/bootstrap-dev.ts && ~/.bun/bin/bun run grant:dev -- dev@example.com"
 ```
 
 - [ ] **Step 3: Commit**
