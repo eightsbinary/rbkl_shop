@@ -26,6 +26,7 @@ describe('MockProvider', () => {
       chargeId: 'mock_c1',
       status: 'paid',
       amountThb: 100,
+      occurredAt: Date.now(),
     });
     const sig = signMockEvent(body);
     const req = new Request('http://x', {
@@ -37,6 +38,7 @@ describe('MockProvider', () => {
     expect(ev.status).toBe('paid');
     expect(ev.orderId).toBe('o1');
     expect(ev.amountThb).toBe(100);
+    expect(typeof ev.occurredAt).toBe('number');
   });
 
   it('rejects notifications with no signature', async () => {

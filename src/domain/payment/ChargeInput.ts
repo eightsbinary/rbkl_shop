@@ -25,4 +25,5 @@ export interface VerifiedEvent {
   readonly chargeId: string;
   readonly status: ChargeStatus;
   readonly amountThb: number;
+  readonly occurredAt: number;
 }

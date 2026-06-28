@@ -19,6 +19,7 @@ export async function simulateMockPayment(orderId: string, status: 'paid' | 'fai
     chargeId: order.payment_charge_id ?? 'mock_unknown',
     status,
     amountThb: order.total_thb,
+    occurredAt: Date.now(),
   });
   const sig = signMockEvent(body);
   const h = await headers();
