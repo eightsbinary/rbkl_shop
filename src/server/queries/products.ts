@@ -11,6 +11,7 @@ export interface ProductCardData {
   slug: string;
   name: { th?: string; en?: string };
   basePriceThb: number;
+  category: string | null;
   heroImage: Pick<ImageRow, 'url_400' | 'url_800' | 'url_1600' | 'alt'> | null;
 }
 
@@ -19,6 +20,7 @@ function rowToCard(p: {
   slug: string;
   name: unknown;
   base_price_thb: number;
+  category: unknown;
   hero_image: unknown;
 }): ProductCardData {
   const hero = Array.isArray(p.hero_image)
@@ -29,6 +31,7 @@ function rowToCard(p: {
     slug: p.slug,
     name: p.name as { th?: string; en?: string },
     basePriceThb: p.base_price_thb,
+    category: (p.category as string | null) ?? null,
     heroImage: hero,
   };
 }
@@ -38,7 +41,7 @@ export async function listActiveProducts(limit = 24): Promise<ProductCardData[]>
   const { data, error } = await supa
     .from('products')
     .select(
-      'id, slug, name, base_price_thb, hero_image:product_images!products_hero_image_fk(url_400, url_800, url_1600, alt)',
+      'id, slug, name, base_price_thb, category, hero_image:product_images!products_hero_image_fk(url_400, url_800, url_1600, alt)',
     )
     .eq('status', 'active')
     .order('created_at', { ascending: false })
@@ -52,7 +55,7 @@ export async function listFeaturedProducts(limit = 3): Promise<ProductCardData[]
   const { data, error } = await supa
     .from('products')
     .select(
-      'id, slug, name, base_price_thb, hero_image:product_images!products_hero_image_fk(url_400, url_800, url_1600, alt)',
+      'id, slug, name, base_price_thb, category, hero_image:product_images!products_hero_image_fk(url_400, url_800, url_1600, alt)',
     )
     .eq('status', 'active')
     .eq('is_featured', true)
