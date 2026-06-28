@@ -168,6 +168,29 @@ Trigger from `/admin/sync` (dev role only) with "Sync now" (debounced 5 min).
   `TURNSTILE_SECRET_KEY` it's a dev bypass; the `<TurnstileWidget>` renders
   nothing without `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Set both for production.
 
+### Step-up auth (recency gate)
+
+Destructive admin actions (ship, product save/archive, discount create/update,
+sheets sync) require an interactive sign-in within the last 30 minutes
+(`requireRecentAuth` / `stepUpGuard` in `src/db/auth.ts`, using Supabase
+`last_sign_in_at`). A stale session returns the `stepUpRequired` sentinel; the
+admin UI shows `<StepUpPrompt>` which re-sends a magic link. Bypassed outside
+production to keep local admin frictionless.
+
+### Webhook replay hardening
+
+`/api/payments/notify/[provider]` rejects events older than 5 minutes
+(`isFresh`, `occurredAt` on the event) and dedups via an atomic insert into
+`processed_webhook_events` (`unique (provider, event_id)`) — also closing a
+double-process race in the previous read-then-check.
+
+### Admin CSP
+
+`/admin` responses use a per-request nonce (`src/proxy.ts`) so `script-src`
+drops `'unsafe-inline'`. The storefront keeps the pragmatic CSP to stay
+statically cacheable. `style-src 'unsafe-inline'` remains (React inline style
+attributes can't be nonced).
+
 ## Build runtime split
 
 `bun run build` runs `node ./node_modules/next/dist/bin/next build` because Bun's
