@@ -114,5 +114,21 @@
     "paymentMethod": "payment method",
     "thankYou": "thank you for supporting",
     "print": "print"
+  },
+  "about": {
+    "heroTitle": "Made with care.",
+    "heroBody1": "rainbykello is a small studio for the things I make and share with my community — designed slowly, in limited runs, and shipped warmly from Thailand.",
+    "heroBody2": "Everything here starts on stream and ends in your hands. No mass production, no noise — just objects I'd want to keep myself.",
+    "craftTitle": "How it's made",
+    "craftSubtitle": "Every drop is considered — from the first sketch to the package on your doorstep.",
+    "craftCaption": "Material — chosen by hand",
+    "card1Title": "Made to last",
+    "card1Body": "Heavyweight fabrics and durable prints, chosen so each piece holds up to everyday wear.",
+    "card2Title": "Small batches",
+    "card2Body": "Limited runs mean tighter quality control and less waste — once a drop sells out, it's gone.",
+    "inspirationLabel": "Inspiration",
+    "inspirationTitle": "Stream & community",
+    "inspirationBody1": "The work is shaped by the people who show up — the chat, the regulars, the late-night streams.",
+    "inspirationBody2": "Every design is a little artifact of that community: something to carry the feeling of being part of it, offline."
   }
 }
