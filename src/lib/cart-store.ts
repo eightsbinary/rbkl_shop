@@ -49,6 +49,8 @@ export const useCart = create<CartState>()(
       clear: () => set({ lines: [] }),
       count: () => get().lines.reduce((acc, l) => acc + l.qty, 0),
     }),
-    { name: 'rb_shop_cart' },
+    // Persist only the cart lines — never the transient `open` drawer flag,
+    // which would otherwise re-open the drawer on every reload.
+    { name: 'rb_shop_cart', partialize: (s) => ({ lines: s.lines }) },
   ),
 );
