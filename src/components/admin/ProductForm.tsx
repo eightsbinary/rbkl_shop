@@ -2,12 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { createBrowserSupabase } from '@/db/client';
+import { STEP_UP_REQUIRED } from '@/lib/step-up';
 import { type ProductInputT, saveProduct } from '@/server/actions/products';
 import { ImagePicker, type UploadedImage } from './ImagePicker';
 
@@ -240,7 +242,11 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         </section>
       )}
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error === STEP_UP_REQUIRED ? (
+        <StepUpPrompt />
+      ) : (
+        error && <p className="text-sm text-error">{error}</p>
+      )}
       <div className="flex gap-3">
         <Button type="submit" disabled={busy}>
           {busy ? 'Saving…' : state.id ? 'Save changes' : 'Create product'}

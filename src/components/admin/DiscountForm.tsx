@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState, useTransition } from 'react';
+import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
+import { STEP_UP_REQUIRED } from '@/lib/step-up';
 import { createDiscount, type DiscountInputRaw, updateDiscount } from '@/server/actions/discounts';
 
 export interface DiscountFormValues {
@@ -167,7 +169,11 @@ export function DiscountForm({
         Active
       </label>
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error === STEP_UP_REQUIRED ? (
+        <StepUpPrompt />
+      ) : (
+        error && <p className="text-sm text-error">{error}</p>
+      )}
 
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={pending}>

@@ -1,12 +1,14 @@
 'use client';
 
 import { type FormEvent, useState, useTransition } from 'react';
+import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { CARRIERS } from '@/domain/carriers';
+import { STEP_UP_REQUIRED } from '@/lib/step-up';
 import { shipOrder } from '@/server/actions/ship-order';
 
 const CARRIER_ENTRIES = Object.entries(CARRIERS).map(([key, c]) => ({ key, label: c.label }));
@@ -77,7 +79,11 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
         />
       </div>
 
-      {error && <p className="text-sm text-error">{error}</p>}
+      {error === STEP_UP_REQUIRED ? (
+        <StepUpPrompt />
+      ) : (
+        error && <p className="text-sm text-error">{error}</p>
+      )}
 
       <Button type="submit" disabled={pending || trackingNumber.trim().length === 0}>
         {pending ? 'Marking shipped…' : 'Mark as shipped'}
