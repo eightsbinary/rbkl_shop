@@ -23,6 +23,7 @@ export function AddToCartButton({
 
   return (
     <Button
+      variant="solid"
       size="lg"
       className="w-full"
       disabled={disabled}

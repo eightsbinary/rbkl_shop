@@ -33,28 +33,32 @@ export function WaitlistButton({ variantId }: { variantId: string | null }) {
 
   if (state === 'done') {
     return (
-      <p className="animate-rise rounded-md border border-line bg-paper-warm px-4 py-3 text-sm text-ink-soft">
+      <p className="border border-line bg-field px-4 py-3 text-sm text-ink-soft">
         {t('notifyDone')}
       </p>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-2">
+    <form onSubmit={onSubmit} className="space-y-3">
       <p className="text-sm text-muted">{t('outOfStock')}</p>
-      <div className="flex gap-2">
-        <Input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t('notifyEmailPlaceholder')}
-          aria-label={t('notifyEmailPlaceholder')}
-        />
-        <Button type="submit" variant="secondary" disabled={state === 'pending' || !variantId}>
-          {t('notifyMe')}
-        </Button>
-      </div>
+      <Input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={t('notifyEmailPlaceholder')}
+        aria-label={t('notifyEmailPlaceholder')}
+      />
+      <Button
+        type="submit"
+        variant="outline"
+        size="lg"
+        className="w-full"
+        disabled={state === 'pending' || !variantId}
+      >
+        {t('notifyMe')}
+      </Button>
       <TurnstileWidget onToken={setToken} />
       {state === 'error' && <p className="text-sm text-error">{t('notifyError')}</p>}
     </form>
