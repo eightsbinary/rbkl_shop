@@ -6,6 +6,7 @@ import { MockProvider } from '@/domain/payment/adapters/MockProvider';
 import type { VerifiedEvent } from '@/domain/payment/ChargeInput';
 import { sendEmail } from '@/lib/email';
 import { signOrderToken } from '@/lib/order-token';
+import { isFresh } from '@/lib/webhook/freshness';
 
 const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
@@ -29,6 +30,10 @@ export async function POST(
     );
   }
 
+  if (!isFresh(event.occurredAt, Date.now(), 5 * 60_000)) {
+    return NextResponse.json({ error: 'Stale event' }, { status: 400 });
+  }
+
   const supa = createServiceRoleSupabase();
   const { data: order } = await supa
     .from('orders')
@@ -36,11 +41,20 @@ export async function POST(
     .eq('id', event.orderId)
     .maybeSingle();
   if (!order) return NextResponse.json({ error: 'Unknown order' }, { status: 404 });
-  if (order.last_event_id === event.eventId) {
-    return NextResponse.json({ ok: true, dedup: true });
-  }
   if (order.total_thb !== event.amountThb) {
     return NextResponse.json({ error: 'Amount mismatch' }, { status: 400 });
+  }
+
+  // Atomic, durable dedup: the unique (provider, event_id) constraint makes a
+  // concurrent or replayed delivery fail with 23505 instead of double-processing.
+  const { error: dedupError } = await supa
+    .from('processed_webhook_events')
+    .insert({ provider: providerKey, event_id: event.eventId, order_id: order.id });
+  if (dedupError) {
+    if (dedupError.code === '23505') {
+      return NextResponse.json({ ok: true, dedup: true });
+    }
+    return NextResponse.json({ error: 'Could not record event' }, { status: 500 });
   }
 
   if (event.status === 'paid') {
