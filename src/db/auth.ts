@@ -53,10 +53,12 @@ export async function requireRecentAuth(
   windowMs: number,
   now: () => number = () => Date.now(),
 ): Promise<void> {
+  // A failed getUser leaves data.user null → the !lastSignIn check below denies (fail closed).
   const { data } = await client.auth.getUser();
   const lastSignIn = data.user?.last_sign_in_at;
   if (!lastSignIn) throw new StepUpRequiredError();
-  if (now() - Date.parse(lastSignIn) > windowMs) throw new StepUpRequiredError();
+  const elapsed = now() - Date.parse(lastSignIn);
+  if (!Number.isFinite(elapsed) || elapsed > windowMs) throw new StepUpRequiredError();
 }
 
 /** Action-friendly wrapper: returns the step-up sentinel result, or null when

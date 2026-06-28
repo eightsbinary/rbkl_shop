@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { requireRecentAuth, StepUpRequiredError } from '@/db/auth';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { requireRecentAuth, StepUpRequiredError, stepUpGuard } from '@/db/auth';
+import { STEP_UP_REQUIRED } from '@/lib/step-up';
 
 type Client = Parameters<typeof requireRecentAuth>[0];
 
@@ -38,5 +39,42 @@ describe('requireRecentAuth', () => {
     await expect(requireRecentAuth(client, WINDOW, now)).rejects.toBeInstanceOf(
       StepUpRequiredError,
     );
+  });
+});
+
+describe('stepUpGuard', () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('bypasses the check outside production', async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    // Stale session, but dev bypass should still return null.
+    const client = clientWithUser({ last_sign_in_at: new Date(0).toISOString() });
+    expect(await stepUpGuard(client)).toBeNull();
+  });
+
+  it('returns null in production when the session is recent', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const client = clientWithUser({ last_sign_in_at: new Date(Date.now() - 1000).toISOString() });
+    expect(await stepUpGuard(client)).toBeNull();
+  });
+
+  it('returns the step-up sentinel in production when the session is stale', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const client = clientWithUser({
+      last_sign_in_at: new Date(Date.now() - 60 * 60_000).toISOString(),
+    });
+    expect(await stepUpGuard(client)).toEqual({ error: STEP_UP_REQUIRED });
+  });
+
+  it('rethrows unexpected errors in production', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const client = {
+      auth: {
+        getUser: async () => {
+          throw new Error('network');
+        },
+      },
+    } as unknown as Parameters<typeof stepUpGuard>[0];
+    await expect(stepUpGuard(client)).rejects.toThrow('network');
   });
 });
