@@ -39,7 +39,12 @@
     "notifyMe": "notify me when available",
     "notifyEmailPlaceholder": "your email",
     "notifyDone": "we'll email you when it's back",
-    "notifyError": "something went wrong — try again"
+    "notifyError": "something went wrong — try again",
+    "breadcrumbHome": "Home",
+    "detailsTitle": "Details & Care",
+    "detailsBody": "Made in small batches and shipped from Thailand. Follow the care label; wash cold, hang dry. Slight variation between pieces is part of how they're made.",
+    "shippingTitle": "Shipping & Returns",
+    "shippingBody": "Ships within 3–5 business days. Domestic and international tracked shipping at checkout. Unworn items can be returned within 14 days of delivery."
   },
   "footer": {
     "copyright": "© rainbykello",
