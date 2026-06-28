@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Fraunces, IBM_Plex_Sans_Thai, Inter } from 'next/font/google';
+import { IBM_Plex_Sans_Thai, Inter, Libre_Caslon_Text } from 'next/font/google';
 import './globals.css';
 
-const fraunces = Fraunces({
+const caslon = Libre_Caslon_Text({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  weight: ['400', '700'],
+  variable: '--font-caslon',
   display: 'swap',
 });
 
@@ -37,7 +38,7 @@ export default function RootLayout({
   return (
     <html
       lang="th"
-      className={`${fraunces.variable} ${inter.variable} ${plexThai.variable}`}
+      className={`${caslon.variable} ${inter.variable} ${plexThai.variable}`}
       suppressHydrationWarning
     >
       <body>{children}</body>

@@ -1,21 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  /* Soft Studio palette — LOCKED (spec §7 Option A) */
-  --color-ink: #1f1a17;
-  --color-ink-soft: #3a3330;
-  --color-paper: #faf7f2;
-  --color-paper-warm: #f2ede5;
-  --color-rose: #c9a0a0;
-  --color-rose-deep: #a87e7e;
-  --color-rose-soft: #e6d0d0;
-  --color-muted: #7a7370;
-  --color-line: #e5ded3;
-  --color-success: #5a8a6c;
-  --color-warn: #c28a3d;
-  --color-error: #b7484a;
+  /* Editorial Mono — neutral monochrome (token names kept for back-compat; rose* + paper-warm
+     revalued to neutrals so the ~21 not-yet-restyled files degrade gracefully to mono). */
+  --color-ink: #111111;
+  --color-ink-soft: #3a3a3a;
+  --color-ink-deep: #1a1a1a; /* dark bands (Journal / hero overlay); text on it = paper */
+  --color-paper: #fbfbfa;
+  --color-surface: #ffffff; /* cards / PDP panels */
+  --color-field: #f3f3f4; /* image placeholder fields */
+  --color-paper-warm: #f3f3f4; /* back-compat alias → field */
+  --color-muted: #5e5e5e;
+  --color-line: #e2e2e2;
+  /* rose accent retired → neutralised (existing rose-* classes now render mono) */
+  --color-rose: #111111;
+  --color-rose-deep: #000000;
+  --color-rose-soft: #e2e2e2;
+  --color-success: #4a6b56;
+  --color-warn: #8a6a3d;
+  --color-error: #a83e40;
 
-  --font-serif: var(--font-fraunces), var(--font-plex-thai), ui-serif, Georgia, serif;
+  --font-serif: var(--font-caslon), var(--font-plex-thai), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif;
 
   --radius-xs: 2px;
@@ -44,7 +49,7 @@
   }
 
   ::selection {
-    background: var(--color-rose-soft);
+    background: var(--color-line);
     color: var(--color-ink);
   }
 
