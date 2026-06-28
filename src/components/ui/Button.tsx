@@ -1,12 +1,16 @@
 import { type ButtonHTMLAttributes, forwardRef } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'ghost';
+type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'solid';
 type Size = 'sm' | 'md' | 'lg';
 
 const variantClasses: Record<Variant, string> = {
   primary: 'bg-ink text-paper hover:bg-ink-soft',
-  secondary: 'bg-paper-warm text-ink hover:bg-line border border-line',
-  ghost: 'bg-transparent text-ink hover:bg-paper-warm',
+  secondary: 'bg-surface text-ink border border-line hover:bg-field',
+  ghost: 'bg-transparent text-ink hover:bg-field',
+  // Editorial CTAs — square, uppercase, tracked
+  outline:
+    'rounded-none border border-ink bg-transparent text-ink uppercase tracking-[0.12em] hover:bg-ink hover:text-paper',
+  solid: 'rounded-none bg-ink text-paper uppercase tracking-[0.12em] hover:bg-ink-soft',
 };
 
 const sizeClasses: Record<Size, string> = {
