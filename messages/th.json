@@ -57,7 +57,16 @@
     "title": "ตะกร้า",
     "empty": "ตะกร้าว่างเปล่า",
     "subtotal": "ราคารวมก่อนค่าจัดส่ง",
-    "checkout": "ชำระเงิน"
+    "checkout": "ชำระเงิน",
+    "pageTitle": "ตะกร้าของคุณ",
+    "itemsCount": "{count} ชิ้น",
+    "orderSummary": "สรุปคำสั่งซื้อ",
+    "shipping": "ค่าจัดส่ง",
+    "shippingNote": "คำนวณในขั้นตอนถัดไป",
+    "total": "ยอดรวม",
+    "secureCheckout": "ชำระเงินปลอดภัย",
+    "continueShopping": "เลือกซื้อสินค้าต่อ",
+    "checkoutCta": "ดำเนินการชำระเงิน"
   },
   "checkout": {
     "title": "ชำระเงิน",

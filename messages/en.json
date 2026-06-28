@@ -57,7 +57,16 @@
     "title": "cart",
     "empty": "your cart is empty",
     "subtotal": "subtotal",
-    "checkout": "checkout"
+    "checkout": "checkout",
+    "pageTitle": "Your Cart",
+    "itemsCount": "{count, plural, one {# item} other {# items}}",
+    "orderSummary": "Order Summary",
+    "shipping": "Shipping",
+    "shippingNote": "Calculated at next step",
+    "total": "Total",
+    "secureCheckout": "Secure checkout",
+    "continueShopping": "Continue shopping",
+    "checkoutCta": "Proceed to checkout"
   },
   "checkout": {
     "title": "checkout",
