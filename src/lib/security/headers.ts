@@ -16,6 +16,8 @@ export function securityHeaders({
   const turnstile = 'https://challenges.cloudflare.com';
   const connect = ["'self'", supabaseHost, turnstile, isDev ? 'ws: wss:' : ''].filter(Boolean);
   const scriptInline = nonce ? `'nonce-${nonce}'` : "'unsafe-inline'";
+  // 'self' is intentional (no user-controlled script endpoints on this origin), so we skip 'strict-dynamic'.
+  // 'unsafe-eval' is added only in the isDev branch; it is required for Next HMR in dev.
   const script = ["'self'", scriptInline, turnstile, isDev ? "'unsafe-eval'" : ''].filter(Boolean);
 
   const csp = [
