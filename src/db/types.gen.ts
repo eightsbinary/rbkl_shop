@@ -239,6 +239,38 @@ export type Database = {
         }
         Relationships: []
       }
+      processed_webhook_events: {
+        Row: {
+          event_id: string
+          id: string
+          order_id: string | null
+          provider: string
+          received_at: string
+        }
+        Insert: {
+          event_id: string
+          id?: string
+          order_id?: string | null
+          provider: string
+          received_at?: string
+        }
+        Update: {
+          event_id?: string
+          id?: string
+          order_id?: string | null
+          provider?: string
+          received_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processed_webhook_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_images: {
         Row: {
           alt: Json
