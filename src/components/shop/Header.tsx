@@ -7,24 +7,23 @@ export function Header() {
   const locale = useLocale();
   const t = useTranslations('nav');
   return (
-    <header className="border-b border-line">
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
+    <header className="border-b border-line bg-paper">
+      <div className="container mx-auto grid h-20 grid-cols-[1fr_auto_1fr] items-center px-6">
+        <nav className="flex items-center gap-6 text-xs uppercase tracking-[0.14em] text-ink-soft">
+          <Link href={`/${locale}/shop`} className="transition-colors hover:text-ink">
+            {t('shop')}
+          </Link>
+        </nav>
         <Link
           href={`/${locale}`}
-          className="font-serif text-xl text-ink hover:text-rose-deep transition-colors duration-150 ease-out-soft"
+          className="justify-self-center font-serif text-2xl tracking-tight text-ink"
         >
           rainbykello
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-ink-soft">
-          <Link
-            href={`/${locale}/shop`}
-            className="relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100"
-          >
-            {t('shop')}
-          </Link>
+        <div className="flex items-center justify-end gap-5 text-xs uppercase tracking-[0.14em] text-ink-soft">
           <CartIcon label={t('cart')} />
           <LocaleSwitcher />
-        </nav>
+        </div>
       </div>
     </header>
   );
