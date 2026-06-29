@@ -151,6 +151,7 @@
       "discounts": "Discounts",
       "waitlists": "Waitlists",
       "sync": "Sync",
+      "settings": "Settings",
       "signOut": "Sign out"
     },
     "common": {
@@ -314,6 +315,18 @@
       "sent": "Sign-in link sent — open it from your email, then retry.",
       "sending": "Sending…",
       "sendCta": "Email me a sign-in link"
+    },
+    "settings": {
+      "title": "Payment settings",
+      "qrLabel": "PromptPay QR",
+      "uploadQr": "Upload QR image",
+      "uploading": "Uploading…",
+      "accountLabel": "Account name / label",
+      "instructionsEn": "Instructions (EN)",
+      "instructionsTh": "Instructions (TH)",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved."
     }
   }
 }

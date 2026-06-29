@@ -18,6 +18,7 @@ export async function AdminNav() {
     { href: '/admin/orders', label: t('orders') },
     { href: '/admin/discounts', label: t('discounts') },
     { href: '/admin/waitlists', label: t('waitlists') },
+    { href: '/admin/settings', label: t('settings') },
     ...(role === 'dev' ? [{ href: '/admin/sync', label: t('sync') }] : []),
   ];
 
