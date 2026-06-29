@@ -14,6 +14,7 @@ const orderTone: Record<OrderStatus, string> = {
 
 const shipTone: Record<ShipStatus, string> = {
   pending: 'bg-muted/15 text-muted',
+  awaiting_stock: 'bg-warn/15 text-warn',
   preparing: 'bg-warn/15 text-warn',
   shipped: 'bg-rose-soft text-rose-deep',
   delivered: 'bg-success/15 text-success',
@@ -46,6 +47,7 @@ export function ShipStatusPill({ status }: { status: ShipStatus }) {
   const t = useTranslations('admin.orders');
   const labels: Record<ShipStatus, string> = {
     pending: t('shipStatus.pending'),
+    awaiting_stock: t('shipStatus.awaiting_stock'),
     preparing: t('shipStatus.preparing'),
     shipped: t('shipStatus.shipped'),
     delivered: t('shipStatus.delivered'),

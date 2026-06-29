@@ -248,6 +248,7 @@
       },
       "shipStatus": {
         "pending": "รอดำเนินการ",
+        "awaiting_stock": "รอสินค้าเข้า",
         "preparing": "กำลังเตรียม",
         "shipped": "จัดส่งแล้ว",
         "delivered": "ได้รับสินค้า"

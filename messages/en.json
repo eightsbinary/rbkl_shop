@@ -248,6 +248,7 @@
       },
       "shipStatus": {
         "pending": "Pending",
+        "awaiting_stock": "Awaiting stock",
         "preparing": "Preparing",
         "shipped": "Shipped",
         "delivered": "Delivered"

@@ -99,6 +99,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_preorder: boolean
           line_total_thb: number
           order_id: string
           product_snapshot: Json
@@ -109,6 +110,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          is_preorder?: boolean
           line_total_thb: number
           order_id: string
           product_snapshot: Json
@@ -119,6 +121,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          is_preorder?: boolean
           line_total_thb?: number
           order_id?: string
           product_snapshot?: Json
@@ -389,7 +392,9 @@ export type Database = {
           hero_image_id: string | null
           id: string
           is_featured: boolean
+          is_preorder: boolean
           name: Json
+          preorder_ship_date: string | null
           slug: string
           status: Database["public"]["Enums"]["product_status"]
           updated_at: string
@@ -404,7 +409,9 @@ export type Database = {
           hero_image_id?: string | null
           id?: string
           is_featured?: boolean
+          is_preorder?: boolean
           name: Json
+          preorder_ship_date?: string | null
           slug: string
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
@@ -419,7 +426,9 @@ export type Database = {
           hero_image_id?: string | null
           id?: string
           is_featured?: boolean
+          is_preorder?: boolean
           name?: Json
+          preorder_ship_date?: string | null
           slug?: string
           status?: Database["public"]["Enums"]["product_status"]
           updated_at?: string
@@ -617,6 +626,9 @@ export type Database = {
           id: string
           is_active: boolean
           option_values: Json
+          preorder_cap: number | null
+          preorder_count: number
+          preorder_enabled: boolean
           price_thb: number | null
           product_id: string
           sku: string
@@ -630,6 +642,9 @@ export type Database = {
           id?: string
           is_active?: boolean
           option_values: Json
+          preorder_cap?: number | null
+          preorder_count?: number
+          preorder_enabled?: boolean
           price_thb?: number | null
           product_id: string
           sku: string
@@ -643,6 +658,9 @@ export type Database = {
           id?: string
           is_active?: boolean
           option_values?: Json
+          preorder_cap?: number | null
+          preorder_count?: number
+          preorder_enabled?: boolean
           price_thb?: number | null
           product_id?: string
           sku?: string
@@ -717,7 +735,12 @@ export type Database = {
         | "cancelled"
         | "refunded"
       product_status: "draft" | "active" | "archived"
-      ship_status: "pending" | "preparing" | "shipped" | "delivered"
+      ship_status:
+        | "pending"
+        | "awaiting_stock"
+        | "preparing"
+        | "shipped"
+        | "delivered"
       user_role: "customer" | "owner" | "dev"
     }
     CompositeTypes: {
@@ -855,7 +878,13 @@ export const Constants = {
         "refunded",
       ],
       product_status: ["draft", "active", "archived"],
-      ship_status: ["pending", "preparing", "shipped", "delivered"],
+      ship_status: [
+        "pending",
+        "awaiting_stock",
+        "preparing",
+        "shipped",
+        "delivered",
+      ],
       user_role: ["customer", "owner", "dev"],
     },
   },
