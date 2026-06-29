@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { TurnstileWidget } from '@/components/security/TurnstileWidget';
 import { Button } from '@/components/ui/Button';
@@ -10,6 +11,7 @@ import { requestMagicLink } from '@/server/actions/auth';
 type Status = 'idle' | 'sent' | { error: string };
 
 export default function AdminLoginPage() {
+  const t = useTranslations('admin.login');
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [token, setToken] = useState('');
@@ -17,8 +19,8 @@ export default function AdminLoginPage() {
   return (
     <div className="mx-auto max-w-md py-24 space-y-8 px-6">
       <header className="space-y-2 text-center">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted">admin</p>
-        <h1 className="font-serif text-3xl text-ink">Sign in</h1>
+        <p className="text-xs uppercase tracking-[0.2em] text-muted">{t('badge')}</p>
+        <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
       </header>
       <form
         action={async (fd) => {
@@ -31,19 +33,15 @@ export default function AdminLoginPage() {
         className="space-y-4"
       >
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t('emailLabel')}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
         <TurnstileWidget onToken={setToken} />
         <input type="hidden" name="turnstileToken" value={token} />
         <Button type="submit" disabled={submitting} className="w-full">
-          {submitting ? 'Sending…' : 'Send magic link'}
+          {submitting ? t('sending') : t('sendCta')}
         </Button>
-        {status === 'sent' && (
-          <p className="text-sm text-success">
-            Check your inbox (or Mailpit at http://127.0.0.1:54324 for local dev).
-          </p>
-        )}
+        {status === 'sent' && <p className="text-sm text-success">{t('sentMsg')}</p>}
         {typeof status === 'object' && 'error' in status && (
           <p className="text-sm text-error">{status.error}</p>
         )}

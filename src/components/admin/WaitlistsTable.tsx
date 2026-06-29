@@ -1,10 +1,14 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import type { WaitlistGroup } from '@/server/queries/admin-waitlists';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium' });
 
 export function WaitlistsTable({ groups }: { groups: WaitlistGroup[] }) {
+  const t = useTranslations('admin.waitlists');
   if (groups.length === 0) {
-    return <p className="text-muted">No one is waiting right now.</p>;
+    return <p className="text-muted">{t('empty')}</p>;
   }
 
   return (
@@ -12,10 +16,10 @@ export function WaitlistsTable({ groups }: { groups: WaitlistGroup[] }) {
       <table className="w-full text-sm">
         <thead className="border-b border-line text-left text-muted">
           <tr>
-            <th className="px-4 py-3 font-medium">Product</th>
-            <th className="px-4 py-3 font-medium">Waiting</th>
-            <th className="px-4 py-3 font-medium">Since</th>
-            <th className="px-4 py-3 font-medium">Stock</th>
+            <th className="px-4 py-3 font-medium">{t('colProduct')}</th>
+            <th className="px-4 py-3 font-medium">{t('colWaiting')}</th>
+            <th className="px-4 py-3 font-medium">{t('colSince')}</th>
+            <th className="px-4 py-3 font-medium">{t('colStock')}</th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +39,7 @@ export function WaitlistsTable({ groups }: { groups: WaitlistGroup[] }) {
                       restockReady ? 'bg-success/15 text-success' : 'bg-muted/15 text-muted'
                     }`}
                   >
-                    {restockReady ? `${g.stockAvailable} in stock — will notify` : 'sold out'}
+                    {restockReady ? t('inStock', { count: g.stockAvailable }) : t('soldOut')}
                   </span>
                 </td>
               </tr>

@@ -246,6 +246,49 @@
         "markShipped": "Mark as shipped",
         "marking": "Marking shipped…"
       }
+    },
+    "dashboard": {
+      "welcome": "Welcome.",
+      "intro": "Start with <link>Products</link>."
+    },
+    "waitlists": {
+      "title": "Waitlists",
+      "description": "Fans waiting on sold-out variants. Restocking a variant queues them for the next notify-waitlist run.",
+      "empty": "No one is waiting right now.",
+      "colProduct": "Product",
+      "colWaiting": "Waiting",
+      "colSince": "Since",
+      "colStock": "Stock",
+      "inStock": "{count} in stock — will notify",
+      "soldOut": "sold out"
+    },
+    "sync": {
+      "title": "Sheets sync",
+      "description": "Reconcile the Google Sheet with the database. The DB is authoritative; the sheet is overwritten with a fresh snapshot every run.",
+      "colWhen": "When",
+      "colStatus": "Status",
+      "colPulled": "Pulled",
+      "colApplied": "Applied",
+      "colRejected": "Rejected",
+      "empty": "No syncs yet.",
+      "errorRow": "error: {error}",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…",
+      "synced": "Synced — {applied} applied, {rejected} rejected."
+    },
+    "login": {
+      "badge": "admin",
+      "title": "Sign in",
+      "emailLabel": "Email",
+      "sending": "Sending…",
+      "sendCta": "Send magic link",
+      "sentMsg": "Check your inbox (or Mailpit at http://127.0.0.1:54324 for local dev)."
+    },
+    "stepUp": {
+      "prompt": "For your security, confirm it’s you before this action.",
+      "sent": "Sign-in link sent — open it from your email, then retry.",
+      "sending": "Sending…",
+      "sendCta": "Email me a sign-in link"
     }
   }
 }

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { SyncPanel } from '@/components/admin/SyncPanel';
 import { getCurrentRole } from '@/db/auth';
 import { createServerSupabase } from '@/db/server';
@@ -6,6 +7,7 @@ import { createServerSupabase } from '@/db/server';
 const dateFmt = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
 export default async function AdminSyncPage() {
+  const t = await getTranslations('admin.sync');
   const supa = await createServerSupabase();
   const role = await getCurrentRole(supa);
   if (role !== 'dev') notFound(); // dev-only screen
@@ -19,11 +21,8 @@ export default async function AdminSyncPage() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h1 className="font-serif text-3xl text-ink">Sheets sync</h1>
-        <p className="text-sm text-muted">
-          Reconcile the Google Sheet with the database. The DB is authoritative; the sheet is
-          overwritten with a fresh snapshot every run.
-        </p>
+        <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
+        <p className="text-sm text-muted">{t('description')}</p>
       </div>
 
       <SyncPanel />
@@ -32,18 +31,18 @@ export default async function AdminSyncPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-line text-left text-muted">
             <tr>
-              <th className="px-4 py-3 font-medium">When</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Pulled</th>
-              <th className="px-4 py-3 font-medium">Applied</th>
-              <th className="px-4 py-3 font-medium">Rejected</th>
+              <th className="px-4 py-3 font-medium">{t('colWhen')}</th>
+              <th className="px-4 py-3 font-medium">{t('colStatus')}</th>
+              <th className="px-4 py-3 font-medium">{t('colPulled')}</th>
+              <th className="px-4 py-3 font-medium">{t('colApplied')}</th>
+              <th className="px-4 py-3 font-medium">{t('colRejected')}</th>
             </tr>
           </thead>
           <tbody>
             {(runs ?? []).length === 0 && (
               <tr>
                 <td className="px-4 py-3 text-muted" colSpan={5}>
-                  No syncs yet.
+                  {t('empty')}
                 </td>
               </tr>
             )}
@@ -51,7 +50,7 @@ export default async function AdminSyncPage() {
               <tr key={r.id} className="border-b border-line last:border-0">
                 <td className="px-4 py-3 text-ink">{dateFmt.format(new Date(r.started_at))}</td>
                 <td className="px-4 py-3 text-ink-soft">
-                  {r.error ? `error: ${r.error}` : r.status}
+                  {r.error ? t('errorRow', { error: r.error }) : r.status}
                 </td>
                 <td className="px-4 py-3 text-ink-soft">{r.rows_pulled}</td>
                 <td className="px-4 py-3 text-ink-soft">{r.rows_applied}</td>

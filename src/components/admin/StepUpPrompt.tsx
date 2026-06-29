@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/Button';
 import { resendStepUpLink } from '@/server/actions/auth';
@@ -8,15 +9,16 @@ import { resendStepUpLink } from '@/server/actions/auth';
  *  link to the signed-in admin; clicking it refreshes last_sign_in_at so the
  *  retried action passes the recency gate. */
 export function StepUpPrompt() {
+  const t = useTranslations('admin.stepUp');
   const [pending, start] = useTransition();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="space-y-2 rounded-md border p-3 text-sm">
-      <p>For your security, confirm it&apos;s you before this action.</p>
+      <p>{t('prompt')}</p>
       {sent ? (
-        <p className="text-success">Sign-in link sent — open it from your email, then retry.</p>
+        <p className="text-success">{t('sent')}</p>
       ) : (
         <Button
           type="button"
@@ -30,7 +32,7 @@ export function StepUpPrompt() {
             })
           }
         >
-          {pending ? 'Sending…' : 'Email me a sign-in link'}
+          {pending ? t('sending') : t('sendCta')}
         </Button>
       )}
       {error && <p className="text-error">{error}</p>}
