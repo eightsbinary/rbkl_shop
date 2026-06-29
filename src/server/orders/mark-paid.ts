@@ -24,17 +24,23 @@ export async function markOrderPaid(
     .maybeSingle();
   if (!order || order.status === 'paid') return;
 
-  await supa
-    .from('orders')
-    .update({ status: 'paid', paid_at: new Date().toISOString(), ship_status: 'preparing' })
-    .eq('id', orderId);
-
   const { data: items } = await supa
     .from('order_items')
-    .select('variant_id, qty, product_snapshot')
+    .select('variant_id, qty, product_snapshot, is_preorder')
     .eq('order_id', orderId);
 
+  const hasPreorder = (items ?? []).some((it) => it.is_preorder);
+  await supa
+    .from('orders')
+    .update({
+      status: 'paid',
+      paid_at: new Date().toISOString(),
+      ship_status: hasPreorder ? 'awaiting_stock' : 'preparing',
+    })
+    .eq('id', orderId);
+
   for (const it of items ?? []) {
+    if (it.is_preorder) continue;
     if (!it.variant_id) continue;
     const { data: v } = await supa
       .from('variants')

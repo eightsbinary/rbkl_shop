@@ -23,6 +23,7 @@ interface FakeItem {
   variant_id: string | null;
   qty: number;
   product_snapshot: unknown;
+  is_preorder?: boolean;
 }
 
 function buildFakeSupa(opts: {
@@ -153,5 +154,65 @@ describe('markOrderPaid', () => {
       type: 'payment.paid',
       actor: 'test-actor',
     });
+  });
+
+  it('pre-order: sets ship_status awaiting_stock and skips stock release', async () => {
+    const { supa, ordersUpdates, variantsUpdates } = buildFakeSupa({
+      order: {
+        id: 'order-3',
+        status: 'awaiting_verification',
+        total_thb: 890,
+        number: 'ORD-003',
+        customer_email: 'buyer@example.com',
+        locale: 'en',
+      },
+      items: [
+        {
+          variant_id: 'var-2',
+          qty: 1,
+          product_snapshot: { name: { en: 'Limited Drop', th: 'ลิมิเต็ด' } },
+          is_preorder: true,
+        },
+      ],
+      variants: {
+        'var-2': { stock_reserved: 0 },
+      },
+    });
+
+    await markOrderPaid(supa, 'order-3');
+
+    expect(ordersUpdates).toHaveLength(1);
+    expect(ordersUpdates[0]).toMatchObject({ status: 'paid', ship_status: 'awaiting_stock' });
+    // pre-order lines must not touch stock_reserved
+    expect(variantsUpdates['var-2']).toBeUndefined();
+  });
+
+  it('all-in-stock order: sets ship_status preparing', async () => {
+    const { supa, ordersUpdates } = buildFakeSupa({
+      order: {
+        id: 'order-4',
+        status: 'awaiting_verification',
+        total_thb: 299,
+        number: 'ORD-004',
+        customer_email: 'buyer@example.com',
+        locale: 'th',
+      },
+      items: [
+        {
+          variant_id: 'var-3',
+          qty: 1,
+          product_snapshot: { name: { en: 'Regular Item', th: 'สินค้าปกติ' } },
+          is_preorder: false,
+        },
+      ],
+      variants: {
+        'var-3': { stock_reserved: 3 },
+      },
+    });
+
+    await markOrderPaid(supa, 'order-4');
+
+    expect(ordersUpdates).toHaveLength(1);
+    expect(ordersUpdates[0]).toMatchObject({ status: 'paid', ship_status: 'preparing' });
   });
 });
