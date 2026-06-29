@@ -4,6 +4,7 @@ import * as z from 'zod';
 import { createServiceRoleSupabase } from '@/db/server';
 import type { Json } from '@/db/types.gen';
 import { generateOrderNumber } from '@/domain/order-number';
+import { lineMode, preorderActive } from '@/domain/preorder';
 import { signOrderToken } from '@/lib/order-token';
 import { clientIp, enforceRateLimit } from '@/lib/rate-limit';
 import { verifyTurnstile } from '@/lib/turnstile';
@@ -44,7 +45,7 @@ export async function placeOrder(raw: PlaceOrderInputT) {
   const { data: variants, error: vErr } = await supa
     .from('variants')
     .select(
-      'id, price_thb, stock_available, stock_reserved, is_active, option_values, product:products!inner(id, slug, name, base_price_thb, status, weight_grams)',
+      'id, price_thb, stock_available, stock_reserved, is_active, option_values, preorder_enabled, preorder_cap, preorder_count, product:products!inner(id, slug, name, base_price_thb, status, weight_grams, is_preorder)',
     )
     .in(
       'id',
@@ -59,6 +60,7 @@ export async function placeOrder(raw: PlaceOrderInputT) {
     unit_price_thb: number;
     line_total_thb: number;
     product_snapshot: Json;
+    is_preorder: boolean;
   }
   const itemRows: ItemDraft[] = [];
   for (const line of input.lines) {
@@ -66,7 +68,17 @@ export async function placeOrder(raw: PlaceOrderInputT) {
     if (!v?.is_active) return { error: 'Variant unavailable' };
     const p = Array.isArray(v.product) ? v.product[0] : v.product;
     if (p?.status !== 'active') return { error: 'Product unavailable' };
-    if (v.stock_available < line.qty) return { error: 'Not enough stock' };
+    const preState = {
+      isPreorder: p?.is_preorder ?? false,
+      preorderEnabled: v.preorder_enabled,
+      preorderCap: v.preorder_cap,
+      preorderCount: v.preorder_count,
+      stockAvailable: v.stock_available,
+    };
+    const mode = lineMode(preState, line.qty);
+    if (mode === 'unavailable') {
+      return { error: preorderActive(preState) ? 'Pre-orders are full' : 'Not enough stock' };
+    }
     const unit = v.price_thb ?? p.base_price_thb;
     const lineTotal = unit * line.qty;
     subtotal += lineTotal;
@@ -75,6 +87,7 @@ export async function placeOrder(raw: PlaceOrderInputT) {
       qty: line.qty,
       unit_price_thb: unit,
       line_total_thb: lineTotal,
+      is_preorder: mode === 'preorder',
       product_snapshot: {
         productId: p.id,
         slug: p.slug,
@@ -116,18 +129,29 @@ export async function placeOrder(raw: PlaceOrderInputT) {
   if (discount > subtotal) discount = subtotal;
   const total = subtotal - discount + zone.flat_rate_thb;
 
-  for (const line of input.lines) {
-    const v = variants.find((x) => x.id === line.variantId);
+  for (const row of itemRows) {
+    const v = variants.find((x) => x.id === row.variant_id);
     if (!v) continue;
-    const { error: updErr } = await supa
-      .from('variants')
-      .update({
-        stock_available: v.stock_available - line.qty,
-        stock_reserved: v.stock_reserved + line.qty,
-      })
-      .eq('id', v.id)
-      .gte('stock_available', line.qty);
-    if (updErr) return { error: 'Reservation failed' };
+    if (row.is_preorder) {
+      let q = supa
+        .from('variants')
+        .update({ preorder_count: v.preorder_count + row.qty })
+        .eq('id', v.id);
+      if (v.preorder_cap != null) q = q.lte('preorder_count', v.preorder_cap - row.qty);
+      const { data: updated, error: updErr } = await q.select('id');
+      if (updErr || !updated || updated.length === 0) return { error: 'Pre-orders are full' };
+    } else {
+      const { data: updated, error: updErr } = await supa
+        .from('variants')
+        .update({
+          stock_available: v.stock_available - row.qty,
+          stock_reserved: v.stock_reserved + row.qty,
+        })
+        .eq('id', v.id)
+        .gte('stock_available', row.qty)
+        .select('id');
+      if (updErr || !updated || updated.length === 0) return { error: 'Not enough stock' };
+    }
   }
 
   const number = generateOrderNumber();
