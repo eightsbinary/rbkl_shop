@@ -49,8 +49,17 @@ export const useCart = create<CartState>()(
       clear: () => set({ lines: [] }),
       count: () => get().lines.reduce((acc, l) => acc + l.qty, 0),
     }),
-    // Persist only the cart lines — never the transient `open` drawer flag,
-    // which would otherwise re-open the drawer on every reload.
-    { name: 'rb_shop_cart', partialize: (s) => ({ lines: s.lines }) },
+    {
+      name: 'rb_shop_cart',
+      // Persist only the cart lines — never the transient `open` drawer flag.
+      partialize: (s) => ({ lines: s.lines }),
+      // Force the drawer closed on every load, even for sessions whose older
+      // persisted state still contains `open: true`.
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as Partial<CartState>),
+        open: false,
+      }),
+    },
   ),
 );

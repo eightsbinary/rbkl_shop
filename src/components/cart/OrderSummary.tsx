@@ -8,7 +8,7 @@ export function OrderSummary({ subtotal, locale }: { subtotal: number; locale: '
   const t = useTranslations('cart');
   const money = `฿${subtotal.toLocaleString()}`;
   return (
-    <div className="border border-line bg-surface p-8">
+    <div className="border border-line bg-surface p-8 shadow-sm">
       <h2 className="font-serif text-2xl text-ink">{t('orderSummary')}</h2>
       <dl className="mt-6 space-y-3 text-sm">
         <div className="flex justify-between">
