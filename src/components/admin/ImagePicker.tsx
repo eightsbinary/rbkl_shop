@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Label } from '@/components/ui/Label';
 import { createBrowserSupabase } from '@/db/client';
@@ -19,6 +20,7 @@ export function ImagePicker({
   productId: string;
   onUploaded: (img: UploadedImage) => void;
 }) {
+  const t = useTranslations('admin.products');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,7 +65,7 @@ export function ImagePicker({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="image-upload">Add image</Label>
+      <Label htmlFor="image-upload">{t('addImage')}</Label>
       <input
         id="image-upload"
         type="file"
@@ -75,7 +77,7 @@ export function ImagePicker({
         }}
         className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-md file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
       />
-      {busy && <p className="text-sm text-muted">Resizing and uploading…</p>}
+      {busy && <p className="text-sm text-muted">{t('uploading')}</p>}
       {error && <p className="text-sm text-error">{error}</p>}
     </div>
   );

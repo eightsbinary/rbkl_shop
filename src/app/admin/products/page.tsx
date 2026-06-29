@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/Button';
 import { createServerSupabase } from '@/db/server';
 
@@ -9,12 +10,15 @@ export default async function AdminProductsPage() {
     .select('id, slug, status, name, base_price_thb, is_featured, updated_at')
     .order('updated_at', { ascending: false });
 
+  const t = await getTranslations('admin.products');
+  const tc = await getTranslations('admin.common');
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-ink">Products</h1>
+        <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
         <Link href="/admin/products/new">
-          <Button>New product</Button>
+          <Button>{t('newProduct')}</Button>
         </Link>
       </div>
 
@@ -22,10 +26,10 @@ export default async function AdminProductsPage() {
         <table className="w-full text-sm">
           <thead className="border-b border-line text-left text-muted">
             <tr>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Featured</th>
-              <th className="px-4 py-3 font-medium">Price</th>
+              <th className="px-4 py-3 font-medium">{t('colName')}</th>
+              <th className="px-4 py-3 font-medium">{tc('status')}</th>
+              <th className="px-4 py-3 font-medium">{t('colFeatured')}</th>
+              <th className="px-4 py-3 font-medium">{t('colPrice')}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -44,7 +48,7 @@ export default async function AdminProductsPage() {
                       href={`/admin/products/${p.id}/edit`}
                       className="text-rose-deep hover:underline"
                     >
-                      Edit
+                      {t('editLink')}
                     </Link>
                   </td>
                 </tr>

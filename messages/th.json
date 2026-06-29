@@ -139,6 +139,38 @@
       "waitlists": "รายการรอ",
       "sync": "ซิงค์",
       "signOut": "ออกจากระบบ"
+    },
+    "common": {
+      "status": "สถานะ",
+      "draft": "ฉบับร่าง",
+      "active": "เผยแพร่",
+      "archived": "เก็บถาวร",
+      "saving": "กำลังบันทึก…"
+    },
+    "products": {
+      "title": "สินค้า",
+      "newProduct": "สินค้าใหม่",
+      "editProduct": "แก้ไขสินค้า",
+      "colName": "ชื่อ",
+      "colFeatured": "แนะนำ",
+      "colPrice": "ราคา",
+      "editLink": "แก้ไข",
+      "basics": "ข้อมูลพื้นฐาน",
+      "nameTh": "ชื่อ (TH)",
+      "nameEn": "ชื่อ (EN)",
+      "descTh": "คำอธิบาย (TH)",
+      "descEn": "คำอธิบาย (EN)",
+      "basePrice": "ราคาตั้งต้น (บาท)",
+      "weight": "น้ำหนัก (กรัม)",
+      "featureOnLanding": "แสดงบนหน้าหลัก",
+      "variants": "ตัวเลือกสินค้า",
+      "axisName": "ชื่อแกน",
+      "axisValues": "ค่า (คั่นด้วยคอมมา)",
+      "images": "รูปภาพ",
+      "saveCta": "บันทึกการเปลี่ยนแปลง",
+      "createCta": "สร้างสินค้า",
+      "addImage": "เพิ่มรูปภาพ",
+      "uploading": "กำลังปรับขนาดและอัปโหลด…"
     }
   }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
@@ -25,6 +26,8 @@ const DEFAULT_AXES: ProductInputT['axes'] = [
 
 export function ProductForm({ initial }: { initial: ProductFormInitial }) {
   const router = useRouter();
+  const t = useTranslations('admin.products');
+  const tc = useTranslations('admin.common');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [state, setState] = useState<ProductInputT>({
@@ -91,11 +94,11 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
   return (
     <form onSubmit={onSubmit} className="space-y-10 max-w-3xl">
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl text-ink">Basics</h2>
+        <h2 className="font-serif text-2xl text-ink">{t('basics')}</h2>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name-th">Name (TH)</Label>
+            <Label htmlFor="name-th">{t('nameTh')}</Label>
             <Input
               id="name-th"
               value={state.name.th}
@@ -103,7 +106,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="name-en">Name (EN)</Label>
+            <Label htmlFor="name-en">{t('nameEn')}</Label>
             <Input
               id="name-en"
               value={state.name.en}
@@ -114,7 +117,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="desc-th">Description (TH)</Label>
+            <Label htmlFor="desc-th">{t('descTh')}</Label>
             <Textarea
               id="desc-th"
               value={state.description.th}
@@ -127,7 +130,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="desc-en">Description (EN)</Label>
+            <Label htmlFor="desc-en">{t('descEn')}</Label>
             <Textarea
               id="desc-en"
               value={state.description.en}
@@ -143,7 +146,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
 
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="price">Base price (THB)</Label>
+            <Label htmlFor="price">{t('basePrice')}</Label>
             <Input
               id="price"
               type="number"
@@ -153,7 +156,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="weight">Weight (g)</Label>
+            <Label htmlFor="weight">{t('weight')}</Label>
             <Input
               id="weight"
               type="number"
@@ -163,7 +166,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{tc('status')}</Label>
             <Select
               id="status"
               value={state.status}
@@ -171,9 +174,9 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
                 setState({ ...state, status: e.target.value as ProductInputT['status'] })
               }
             >
-              <option value="draft">Draft</option>
-              <option value="active">Active</option>
-              <option value="archived">Archived</option>
+              <option value="draft">{tc('draft')}</option>
+              <option value="active">{tc('active')}</option>
+              <option value="archived">{tc('archived')}</option>
             </Select>
           </div>
         </div>
@@ -185,17 +188,17 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             checked={state.isFeatured}
             onChange={(e) => setState({ ...state, isFeatured: e.target.checked })}
           />
-          <Label htmlFor="isFeatured">Feature on landing</Label>
+          <Label htmlFor="isFeatured">{t('featureOnLanding')}</Label>
         </div>
       </section>
 
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl text-ink">Variants</h2>
+        <h2 className="font-serif text-2xl text-ink">{t('variants')}</h2>
         {state.axes.map((axis, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: axes are user-mutated rows, name can repeat during edits
           <div key={i} className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor={`axis-name-${i}`}>Axis name</Label>
+              <Label htmlFor={`axis-name-${i}`}>{t('axisName')}</Label>
               <Input
                 id={`axis-name-${i}`}
                 value={axis.name}
@@ -203,7 +206,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
               />
             </div>
             <div className="col-span-2 space-y-2">
-              <Label htmlFor={`axis-values-${i}`}>Values (comma separated)</Label>
+              <Label htmlFor={`axis-values-${i}`}>{t('axisValues')}</Label>
               <Input
                 id={`axis-values-${i}`}
                 value={axis.values.join(', ')}
@@ -223,7 +226,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
 
       {state.id && (
         <section className="space-y-4">
-          <h2 className="font-serif text-2xl text-ink">Images</h2>
+          <h2 className="font-serif text-2xl text-ink">{t('images')}</h2>
           <div className="grid grid-cols-4 gap-3">
             {images.map((img) => (
               // biome-ignore lint/performance/noImgElement: admin-only preview, sizes vary, Next/Image not worth it
@@ -249,7 +252,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
       )}
       <div className="flex gap-3">
         <Button type="submit" disabled={busy}>
-          {busy ? 'Saving…' : state.id ? 'Save changes' : 'Create product'}
+          {busy ? tc('saving') : state.id ? t('saveCta') : t('createCta')}
         </Button>
       </div>
     </form>

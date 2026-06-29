@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { ProductForm, type ProductFormInitial } from '@/components/admin/ProductForm';
 import { createServerSupabase } from '@/db/server';
 
@@ -11,6 +12,8 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     supa.from('product_images').select('id, url_400').eq('product_id', id).order('sort'),
   ]);
   if (!product) notFound();
+
+  const t = await getTranslations('admin.products');
 
   const initial: ProductFormInitial = {
     id: product.id,
@@ -29,7 +32,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-8">
-      <h1 className="font-serif text-3xl text-ink">Edit product</h1>
+      <h1 className="font-serif text-3xl text-ink">{t('editProduct')}</h1>
       <ProductForm initial={initial} />
     </div>
   );

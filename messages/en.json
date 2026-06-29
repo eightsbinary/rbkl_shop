@@ -139,6 +139,38 @@
       "waitlists": "Waitlists",
       "sync": "Sync",
       "signOut": "Sign out"
+    },
+    "common": {
+      "status": "Status",
+      "draft": "Draft",
+      "active": "Active",
+      "archived": "Archived",
+      "saving": "Saving…"
+    },
+    "products": {
+      "title": "Products",
+      "newProduct": "New product",
+      "editProduct": "Edit product",
+      "colName": "Name",
+      "colFeatured": "Featured",
+      "colPrice": "Price",
+      "editLink": "Edit",
+      "basics": "Basics",
+      "nameTh": "Name (TH)",
+      "nameEn": "Name (EN)",
+      "descTh": "Description (TH)",
+      "descEn": "Description (EN)",
+      "basePrice": "Base price (THB)",
+      "weight": "Weight (g)",
+      "featureOnLanding": "Feature on landing",
+      "variants": "Variants",
+      "axisName": "Axis name",
+      "axisValues": "Values (comma separated)",
+      "images": "Images",
+      "saveCta": "Save changes",
+      "createCta": "Create product",
+      "addImage": "Add image",
+      "uploading": "Resizing and uploading…"
     }
   }
 }
