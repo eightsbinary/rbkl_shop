@@ -130,5 +130,15 @@
     "inspirationTitle": "Stream & community",
     "inspirationBody1": "The work is shaped by the people who show up — the chat, the regulars, the late-night streams.",
     "inspirationBody2": "Every design is a little artifact of that community: something to carry the feeling of being part of it, offline."
+  },
+  "admin": {
+    "nav": {
+      "products": "Products",
+      "orders": "Orders",
+      "discounts": "Discounts",
+      "waitlists": "Waitlists",
+      "sync": "Sync",
+      "signOut": "Sign out"
+    }
   }
 }

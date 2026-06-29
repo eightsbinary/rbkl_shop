@@ -1,14 +1,9 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { AdminLocaleToggle } from '@/components/admin/AdminLocaleToggle';
 import { getCurrentRole } from '@/db/auth';
 import { createServerSupabase } from '@/db/server';
 import { signOutAdmin } from '@/server/actions/auth';
-
-const NAV_LINKS = [
-  { href: '/admin/products', label: 'Products' },
-  { href: '/admin/orders', label: 'Orders' },
-  { href: '/admin/discounts', label: 'Discounts' },
-  { href: '/admin/waitlists', label: 'Waitlists' },
-];
 
 const linkClass =
   'relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100';
@@ -16,7 +11,15 @@ const linkClass =
 export async function AdminNav() {
   const supa = await createServerSupabase();
   const role = await getCurrentRole(supa);
-  const links = role === 'dev' ? [...NAV_LINKS, { href: '/admin/sync', label: 'Sync' }] : NAV_LINKS;
+  const t = await getTranslations('admin.nav');
+
+  const links = [
+    { href: '/admin/products', label: t('products') },
+    { href: '/admin/orders', label: t('orders') },
+    { href: '/admin/discounts', label: t('discounts') },
+    { href: '/admin/waitlists', label: t('waitlists') },
+    ...(role === 'dev' ? [{ href: '/admin/sync', label: t('sync') }] : []),
+  ];
 
   return (
     <header className="border-b border-line bg-paper">
@@ -35,9 +38,10 @@ export async function AdminNav() {
               type="submit"
               className="text-muted transition-colors duration-150 ease-out-soft hover:text-ink active:scale-95"
             >
-              Sign out
+              {t('signOut')}
             </button>
           </form>
+          <AdminLocaleToggle />
         </nav>
       </div>
     </header>
