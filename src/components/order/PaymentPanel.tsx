@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -94,7 +93,10 @@ export function PaymentPanel({
         <div className="space-y-4">
           {qrUrl ? (
             <div className="bg-field inline-block rounded-sm p-4">
-              <Image
+              {/* biome-ignore lint/performance/noImgElement: QR is a user-uploaded image of
+                  unknown host/size; next/image's remotePatterns coupling would crash the
+                  order page for any Supabase host not pre-listed. */}
+              <img
                 src={qrUrl}
                 alt="PromptPay QR"
                 width={192}
