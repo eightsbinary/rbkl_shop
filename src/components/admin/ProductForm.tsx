@@ -285,6 +285,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         {generateVariants(state.axes).length > 0 && (
           <div className="space-y-3">
             <h3 className="text-sm font-medium text-ink">{t('preorderPerVariant')}</h3>
+            <p className="text-xs text-muted">{t('preorderCapHint')}</p>
             {generateVariants(state.axes).map((d) => {
               const key = Object.values(d.optionValues).join(' / ');
               const ov = findOv(d.optionValues);

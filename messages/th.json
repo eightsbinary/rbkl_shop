@@ -204,7 +204,8 @@
       "preorderPerVariant": "พรีออร์เดอร์รายตัวเลือก",
       "preorderEnabled": "อนุญาตเมื่อหมดสต็อก",
       "preorderCap": "จำกัดจำนวน",
-      "preorderCount": "จำนวนพรีออร์เดอร์"
+      "preorderCount": "จำนวนพรีออร์เดอร์",
+      "preorderCapHint": "เว้นช่องจำกัดจำนวนไว้ว่างเพื่อรับพรีออร์เดอร์แบบไม่จำกัด"
     },
     "discounts": {
       "title": "โค้ดส่วนลด",

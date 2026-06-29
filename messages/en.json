@@ -204,7 +204,8 @@
       "preorderPerVariant": "Pre-order per variant",
       "preorderEnabled": "Allow when sold out",
       "preorderCap": "Limit",
-      "preorderCount": "Pre-ordered"
+      "preorderCount": "Pre-ordered",
+      "preorderCapHint": "Leave the limit blank for unlimited pre-orders."
     },
     "discounts": {
       "title": "Discount codes",
