@@ -59,6 +59,7 @@ Both modes fall out of one rule: a drop starts at `stock_available = 0` with `is
 ## Admin
 
 - **Product/variant editor** — add the controls: product `is_preorder` toggle + `preorder_ship_date` date; per-variant `preorder_enabled` toggle + `preorder_cap` number; show read-only `preorder_count`. Follow the existing product-editor + ImagePicker/form patterns; owner/dev gated as today.
+- **`syncVariants` fix (decided 2026-06-29):** the current `saveProduct` → `syncVariants` **deletes and re-inserts** all of a product's variants on every save, which would reset the live `preorder_count` (it already resets `stock_reserved` and nulls `order_items.variant_id`). Plan 1 refactors `syncVariants` to **upsert by `(product_id, option_values)`** — update matched variants in place (preserving `id`, `stock_reserved`, `preorder_count`), insert new option combinations, delete only the combinations that were removed. This makes per-variant caps reliable and fixes the latent stock/order-link bug.
 - **Orders list** — an `awaiting_stock` badge + a filter so the creator sees what's waiting on stock. `StatusPill` gains the `awaiting_stock` label (warn tone, like `awaiting_payment`). Order detail still offers ShipOrderForm for paid orders (incl. `awaiting_stock`).
 
 ## i18n
