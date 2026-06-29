@@ -1,12 +1,18 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import type { AdminOrderRow } from '@/server/queries/admin-orders';
 import { OrderStatusPill, ShipStatusPill } from './StatusPill';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
 export function OrdersTable({ orders }: { orders: AdminOrderRow[] }) {
+  const t = useTranslations('admin.orders');
+  const tc = useTranslations('admin.common');
+
   if (orders.length === 0) {
-    return <p className="text-muted">No orders yet.</p>;
+    return <p className="text-muted">{t('empty')}</p>;
   }
 
   return (
@@ -14,12 +20,12 @@ export function OrdersTable({ orders }: { orders: AdminOrderRow[] }) {
       <table className="w-full text-sm">
         <thead className="border-b border-line text-left text-muted">
           <tr>
-            <th className="px-4 py-3 font-medium">Order</th>
-            <th className="px-4 py-3 font-medium">Customer</th>
-            <th className="px-4 py-3 font-medium">Status</th>
-            <th className="px-4 py-3 font-medium">Shipping</th>
-            <th className="px-4 py-3 font-medium">Total</th>
-            <th className="px-4 py-3 font-medium">Placed</th>
+            <th className="px-4 py-3 font-medium">{t('colOrder')}</th>
+            <th className="px-4 py-3 font-medium">{t('colCustomer')}</th>
+            <th className="px-4 py-3 font-medium">{tc('status')}</th>
+            <th className="px-4 py-3 font-medium">{t('colShipping')}</th>
+            <th className="px-4 py-3 font-medium">{t('colTotal')}</th>
+            <th className="px-4 py-3 font-medium">{t('colPlaced')}</th>
             <th className="px-4 py-3" />
           </tr>
         </thead>
@@ -44,7 +50,7 @@ export function OrdersTable({ orders }: { orders: AdminOrderRow[] }) {
                   href={`/admin/orders/${o.id}`}
                   className="text-rose-deep transition-colors duration-150 ease-out-soft hover:text-ink hover:underline"
                 >
-                  View
+                  {tc('viewLink')}
                 </Link>
               </td>
             </tr>

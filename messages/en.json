@@ -145,7 +145,12 @@
       "draft": "Draft",
       "active": "Active",
       "archived": "Archived",
-      "saving": "Saving…"
+      "saving": "Saving…",
+      "inactive": "Inactive",
+      "cancel": "Cancel",
+      "saveChanges": "Save changes",
+      "editLink": "Edit",
+      "viewLink": "View"
     },
     "products": {
       "title": "Products",
@@ -171,6 +176,76 @@
       "createCta": "Create product",
       "addImage": "Add image",
       "uploading": "Resizing and uploading…"
+    },
+    "discounts": {
+      "title": "Discount codes",
+      "newCode": "New code",
+      "empty": "No discount codes yet.",
+      "backLink": "← Discount codes",
+      "newTitle": "New code",
+      "editTitle": "Edit {code}",
+      "colCode": "Code",
+      "colDiscount": "Discount",
+      "colWindow": "Window",
+      "colUses": "Uses",
+      "labelCode": "Code",
+      "labelType": "Type",
+      "optionFixed": "Fixed (฿)",
+      "optionPercent": "Percent (%)",
+      "labelPercentOff": "Percent off",
+      "labelBahtOff": "Baht off",
+      "labelMinSubtotal": "Minimum subtotal (฿)",
+      "labelStarts": "Starts",
+      "labelEnds": "Ends",
+      "labelMaxUses": "Max uses (blank = unlimited)",
+      "createCta": "Create code"
+    },
+    "orders": {
+      "title": "Orders",
+      "empty": "No orders yet.",
+      "filterAll": "All",
+      "backLink": "← Orders",
+      "placed": "placed",
+      "colOrder": "Order",
+      "colCustomer": "Customer",
+      "colShipping": "Shipping",
+      "colTotal": "Total",
+      "colPlaced": "Placed",
+      "sectionItems": "Items",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "shipping": "Shipping",
+      "total": "Total",
+      "sectionShipTo": "Ship to",
+      "sectionFulfillment": "Fulfillment",
+      "shippedVia": "Shipped via",
+      "trackingLabel": "Tracking:",
+      "notPaid": "Order isn't paid yet — nothing to ship.",
+      "sectionActivity": "Activity",
+      "noEvents": "No events.",
+      "carrierFallback": "carrier",
+      "orderStatus": {
+        "awaiting_payment": "Awaiting payment",
+        "paid": "Paid",
+        "failed": "Failed",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      },
+      "shipStatus": {
+        "pending": "Pending",
+        "preparing": "Preparing",
+        "shipped": "Shipped",
+        "delivered": "Delivered"
+      },
+      "ship": {
+        "labelCarrier": "Carrier",
+        "labelTracking": "Tracking number",
+        "labelEta": "Estimated delivery date (optional)",
+        "labelNotes": "Note to buyer (optional)",
+        "notesPlaceholder": "Anything the buyer should know…",
+        "markShipped": "Mark as shipped",
+        "marking": "Marking shipped…"
+      }
     }
   }
 }

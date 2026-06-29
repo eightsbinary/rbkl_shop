@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState, useTransition } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
@@ -42,6 +43,8 @@ export function DiscountForm({
   initial?: DiscountFormValues;
 }) {
   const router = useRouter();
+  const t = useTranslations('admin.discounts');
+  const tc = useTranslations('admin.common');
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [v, setV] = useState<DiscountFormValues>(initial ?? EMPTY);
@@ -77,7 +80,7 @@ export function DiscountForm({
   return (
     <form onSubmit={onSubmit} className="max-w-lg space-y-5">
       <div className="space-y-1.5">
-        <Label htmlFor="code">Code</Label>
+        <Label htmlFor="code">{t('labelCode')}</Label>
         <Input
           id="code"
           value={v.code}
@@ -90,18 +93,20 @@ export function DiscountForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="kind">Type</Label>
+          <Label htmlFor="kind">{t('labelType')}</Label>
           <Select
             id="kind"
             value={v.kind}
             onChange={(e) => set('kind', e.target.value as 'fixed' | 'percent')}
           >
-            <option value="fixed">Fixed (฿)</option>
-            <option value="percent">Percent (%)</option>
+            <option value="fixed">{t('optionFixed')}</option>
+            <option value="percent">{t('optionPercent')}</option>
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="value">{v.kind === 'percent' ? 'Percent off' : 'Baht off'}</Label>
+          <Label htmlFor="value">
+            {v.kind === 'percent' ? t('labelPercentOff') : t('labelBahtOff')}
+          </Label>
           <Input
             id="value"
             type="number"
@@ -115,7 +120,7 @@ export function DiscountForm({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="minSubtotal">Minimum subtotal (฿)</Label>
+        <Label htmlFor="minSubtotal">{t('labelMinSubtotal')}</Label>
         <Input
           id="minSubtotal"
           type="number"
@@ -127,7 +132,7 @@ export function DiscountForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="startsAt">Starts</Label>
+          <Label htmlFor="startsAt">{t('labelStarts')}</Label>
           <Input
             id="startsAt"
             type="datetime-local"
@@ -137,7 +142,7 @@ export function DiscountForm({
           />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="endsAt">Ends</Label>
+          <Label htmlFor="endsAt">{t('labelEnds')}</Label>
           <Input
             id="endsAt"
             type="datetime-local"
@@ -149,7 +154,7 @@ export function DiscountForm({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="maxUses">Max uses (blank = unlimited)</Label>
+        <Label htmlFor="maxUses">{t('labelMaxUses')}</Label>
         <Input
           id="maxUses"
           type="number"
@@ -166,7 +171,7 @@ export function DiscountForm({
           onChange={(e) => set('active', e.target.checked)}
           className="h-4 w-4 accent-ink"
         />
-        Active
+        {tc('active')}
       </label>
 
       {error === STEP_UP_REQUIRED ? (
@@ -177,10 +182,10 @@ export function DiscountForm({
 
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={pending}>
-          {pending ? 'Saving…' : mode === 'edit' ? 'Save changes' : 'Create code'}
+          {pending ? tc('saving') : mode === 'edit' ? tc('saveChanges') : t('createCta')}
         </Button>
         <Button type="button" variant="ghost" onClick={() => router.push('/admin/discounts')}>
-          Cancel
+          {tc('cancel')}
         </Button>
       </div>
     </form>

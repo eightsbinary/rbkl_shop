@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/Button';
 import { createServerSupabase } from '@/db/server';
 
@@ -11,27 +12,30 @@ export default async function AdminDiscountsPage() {
     .select('id, code, kind, value, starts_at, ends_at, max_uses, uses, active')
     .order('created_at', { ascending: false });
 
+  const t = await getTranslations('admin.discounts');
+  const tc = await getTranslations('admin.common');
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="font-serif text-3xl text-ink">Discount codes</h1>
+        <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
         <Link href="/admin/discounts/new">
-          <Button>New code</Button>
+          <Button>{t('newCode')}</Button>
         </Link>
       </div>
 
       {(codes ?? []).length === 0 ? (
-        <p className="text-muted">No discount codes yet.</p>
+        <p className="text-muted">{t('empty')}</p>
       ) : (
         <div className="overflow-hidden rounded-lg border border-line bg-paper">
           <table className="w-full text-sm">
             <thead className="border-b border-line text-left text-muted">
               <tr>
-                <th className="px-4 py-3 font-medium">Code</th>
-                <th className="px-4 py-3 font-medium">Discount</th>
-                <th className="px-4 py-3 font-medium">Window</th>
-                <th className="px-4 py-3 font-medium">Uses</th>
-                <th className="px-4 py-3 font-medium">Active</th>
+                <th className="px-4 py-3 font-medium">{t('colCode')}</th>
+                <th className="px-4 py-3 font-medium">{t('colDiscount')}</th>
+                <th className="px-4 py-3 font-medium">{t('colWindow')}</th>
+                <th className="px-4 py-3 font-medium">{t('colUses')}</th>
+                <th className="px-4 py-3 font-medium">{tc('status')}</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -58,7 +62,7 @@ export default async function AdminDiscountsPage() {
                         d.active ? 'bg-success/15 text-success' : 'bg-muted/15 text-muted'
                       }`}
                     >
-                      {d.active ? 'active' : 'inactive'}
+                      {d.active ? tc('active') : tc('inactive')}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -66,7 +70,7 @@ export default async function AdminDiscountsPage() {
                       href={`/admin/discounts/${d.id}/edit`}
                       className="text-rose-deep transition-colors duration-150 ease-out-soft hover:text-ink hover:underline"
                     >
-                      Edit
+                      {tc('editLink')}
                     </Link>
                   </td>
                 </tr>

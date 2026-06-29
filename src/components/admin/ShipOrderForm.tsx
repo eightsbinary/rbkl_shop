@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState, useTransition } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
@@ -14,6 +15,7 @@ import { shipOrder } from '@/server/actions/ship-order';
 const CARRIER_ENTRIES = Object.entries(CARRIERS).map(([key, c]) => ({ key, label: c.label }));
 
 export function ShipOrderForm({ orderId }: { orderId: string }) {
+  const t = useTranslations('admin.orders');
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [carrier, setCarrier] = useState(CARRIER_ENTRIES[0]?.key ?? '');
@@ -42,7 +44,7 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="carrier">Carrier</Label>
+          <Label htmlFor="carrier">{t('ship.labelCarrier')}</Label>
           <Select id="carrier" value={carrier} onChange={(e) => setCarrier(e.target.value)}>
             {CARRIER_ENTRIES.map((c) => (
               <option key={c.key} value={c.key}>
@@ -52,7 +54,7 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
           </Select>
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="tracking">Tracking number</Label>
+          <Label htmlFor="tracking">{t('ship.labelTracking')}</Label>
           <Input
             id="tracking"
             value={trackingNumber}
@@ -64,17 +66,17 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="eta">Estimated delivery date (optional)</Label>
+        <Label htmlFor="eta">{t('ship.labelEta')}</Label>
         <Input id="eta" type="date" value={eta} onChange={(e) => setEta(e.target.value)} />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="notes">Note to buyer (optional)</Label>
+        <Label htmlFor="notes">{t('ship.labelNotes')}</Label>
         <Textarea
           id="notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Anything the buyer should know…"
+          placeholder={t('ship.notesPlaceholder')}
           className="min-h-24"
         />
       </div>
@@ -86,7 +88,7 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
       )}
 
       <Button type="submit" disabled={pending || trackingNumber.trim().length === 0}>
-        {pending ? 'Marking shipped…' : 'Mark as shipped'}
+        {pending ? t('ship.marking') : t('ship.markShipped')}
       </Button>
     </form>
   );

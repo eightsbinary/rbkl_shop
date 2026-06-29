@@ -145,7 +145,12 @@
       "draft": "ฉบับร่าง",
       "active": "เผยแพร่",
       "archived": "เก็บถาวร",
-      "saving": "กำลังบันทึก…"
+      "saving": "กำลังบันทึก…",
+      "inactive": "ไม่ใช้งาน",
+      "cancel": "ยกเลิก",
+      "saveChanges": "บันทึกการเปลี่ยนแปลง",
+      "editLink": "แก้ไข",
+      "viewLink": "ดู"
     },
     "products": {
       "title": "สินค้า",
@@ -171,6 +176,76 @@
       "createCta": "สร้างสินค้า",
       "addImage": "เพิ่มรูปภาพ",
       "uploading": "กำลังปรับขนาดและอัปโหลด…"
+    },
+    "discounts": {
+      "title": "โค้ดส่วนลด",
+      "newCode": "สร้างโค้ดใหม่",
+      "empty": "ยังไม่มีโค้ดส่วนลด",
+      "backLink": "← โค้ดส่วนลด",
+      "newTitle": "โค้ดใหม่",
+      "editTitle": "แก้ไข {code}",
+      "colCode": "โค้ด",
+      "colDiscount": "ส่วนลด",
+      "colWindow": "ช่วงเวลา",
+      "colUses": "การใช้งาน",
+      "labelCode": "โค้ด",
+      "labelType": "ประเภท",
+      "optionFixed": "จำนวนเงิน (฿)",
+      "optionPercent": "เปอร์เซ็นต์ (%)",
+      "labelPercentOff": "ลดกี่เปอร์เซ็นต์",
+      "labelBahtOff": "ลดกี่บาท",
+      "labelMinSubtotal": "ยอดสั่งซื้อขั้นต่ำ (฿)",
+      "labelStarts": "เริ่มต้น",
+      "labelEnds": "สิ้นสุด",
+      "labelMaxUses": "จำนวนครั้งสูงสุด (เว้นว่าง = ไม่จำกัด)",
+      "createCta": "สร้างโค้ด"
+    },
+    "orders": {
+      "title": "คำสั่งซื้อ",
+      "empty": "ยังไม่มีคำสั่งซื้อ",
+      "filterAll": "ทั้งหมด",
+      "backLink": "← คำสั่งซื้อ",
+      "placed": "สั่งเมื่อ",
+      "colOrder": "คำสั่งซื้อ",
+      "colCustomer": "ลูกค้า",
+      "colShipping": "การจัดส่ง",
+      "colTotal": "ยอดรวม",
+      "colPlaced": "วันที่สั่ง",
+      "sectionItems": "รายการสินค้า",
+      "subtotal": "ยอดรวมก่อนหัก",
+      "discount": "ส่วนลด",
+      "shipping": "ค่าจัดส่ง",
+      "total": "รวมทั้งสิ้น",
+      "sectionShipTo": "จัดส่งไปที่",
+      "sectionFulfillment": "การจัดส่ง",
+      "shippedVia": "จัดส่งโดย",
+      "trackingLabel": "หมายเลขติดตาม:",
+      "notPaid": "ยังไม่ได้ชำระเงิน — ยังไม่สามารถจัดส่งได้",
+      "sectionActivity": "ประวัติ",
+      "noEvents": "ยังไม่มีกิจกรรม",
+      "carrierFallback": "บริษัทขนส่ง",
+      "orderStatus": {
+        "awaiting_payment": "รอชำระเงิน",
+        "paid": "ชำระแล้ว",
+        "failed": "ล้มเหลว",
+        "cancelled": "ยกเลิก",
+        "refunded": "คืนเงินแล้ว"
+      },
+      "shipStatus": {
+        "pending": "รอดำเนินการ",
+        "preparing": "กำลังเตรียม",
+        "shipped": "จัดส่งแล้ว",
+        "delivered": "ได้รับสินค้า"
+      },
+      "ship": {
+        "labelCarrier": "ขนส่ง",
+        "labelTracking": "หมายเลขพัสดุ",
+        "labelEta": "วันส่งมอบโดยประมาณ (ถ้ามี)",
+        "labelNotes": "หมายเหตุถึงผู้ซื้อ (ถ้ามี)",
+        "notesPlaceholder": "ข้อมูลที่ผู้ซื้อควรทราบ…",
+        "markShipped": "ยืนยันการจัดส่ง",
+        "marking": "กำลังอัปเดต…"
+      }
     }
   }
 }

@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import type { OrderStatus, ShipStatus } from '@/server/queries/admin-orders';
 
 const orderTone: Record<OrderStatus, string> = {
@@ -20,15 +23,30 @@ function Pill({ tone, label }: { tone: string; label: string }) {
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${tone}`}
     >
-      {label.replace(/_/g, ' ')}
+      {label}
     </span>
   );
 }
 
 export function OrderStatusPill({ status }: { status: OrderStatus }) {
-  return <Pill tone={orderTone[status]} label={status} />;
+  const t = useTranslations('admin.orders');
+  const labels: Record<OrderStatus, string> = {
+    awaiting_payment: t('orderStatus.awaiting_payment'),
+    paid: t('orderStatus.paid'),
+    failed: t('orderStatus.failed'),
+    cancelled: t('orderStatus.cancelled'),
+    refunded: t('orderStatus.refunded'),
+  };
+  return <Pill tone={orderTone[status]} label={labels[status]} />;
 }
 
 export function ShipStatusPill({ status }: { status: ShipStatus }) {
-  return <Pill tone={shipTone[status]} label={status} />;
+  const t = useTranslations('admin.orders');
+  const labels: Record<ShipStatus, string> = {
+    pending: t('shipStatus.pending'),
+    preparing: t('shipStatus.preparing'),
+    shipped: t('shipStatus.shipped'),
+    delivered: t('shipStatus.delivered'),
+  };
+  return <Pill tone={shipTone[status]} label={labels[status]} />;
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { DiscountForm, type DiscountFormValues } from '@/components/admin/DiscountForm';
 import { createServerSupabase } from '@/db/server';
 
@@ -15,6 +16,8 @@ export default async function EditDiscountPage({ params }: { params: Promise<{ i
     .eq('id', id)
     .maybeSingle();
   if (!d) notFound();
+
+  const t = await getTranslations('admin.discounts');
 
   const initial: DiscountFormValues = {
     code: d.code,
@@ -34,9 +37,9 @@ export default async function EditDiscountPage({ params }: { params: Promise<{ i
           href="/admin/discounts"
           className="text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
         >
-          ← Discount codes
+          {t('backLink')}
         </Link>
-        <h1 className="font-serif text-3xl text-ink">Edit {d.code}</h1>
+        <h1 className="font-serif text-3xl text-ink">{t('editTitle', { code: d.code })}</h1>
       </div>
       <DiscountForm mode="edit" id={d.id} initial={initial} />
     </div>

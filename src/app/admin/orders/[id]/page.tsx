@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { ShipOrderForm } from '@/components/admin/ShipOrderForm';
 import { OrderStatusPill, ShipStatusPill } from '@/components/admin/StatusPill';
 import { getAdminOrder } from '@/server/queries/admin-orders';
@@ -15,6 +16,8 @@ export default async function AdminOrderDetailPage({
   const detail = await getAdminOrder(id);
   if (!detail) notFound();
   const { order, items, events } = detail;
+
+  const t = await getTranslations('admin.orders');
 
   const address = order.shipping_address as {
     fullName?: string;
@@ -32,7 +35,7 @@ export default async function AdminOrderDetailPage({
           href="/admin/orders"
           className="text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
         >
-          ← Orders
+          {t('backLink')}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="font-serif text-3xl text-ink">#{order.number}</h1>
@@ -40,14 +43,14 @@ export default async function AdminOrderDetailPage({
           <ShipStatusPill status={order.ship_status} />
         </div>
         <p className="text-sm text-muted">
-          {order.customer_email} · placed {dateFmt.format(new Date(order.created_at))}
+          {order.customer_email} · {t('placed')} {dateFmt.format(new Date(order.created_at))}
         </p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="space-y-6">
           <div className="rounded-lg border border-line bg-paper p-6">
-            <h2 className="font-serif text-lg text-ink">Items</h2>
+            <h2 className="font-serif text-lg text-ink">{t('sectionItems')}</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {items.map((it) => {
                 const snap = it.product_snapshot as {
@@ -69,18 +72,18 @@ export default async function AdminOrderDetailPage({
               })}
             </ul>
             <dl className="mt-4 space-y-1 border-t border-line pt-3 text-sm">
-              <Row label="Subtotal" value={order.subtotal_thb} />
-              {order.discount_thb > 0 && <Row label="Discount" value={-order.discount_thb} />}
-              <Row label="Shipping" value={order.shipping_thb} />
+              <Row label={t('subtotal')} value={order.subtotal_thb} />
+              {order.discount_thb > 0 && <Row label={t('discount')} value={-order.discount_thb} />}
+              <Row label={t('shipping')} value={order.shipping_thb} />
               <div className="flex justify-between border-t border-line pt-2">
-                <dt className="font-medium text-ink">Total</dt>
+                <dt className="font-medium text-ink">{t('total')}</dt>
                 <dd className="font-serif text-lg text-ink">฿{order.total_thb.toLocaleString()}</dd>
               </div>
             </dl>
           </div>
 
           <div className="rounded-lg border border-line bg-paper p-6 text-sm text-ink-soft">
-            <h2 className="font-serif text-lg text-ink">Ship to</h2>
+            <h2 className="font-serif text-lg text-ink">{t('sectionShipTo')}</h2>
             <p className="mt-3 text-ink">{address.fullName}</p>
             <p>
               {address.line1}
@@ -95,15 +98,15 @@ export default async function AdminOrderDetailPage({
 
         <section className="space-y-6">
           <div className="rounded-lg border border-line bg-paper p-6">
-            <h2 className="font-serif text-lg text-ink">Fulfillment</h2>
+            <h2 className="font-serif text-lg text-ink">{t('sectionFulfillment')}</h2>
             {order.ship_status === 'shipped' || order.ship_status === 'delivered' ? (
               <div className="mt-3 space-y-1 text-sm text-ink-soft">
                 <p>
-                  Shipped via{' '}
-                  <span className="text-ink">{order.tracking_carrier ?? 'carrier'}</span>
+                  {t('shippedVia')}{' '}
+                  <span className="text-ink">{order.tracking_carrier ?? t('carrierFallback')}</span>
                 </p>
                 <p>
-                  Tracking:{' '}
+                  {t('trackingLabel')}{' '}
                   {order.tracking_url ? (
                     <a
                       href={order.tracking_url}
@@ -126,14 +129,14 @@ export default async function AdminOrderDetailPage({
                 <ShipOrderForm orderId={order.id} />
               </div>
             ) : (
-              <p className="mt-3 text-sm text-muted">Order isn't paid yet — nothing to ship.</p>
+              <p className="mt-3 text-sm text-muted">{t('notPaid')}</p>
             )}
           </div>
 
           <div className="rounded-lg border border-line bg-paper p-6">
-            <h2 className="font-serif text-lg text-ink">Activity</h2>
+            <h2 className="font-serif text-lg text-ink">{t('sectionActivity')}</h2>
             <ol className="mt-3 space-y-3 text-sm">
-              {events.length === 0 && <li className="text-muted">No events.</li>}
+              {events.length === 0 && <li className="text-muted">{t('noEvents')}</li>}
               {events.map((ev) => (
                 <li key={ev.id} className="flex items-start justify-between gap-3">
                   <span className="text-ink">{ev.type.replace(/[._]/g, ' ')}</span>
