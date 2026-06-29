@@ -76,16 +76,22 @@ export async function POST(
 
     const { data: items } = await supa
       .from('order_items')
-      .select('variant_id, qty')
+      .select('variant_id, qty, is_preorder')
       .eq('order_id', order.id);
     for (const it of items ?? []) {
       if (!it.variant_id) continue;
       const { data: v } = await supa
         .from('variants')
-        .select('stock_available, stock_reserved')
+        .select('stock_available, stock_reserved, preorder_count')
         .eq('id', it.variant_id)
         .maybeSingle();
-      if (v) {
+      if (!v) continue;
+      if (it.is_preorder) {
+        await supa
+          .from('variants')
+          .update({ preorder_count: Math.max(0, v.preorder_count - it.qty) })
+          .eq('id', it.variant_id);
+      } else {
         await supa
           .from('variants')
           .update({
