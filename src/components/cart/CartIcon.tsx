@@ -1,20 +1,21 @@
 'use client';
 
+import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cart-store';
 
 export function CartIcon({ label }: { label: string }) {
   const count = useCart((s) => s.count());
-  const setOpen = useCart((s) => s.setOpen);
+  const locale = useLocale();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   return (
-    <button
-      type="button"
-      onClick={() => setOpen(true)}
+    <Link
+      href={`/${locale}/cart`}
       className="inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors duration-150 ease-out-soft hover:text-ink"
-      aria-label="Open cart"
+      aria-label="Cart"
     >
       <span>{label}</span>
       {mounted && count > 0 && (
@@ -26,6 +27,6 @@ export function CartIcon({ label }: { label: string }) {
           {count}
         </span>
       )}
-    </button>
+    </Link>
   );
 }

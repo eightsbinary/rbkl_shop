@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
-import { CartDrawer } from '@/components/cart/CartDrawer';
 import { Footer } from '@/components/shop/Footer';
 import { Header } from '@/components/shop/Header';
 import { routing } from '@/i18n/routing';
@@ -29,7 +28,6 @@ export default async function LocaleLayout({
         {children}
       </main>
       <Footer />
-      <CartDrawer />
     </NextIntlClientProvider>
   );
 }

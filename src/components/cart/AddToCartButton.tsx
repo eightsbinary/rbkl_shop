@@ -19,7 +19,6 @@ export function AddToCartButton({
   const t = useTranslations('pdp');
   const tp = useTranslations('preorder');
   const add = useCart((s) => s.add);
-  const setOpen = useCart((s) => s.setOpen);
   const [added, setAdded] = useState(false);
 
   const disabled = !ready || (!preorder && outOfStock) || !variantId;
@@ -33,7 +32,6 @@ export function AddToCartButton({
       onClick={() => {
         if (!variantId) return;
         add({ variantId, qty: 1 });
-        setOpen(true);
         setAdded(true);
         setTimeout(() => setAdded(false), 1300);
       }}
