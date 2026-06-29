@@ -1,14 +1,9 @@
-import OrderPaid from 'emails/OrderPaid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabase } from '@/db/server';
-import { formatMoney, money } from '@/domain/money';
 import { MockProvider } from '@/domain/payment/adapters/MockProvider';
 import type { VerifiedEvent } from '@/domain/payment/ChargeInput';
-import { sendEmail } from '@/lib/email';
-import { signOrderToken } from '@/lib/order-token';
 import { isFresh } from '@/lib/webhook/freshness';
-
-const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+import { markOrderPaid } from '@/server/orders/mark-paid';
 
 export async function POST(
   request: NextRequest,
@@ -68,63 +63,8 @@ export async function POST(
   }
 
   if (event.status === 'paid') {
-    await supa
-      .from('orders')
-      .update({
-        status: 'paid',
-        paid_at: new Date().toISOString(),
-        last_event_id: event.eventId,
-        ship_status: 'preparing',
-      })
-      .eq('id', order.id);
-
-    const { data: items } = await supa
-      .from('order_items')
-      .select('variant_id, qty, product_snapshot')
-      .eq('order_id', order.id);
-    for (const it of items ?? []) {
-      if (!it.variant_id) continue;
-      const { data: v } = await supa
-        .from('variants')
-        .select('stock_reserved')
-        .eq('id', it.variant_id)
-        .maybeSingle();
-      if (v) {
-        await supa
-          .from('variants')
-          .update({ stock_reserved: Math.max(0, v.stock_reserved - it.qty) })
-          .eq('id', it.variant_id);
-      }
-    }
-    await supa.from('order_events').insert({
-      order_id: order.id,
-      type: 'payment.paid',
-      payload: { eventId: event.eventId, chargeId: event.chargeId },
-      actor: 'system',
-    });
-
-    // Confirmation email — best-effort; never block the paid transition on it.
-    try {
-      const locale = order.locale === 'th' ? 'th' : 'en';
-      const emailItems = (items ?? []).map((it) => {
-        const snap = it.product_snapshot as { name?: { th?: string; en?: string } } | null;
-        const name = snap?.name?.[locale] ?? snap?.name?.en ?? snap?.name?.th ?? 'item';
-        return { name, qty: it.qty };
-      });
-      const orderUrl = `${siteUrl()}/${locale}/order/${order.id}?t=${signOrderToken(order.id, order.customer_email)}`;
-      await sendEmail({
-        to: order.customer_email,
-        subject: `Payment received — order ${order.number}`,
-        react: OrderPaid({
-          orderNumber: order.number,
-          orderUrl,
-          items: emailItems,
-          totalLabel: formatMoney(money(order.total_thb), locale),
-        }),
-      });
-    } catch (err) {
-      console.error('[payments/notify] confirmation email failed', err);
-    }
+    await markOrderPaid(supa, order.id, { actor: 'system' });
+    await supa.from('orders').update({ last_event_id: event.eventId }).eq('id', order.id);
   } else if (event.status === 'failed' || event.status === 'expired') {
     await supa
       .from('orders')
