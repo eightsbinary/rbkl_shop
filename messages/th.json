@@ -224,6 +224,7 @@
       "title": "คำสั่งซื้อ",
       "empty": "ยังไม่มีคำสั่งซื้อ",
       "filterAll": "ทั้งหมด",
+      "filterAwaitingStock": "รอสินค้าเข้า",
       "backLink": "← คำสั่งซื้อ",
       "placed": "สั่งเมื่อ",
       "colOrder": "คำสั่งซื้อ",

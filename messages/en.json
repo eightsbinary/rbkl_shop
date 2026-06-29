@@ -224,6 +224,7 @@
       "title": "Orders",
       "empty": "No orders yet.",
       "filterAll": "All",
+      "filterAwaitingStock": "Awaiting stock",
       "backLink": "← Orders",
       "placed": "placed",
       "colOrder": "Order",

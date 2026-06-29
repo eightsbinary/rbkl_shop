@@ -24,14 +24,18 @@ export const ORDER_STATUSES: OrderStatus[] = [
   'refunded',
 ];
 
-/** List orders for the admin table, newest first, optionally filtered by status. */
-export async function listAdminOrders(status?: OrderStatus): Promise<AdminOrderRow[]> {
+/** List orders for the admin table, newest first, optionally filtered by status and/or ship status. */
+export async function listAdminOrders(
+  status?: OrderStatus,
+  shipStatus?: ShipStatus,
+): Promise<AdminOrderRow[]> {
   const supa = await createServerSupabase();
   let query = supa
     .from('orders')
     .select('id, number, customer_email, status, ship_status, total_thb, created_at')
     .order('created_at', { ascending: false });
   if (status) query = query.eq('status', status);
+  if (shipStatus) query = query.eq('ship_status', shipStatus);
   const { data } = await query;
   return data ?? [];
 }
