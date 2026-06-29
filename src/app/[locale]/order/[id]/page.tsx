@@ -22,6 +22,7 @@ export default async function OrderPage({
   if (!data) notFound();
 
   const tr = await getTranslations('order');
+  const tp = await getTranslations('preorder');
   const { order, items } = data;
 
   const settings =
@@ -63,6 +64,9 @@ export default async function OrderPage({
         <div className="space-y-4">
           <h2 className="font-serif text-xl text-ink">{tr('placed')}</h2>
           <ShippingTimeline order={order} />
+          {order.ship_status === 'awaiting_stock' && (
+            <p className="text-sm text-ink-soft">{tp('note')}</p>
+          )}
           {order.tracking_number && (
             <p className="text-sm">
               <span className="text-muted">{tr('trackingLabel')}: </span>
@@ -93,6 +97,11 @@ export default async function OrderPage({
                   <li key={it.id} className="flex items-start justify-between gap-2">
                     <span className="text-ink">
                       {name} × {it.qty}
+                      {it.is_preorder && (
+                        <span className="ml-2 rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-muted">
+                          {tp('badge')}
+                        </span>
+                      )}
                     </span>
                     <span className="text-ink-soft">฿{it.line_total_thb.toLocaleString()}</span>
                   </li>
