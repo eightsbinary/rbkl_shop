@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { createBrowserSupabase } from '@/db/client';
+import { generateVariants } from '@/domain/variant-matrix';
 import { STEP_UP_REQUIRED } from '@/lib/step-up';
 import { type ProductInputT, saveProduct } from '@/server/actions/products';
 import { ImagePicker, type UploadedImage } from './ImagePicker';
@@ -17,6 +18,7 @@ import { ImagePicker, type UploadedImage } from './ImagePicker';
 export type ProductFormInitial = Partial<ProductInputT> & {
   id?: string;
   imageRows?: { id: string; url_400: string }[];
+  preorderCounts?: Record<string, number>;
 };
 
 const DEFAULT_AXES: ProductInputT['axes'] = [
@@ -40,9 +42,12 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
     weightGrams: initial.weightGrams ?? 0,
     category: initial.category ?? '',
     isFeatured: initial.isFeatured ?? false,
+    isPreorder: initial.isPreorder ?? false,
+    preorderShipDate: initial.preorderShipDate ?? undefined,
     axes: initial.axes ?? DEFAULT_AXES,
     variantOverrides: initial.variantOverrides ?? [],
   });
+  const preorderCounts = initial.preorderCounts ?? {};
   const [images, setImages] = useState(initial.imageRows ?? []);
 
   function updateAxis(idx: number, patch: { name?: string; values?: string[] }) {
@@ -51,6 +56,40 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
       axes: s.axes.map((a, i) => (i === idx ? { ...a, ...patch } : a)),
     }));
   }
+
+  function setOverride(
+    optionValues: Record<string, string>,
+    patch: { preorderEnabled?: boolean; preorderCap?: number | null },
+  ) {
+    setState((s) => {
+      const i = s.variantOverrides.findIndex((o) =>
+        Object.entries(optionValues).every(([k, v]) => o.optionValues[k] === v),
+      );
+      const base: ProductInputT['variantOverrides'][number] =
+        i >= 0
+          ? // biome-ignore lint/style/noNonNullAssertion: i >= 0 guarantees the element exists
+            s.variantOverrides[i]!
+          : {
+              optionValues,
+              priceThb: null,
+              stockAvailable: 0,
+              preorderEnabled: false,
+              preorderCap: null,
+            };
+      // patch has optional keys; spread widens inferred type — cast back to the required element shape
+      const next = { ...base, ...patch } as ProductInputT['variantOverrides'][number];
+      const arr =
+        i >= 0
+          ? s.variantOverrides.map((o, j) => (j === i ? next : o))
+          : [...s.variantOverrides, next];
+      return { ...s, variantOverrides: arr };
+    });
+  }
+
+  const findOv = (opts: Record<string, string>) =>
+    state.variantOverrides.find((o) =>
+      Object.entries(opts).every(([k, v]) => o.optionValues[k] === v),
+    );
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -190,6 +229,26 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
           />
           <Label htmlFor="isFeatured">{t('featureOnLanding')}</Label>
         </div>
+
+        <div className="flex items-center gap-2">
+          <input
+            id="isPreorder"
+            type="checkbox"
+            checked={state.isPreorder ?? false}
+            onChange={(e) => setState({ ...state, isPreorder: e.target.checked })}
+          />
+          <Label htmlFor="isPreorder">{t('preorderProduct')}</Label>
+        </div>
+
+        <div className="space-y-2 max-w-xs">
+          <Label htmlFor="preorderShipDate">{t('preorderShipDate')}</Label>
+          <Input
+            id="preorderShipDate"
+            type="date"
+            value={state.preorderShipDate ?? ''}
+            onChange={(e) => setState({ ...state, preorderShipDate: e.target.value || undefined })}
+          />
+        </div>
       </section>
 
       <section className="space-y-6">
@@ -222,6 +281,50 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             </div>
           </div>
         ))}
+
+        {generateVariants(state.axes).length > 0 && (
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-ink">{t('preorderPerVariant')}</h3>
+            {generateVariants(state.axes).map((d) => {
+              const key = Object.values(d.optionValues).join(' / ');
+              const ov = findOv(d.optionValues);
+              const count = preorderCounts[JSON.stringify(d.optionValues)] ?? 0;
+              return (
+                <div
+                  key={key}
+                  className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 text-sm"
+                >
+                  <span className="text-ink-soft">{key}</span>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={ov?.preorderEnabled ?? false}
+                      onChange={(e) =>
+                        setOverride(d.optionValues, { preorderEnabled: e.target.checked })
+                      }
+                    />
+                    {t('preorderEnabled')}
+                  </label>
+                  <Input
+                    type="number"
+                    min={0}
+                    placeholder={t('preorderCap')}
+                    className="w-28"
+                    value={ov?.preorderCap ?? ''}
+                    onChange={(e) =>
+                      setOverride(d.optionValues, {
+                        preorderCap: e.target.value === '' ? null : Number(e.target.value),
+                      })
+                    }
+                  />
+                  <span className="text-muted">
+                    {t('preorderCount')}: {count}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {state.id && (

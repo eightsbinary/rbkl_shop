@@ -189,7 +189,13 @@
       "saveCta": "Save changes",
       "createCta": "Create product",
       "addImage": "Add image",
-      "uploading": "Resizing and uploading…"
+      "uploading": "Resizing and uploading…",
+      "preorderProduct": "Pre-order product (sell before stock)",
+      "preorderShipDate": "Expected ship date",
+      "preorderPerVariant": "Pre-order per variant",
+      "preorderEnabled": "Allow when sold out",
+      "preorderCap": "Limit",
+      "preorderCount": "Pre-ordered"
     },
     "discounts": {
       "title": "Discount codes",
