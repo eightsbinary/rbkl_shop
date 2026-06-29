@@ -259,7 +259,18 @@
         "notesPlaceholder": "Anything the buyer should know…",
         "markShipped": "Mark as shipped",
         "marking": "Marking shipped…"
-      }
+      },
+      "paymentSection": "Payment",
+      "slipReceived": "Payment slip received — review it below.",
+      "viewSlip": "View full size",
+      "approve": "Approve payment",
+      "approving": "Approving…",
+      "reject": "Reject",
+      "rejecting": "Rejecting…",
+      "rejectReasonLabel": "Reason (shown to the buyer)",
+      "rejectConfirm": "Reject & notify buyer",
+      "awaitingPaymentNote": "Buyer hasn't uploaded a slip yet.",
+      "noSlip": "No slip uploaded."
     },
     "dashboard": {
       "welcome": "Welcome.",

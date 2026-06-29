@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ShipOrderForm } from '@/components/admin/ShipOrderForm';
+import { SlipReview } from '@/components/admin/SlipReview';
 import { OrderStatusPill, ShipStatusPill } from '@/components/admin/StatusPill';
 import { getAdminOrder } from '@/server/queries/admin-orders';
+import { getOrderSlipReview } from '@/server/queries/admin-payment';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
@@ -18,6 +20,8 @@ export default async function AdminOrderDetailPage({
   const { order, items, events } = detail;
 
   const t = await getTranslations('admin.orders');
+
+  const slip = order.status === 'awaiting_verification' ? await getOrderSlipReview(order.id) : null;
 
   const address = order.shipping_address as {
     fullName?: string;
@@ -97,6 +101,18 @@ export default async function AdminOrderDetailPage({
         </section>
 
         <section className="space-y-6">
+          {order.status === 'awaiting_verification' ? (
+            <div className="rounded-lg border border-line bg-paper p-6">
+              <h2 className="font-serif text-lg text-ink">{t('paymentSection')}</h2>
+              <SlipReview orderId={order.id} imageUrl={slip?.imageUrl ?? null} />
+            </div>
+          ) : order.status === 'awaiting_payment' ? (
+            <div className="rounded-lg border border-line bg-paper p-6">
+              <h2 className="font-serif text-lg text-ink">{t('paymentSection')}</h2>
+              <p className="mt-3 text-sm text-muted">{t('awaitingPaymentNote')}</p>
+            </div>
+          ) : null}
+
           <div className="rounded-lg border border-line bg-paper p-6">
             <h2 className="font-serif text-lg text-ink">{t('sectionFulfillment')}</h2>
             {order.ship_status === 'shipped' || order.ship_status === 'delivered' ? (

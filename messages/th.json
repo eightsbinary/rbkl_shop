@@ -259,7 +259,18 @@
         "notesPlaceholder": "ข้อมูลที่ผู้ซื้อควรทราบ…",
         "markShipped": "ยืนยันการจัดส่ง",
         "marking": "กำลังอัปเดต…"
-      }
+      },
+      "paymentSection": "การชำระเงิน",
+      "slipReceived": "ได้รับสลิปชำระเงินแล้ว — ตรวจสอบด้านล่าง",
+      "viewSlip": "ดูขนาดเต็ม",
+      "approve": "อนุมัติการชำระเงิน",
+      "approving": "กำลังอนุมัติ…",
+      "reject": "ปฏิเสธ",
+      "rejecting": "กำลังปฏิเสธ…",
+      "rejectReasonLabel": "เหตุผล (จะแสดงให้ผู้ซื้อเห็น)",
+      "rejectConfirm": "ปฏิเสธและแจ้งผู้ซื้อ",
+      "awaitingPaymentNote": "ผู้ซื้อยังไม่ได้อัปโหลดสลิป",
+      "noSlip": "ยังไม่มีสลิป"
     },
     "dashboard": {
       "welcome": "ยินดีต้อนรับ",
