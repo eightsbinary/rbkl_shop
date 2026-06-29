@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { PaymentPanel } from '@/components/order/PaymentPanel';
 import { ShippingTimeline } from '@/components/order/ShippingTimeline';
 import type { Locale } from '@/i18n/routing';
 import { getOrderForGuest } from '@/server/queries/orders';
+import { getPaymentSettings } from '@/server/queries/payment-settings';
 
 export default async function OrderPage({
   params,
@@ -21,6 +23,12 @@ export default async function OrderPage({
 
   const tr = await getTranslations('order');
   const { order, items } = data;
+
+  const settings =
+    order.status === 'awaiting_payment' || order.status === 'awaiting_verification'
+      ? await getPaymentSettings()
+      : null;
+
   const address = order.shipping_address as {
     fullName?: string;
     line1?: string;
@@ -32,6 +40,19 @@ export default async function OrderPage({
 
   return (
     <article className="container mx-auto max-w-3xl px-6 py-16 space-y-12">
+      {settings && (
+        <PaymentPanel
+          orderId={order.id}
+          token={token}
+          locale={locale}
+          amountThb={order.total_thb}
+          status={order.status}
+          qrUrl={settings.qrUrl}
+          accountLabel={settings.accountLabel}
+          instructions={settings.instructions}
+        />
+      )}
+
       <header className="space-y-2">
         <p className="text-xs uppercase tracking-[0.2em] text-muted">{tr('title')}</p>
         <h1 className="font-serif text-3xl text-ink">#{order.number}</h1>

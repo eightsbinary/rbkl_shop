@@ -131,6 +131,19 @@
     "inspirationBody1": "The work is shaped by the people who show up — the chat, the regulars, the late-night streams.",
     "inspirationBody2": "Every design is a little artifact of that community: something to carry the feeling of being part of it, offline."
   },
+  "pay": {
+    "title": "Complete your payment",
+    "amount": "Amount due",
+    "scanInstruction": "Scan this PromptPay QR to pay, then upload your transfer slip below.",
+    "qrMissing": "Payment QR is not set up yet — please contact us.",
+    "uploadLabel": "Upload payment slip",
+    "uploading": "Uploading…",
+    "submit": "I've paid — submit slip",
+    "submitting": "Submitting…",
+    "verifying": "Thanks! We've received your slip and are verifying your payment. You'll get an email once it's confirmed.",
+    "reupload": "Upload a different slip",
+    "error": "Upload failed — please try again."
+  },
   "admin": {
     "nav": {
       "products": "Products",
