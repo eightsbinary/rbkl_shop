@@ -55,6 +55,7 @@ export function SlipReview({ orderId, imageUrl }: { orderId: string; imageUrl: s
       {imageUrl ? (
         <div className="space-y-2">
           <div className="max-w-sm overflow-hidden rounded bg-field p-2">
+            {/* biome-ignore lint/performance/noImgElement: private signed URL, not next/image-optimizable */}
             <img src={imageUrl} alt="payment slip" className="w-full rounded" />
           </div>
           <a
