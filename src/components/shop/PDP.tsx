@@ -58,6 +58,8 @@ export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 
             options={data.options}
             variants={data.variants}
             basePriceThb={data.product.base_price_thb}
+            isPreorder={data.product.is_preorder}
+            preorderShipDate={data.product.preorder_ship_date}
           />
         </div>
       </div>

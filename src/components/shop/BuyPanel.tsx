@@ -1,11 +1,13 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { Accordion } from '@/components/shop/Accordion';
 import { WaitlistButton } from '@/components/shop/WaitlistButton';
+import { Button } from '@/components/ui/Button';
 import type { Database } from '@/db/types.gen';
+import { preorderActive, preorderCapacity } from '@/domain/preorder';
 
 type Variant = Database['public']['Tables']['variants']['Row'];
 
@@ -16,6 +18,8 @@ export function BuyPanel({
   options,
   variants,
   basePriceThb,
+  isPreorder,
+  preorderShipDate,
 }: {
   name: string;
   description: string;
@@ -23,6 +27,8 @@ export function BuyPanel({
   options: { name: string; values: string[] }[];
   variants: Variant[];
   basePriceThb: number;
+  isPreorder: boolean;
+  preorderShipDate: string | null;
 }) {
   const t = useTranslations('pdp');
   const [selection, setSelection] = useState<Record<string, string>>({});
@@ -34,6 +40,31 @@ export function BuyPanel({
   const ready = options.every((o) => selection[o.name]);
   const inStock = !!matched && matched.stock_available > 0;
   const price = matched?.price_thb ?? basePriceThb;
+  const tp = useTranslations('preorder');
+  const locale = useLocale();
+  const preState = matched
+    ? {
+        isPreorder,
+        preorderEnabled: matched.preorder_enabled,
+        preorderCap: matched.preorder_cap,
+        preorderCount: matched.preorder_count,
+        stockAvailable: matched.stock_available,
+      }
+    : null;
+  const canPreorder = preState ? preorderActive(preState) && preorderCapacity(preState) > 0 : false;
+  const preorderFull = preState
+    ? preorderActive(preState) && preorderCapacity(preState) <= 0
+    : false;
+  const slotsLeft = preState ? preorderCapacity(preState) : 0;
+  const showPreorderBadge = isPreorder || canPreorder || preorderFull;
+  const shipDateLabel = preorderShipDate
+    ? tp('shipBy', {
+        date: new Date(preorderShipDate).toLocaleDateString(locale === 'th' ? 'th-TH' : 'en-GB', {
+          month: 'short',
+          year: 'numeric',
+        }),
+      })
+    : tp('shipWhenReady');
 
   return (
     <div className="lg:pl-6">
@@ -48,7 +79,14 @@ export function BuyPanel({
       </nav>
 
       <h1 className="pb-4 font-serif text-4xl leading-tight text-ink">{name}</h1>
-      <p className="pb-8 text-lg text-muted">฿{price.toLocaleString()}</p>
+      <div className="flex items-center gap-3 pb-8">
+        <p className="text-lg text-muted">฿{price.toLocaleString()}</p>
+        {showPreorderBadge && (
+          <span className="rounded-full border border-ink px-2.5 py-0.5 text-xs uppercase tracking-[0.12em] text-ink">
+            {tp('badge')}
+          </span>
+        )}
+      </div>
 
       {description && (
         <div className="border-t border-line pb-8 pt-8">
@@ -89,10 +127,29 @@ export function BuyPanel({
       </div>
 
       <div className="pb-12">
-        {ready && !inStock ? (
-          <WaitlistButton variantId={matched?.id ?? null} />
-        ) : (
+        {!ready || inStock ? (
           <AddToCartButton variantId={matched?.id ?? null} ready={ready} outOfStock={false} />
+        ) : canPreorder ? (
+          <div className="space-y-3">
+            <p className="text-sm text-ink-soft">{shipDateLabel}</p>
+            {Number.isFinite(slotsLeft) && (
+              <p className="text-xs uppercase tracking-[0.12em] text-muted">
+                {tp('slotsLeft', { n: slotsLeft })}
+              </p>
+            )}
+            <AddToCartButton
+              variantId={matched?.id ?? null}
+              ready={ready}
+              outOfStock={false}
+              preorder
+            />
+          </div>
+        ) : preorderFull ? (
+          <Button variant="solid" size="lg" className="w-full" disabled>
+            {tp('full')}
+          </Button>
+        ) : (
+          <WaitlistButton variantId={matched?.id ?? null} />
         )}
       </div>
 

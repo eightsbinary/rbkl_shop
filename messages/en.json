@@ -46,6 +46,15 @@
     "shippingTitle": "Shipping & Returns",
     "shippingBody": "Ships within 3–5 business days. Domestic and international tracked shipping at checkout. Unworn items can be returned within 14 days of delivery."
   },
+  "preorder": {
+    "badge": "Pre-order",
+    "cta": "Pre-order now",
+    "shipBy": "Ships by ~{date}",
+    "shipWhenReady": "Ships when available",
+    "slotsLeft": "{n} left",
+    "full": "Pre-orders full",
+    "note": "This is a pre-order — it ships when stock arrives."
+  },
   "footer": {
     "copyright": "© rainbykello",
     "follow": "follow"

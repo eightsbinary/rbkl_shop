@@ -9,17 +9,20 @@ export function AddToCartButton({
   variantId,
   ready,
   outOfStock,
+  preorder = false,
 }: {
   variantId: string | null;
   ready: boolean;
   outOfStock: boolean;
+  preorder?: boolean;
 }) {
   const t = useTranslations('pdp');
+  const tp = useTranslations('preorder');
   const add = useCart((s) => s.add);
   const setOpen = useCart((s) => s.setOpen);
   const [added, setAdded] = useState(false);
 
-  const disabled = !ready || outOfStock || !variantId;
+  const disabled = !ready || (!preorder && outOfStock) || !variantId;
 
   return (
     <Button
@@ -44,8 +47,10 @@ export function AddToCartButton({
         </span>
       ) : !ready ? (
         t('selectSize')
-      ) : outOfStock ? (
+      ) : !preorder && outOfStock ? (
         t('outOfStock')
+      ) : preorder ? (
+        tp('cta')
       ) : (
         t('addToCart')
       )}
