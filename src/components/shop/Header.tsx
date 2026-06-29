@@ -13,6 +13,9 @@ export function Header() {
           <Link href={`/${locale}/shop`} className="transition-colors hover:text-ink">
             {t('shop')}
           </Link>
+          <Link href={`/${locale}/about`} className="transition-colors hover:text-ink">
+            {t('about')}
+          </Link>
         </nav>
         <Link
           href={`/${locale}`}
