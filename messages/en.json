@@ -226,6 +226,7 @@
       "carrierFallback": "carrier",
       "orderStatus": {
         "awaiting_payment": "Awaiting payment",
+        "awaiting_verification": "Awaiting verification",
         "paid": "Paid",
         "failed": "Failed",
         "cancelled": "Cancelled",

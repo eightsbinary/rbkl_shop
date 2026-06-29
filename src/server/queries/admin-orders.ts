@@ -17,6 +17,7 @@ export interface AdminOrderRow {
 
 export const ORDER_STATUSES: OrderStatus[] = [
   'awaiting_payment',
+  'awaiting_verification',
   'paid',
   'failed',
   'cancelled',

@@ -239,6 +239,71 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_settings: {
+        Row: {
+          account_label: string | null
+          id: string
+          instructions: Json
+          promptpay_qr_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_label?: string | null
+          id?: string
+          instructions?: Json
+          promptpay_qr_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_label?: string | null
+          id?: string
+          instructions?: Json
+          promptpay_qr_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_slips: {
+        Row: {
+          id: string
+          order_id: string
+          reject_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          storage_path: string
+          uploaded_at: string
+        }
+        Insert: {
+          id?: string
+          order_id: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          storage_path: string
+          uploaded_at?: string
+        }
+        Update: {
+          id?: string
+          order_id?: string
+          reject_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          storage_path?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_slips_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       processed_webhook_events: {
         Row: {
           event_id: string
@@ -646,6 +711,7 @@ export type Database = {
     Enums: {
       order_status:
         | "awaiting_payment"
+        | "awaiting_verification"
         | "paid"
         | "failed"
         | "cancelled"
@@ -782,6 +848,7 @@ export const Constants = {
     Enums: {
       order_status: [
         "awaiting_payment",
+        "awaiting_verification",
         "paid",
         "failed",
         "cancelled",

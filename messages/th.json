@@ -226,6 +226,7 @@
       "carrierFallback": "บริษัทขนส่ง",
       "orderStatus": {
         "awaiting_payment": "รอชำระเงิน",
+        "awaiting_verification": "รอตรวจสอบสลิป",
         "paid": "ชำระแล้ว",
         "failed": "ล้มเหลว",
         "cancelled": "ยกเลิก",

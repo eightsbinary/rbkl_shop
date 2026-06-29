@@ -18,6 +18,7 @@ export default async function AdminOrdersPage({
 
   const orderStatusLabels: Record<OrderStatus, string> = {
     awaiting_payment: t('orderStatus.awaiting_payment'),
+    awaiting_verification: t('orderStatus.awaiting_verification'),
     paid: t('orderStatus.paid'),
     failed: t('orderStatus.failed'),
     cancelled: t('orderStatus.cancelled'),

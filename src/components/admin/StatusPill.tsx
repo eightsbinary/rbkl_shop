@@ -5,6 +5,7 @@ import type { OrderStatus, ShipStatus } from '@/server/queries/admin-orders';
 
 const orderTone: Record<OrderStatus, string> = {
   awaiting_payment: 'bg-warn/15 text-warn',
+  awaiting_verification: 'bg-warn/15 text-warn',
   paid: 'bg-success/15 text-success',
   failed: 'bg-error/15 text-error',
   cancelled: 'bg-muted/15 text-muted',
@@ -32,6 +33,7 @@ export function OrderStatusPill({ status }: { status: OrderStatus }) {
   const t = useTranslations('admin.orders');
   const labels: Record<OrderStatus, string> = {
     awaiting_payment: t('orderStatus.awaiting_payment'),
+    awaiting_verification: t('orderStatus.awaiting_verification'),
     paid: t('orderStatus.paid'),
     failed: t('orderStatus.failed'),
     cancelled: t('orderStatus.cancelled'),
