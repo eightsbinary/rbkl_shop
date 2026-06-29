@@ -1,11 +1,9 @@
 'use server';
 
-import { headers } from 'next/headers';
 import * as z from 'zod';
 import { createServiceRoleSupabase } from '@/db/server';
 import type { Json } from '@/db/types.gen';
 import { generateOrderNumber } from '@/domain/order-number';
-import { MockProvider } from '@/domain/payment/adapters/MockProvider';
 import { signOrderToken } from '@/lib/order-token';
 import { clientIp, enforceRateLimit } from '@/lib/rate-limit';
 import { verifyTurnstile } from '@/lib/turnstile';
@@ -145,7 +143,7 @@ export async function placeOrder(raw: PlaceOrderInputT) {
       total_thb: total,
       locale: input.locale,
       shipping_address: input.address,
-      payment_provider: 'mock',
+      payment_provider: 'promptpay_manual',
     })
     .select('id, number')
     .single();
@@ -159,27 +157,12 @@ export async function placeOrder(raw: PlaceOrderInputT) {
     actor: 'system',
   });
 
-  const h = await headers();
-  const origin = h.get('origin') ?? 'http://localhost:3000';
-  const provider = new MockProvider();
-  const handle = await provider.createCharge({
-    orderId: order.id,
-    orderNumber: order.number,
-    amountThb: total,
-    currency: 'THB',
-    method: 'mock',
-    returnUrl: `${origin}/${input.locale}/order/${order.id}?t=${signOrderToken(order.id, input.email)}`,
-    notifyUrl: `${origin}/api/payments/notify/mock`,
-    customerEmail: input.email,
-  });
-
-  await supa.from('orders').update({ payment_charge_id: handle.chargeId }).eq('id', order.id);
-
+  const token = signOrderToken(order.id, input.email);
   return {
     ok: true as const,
     orderId: order.id,
     orderNumber: order.number,
-    token: signOrderToken(order.id, input.email),
-    redirectUrl: handle.redirectUrl ?? `/${input.locale}/order/${order.id}`,
+    token,
+    redirectUrl: `/${input.locale}/order/${order.id}?t=${token}`,
   };
 }

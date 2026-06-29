@@ -96,7 +96,7 @@ export function CheckoutForm({ zones }: { zones: Zone[] }) {
       return;
     }
     clearCart();
-    router.push(`/${locale}${r.redirectUrl ?? `/order/${r.orderId}?t=${r.token}`}`);
+    router.push(r.redirectUrl ?? `/${locale}/order/${r.orderId}?t=${r.token}`);
   }
 
   return (
