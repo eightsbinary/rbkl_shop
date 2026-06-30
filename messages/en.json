@@ -358,6 +358,8 @@
       "sendCta": "Email me a sign-in link"
     },
     "settings": {
+      "heading": "Settings",
+      "paymentSection": "Payment",
       "title": "Payment settings",
       "qrLabel": "PromptPay QR",
       "uploadQr": "Upload QR image",
@@ -367,6 +369,23 @@
       "instructionsEn": "Instructions (EN)",
       "instructionsTh": "Instructions (TH)",
       "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved."
+    },
+    "shipping": {
+      "sectionTitle": "Shipping zones",
+      "sectionHint": "Buyers pay the flat rate of the first active zone matching their country. Add a zone with country * as a worldwide fallback.",
+      "code": "Code",
+      "nameEn": "Name (EN)",
+      "nameTh": "Name (TH)",
+      "countries": "Countries",
+      "countriesHint": "2-letter codes, comma-separated. Use * for worldwide.",
+      "rate": "Flat rate (฿)",
+      "active": "Active",
+      "addZone": "Add zone",
+      "remove": "Remove",
+      "empty": "No shipping zones yet — add one so checkout can quote a rate.",
+      "save": "Save zones",
       "saving": "Saving…",
       "saved": "Saved."
     }
