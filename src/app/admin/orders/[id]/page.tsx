@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { CancelOrderButton } from '@/components/admin/CancelOrderButton';
 import { EditTracking } from '@/components/admin/EditTracking';
 import { ShipOrderForm } from '@/components/admin/ShipOrderForm';
 import { SlipReview } from '@/components/admin/SlipReview';
@@ -177,6 +178,15 @@ export default async function AdminOrderDetailPage({
               ))}
             </ol>
           </div>
+
+          {(order.status === 'awaiting_payment' || order.status === 'awaiting_verification') && (
+            <div className="border border-error/40 bg-surface p-6">
+              <h2 className="font-serif text-lg text-error">{t('dangerZone')}</h2>
+              <div className="mt-3">
+                <CancelOrderButton orderId={order.id} />
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </div>
