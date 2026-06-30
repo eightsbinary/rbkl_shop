@@ -49,7 +49,7 @@ If you don't have Docker / Supabase CLI yet, the app still **builds and tests cl
 | `bun run test:watch` | Vitest watch mode |
 | `bun run db:types` | Regenerate `src/db/types.gen.ts` from local Supabase |
 | `bun run db:reset` | Apply migrations from scratch + seed |
-| `bun run grant:owner -- <email>` | Promote a user to owner (run after they sign in once) |
+| `bun run grant:owner -- <email>` | Promote a user to owner (their auth user must exist first — see [Granting a production admin](#granting-a-production-admin)) |
 | `bun run grant:dev -- <email>` | Promote a user to dev — bootstrap your own access first |
 
 ## Layout
@@ -72,7 +72,42 @@ scripts/     One-shot CLI scripts (run locally with `bun run scripts/*.ts`)
 1. `supabase start` and `bun run dev`
 2. Use Supabase Studio (URL printed by `supabase start`) → Authentication → Add User → enter your email.
 3. `bun run grant:dev -- your@email.com`
-4. You're now a dev. Magic-link sign-in surface is added in a later plan.
+4. You're now a dev. Sign in at `/admin/login` (magic link → [Mailpit](http://127.0.0.1:54324)).
+
+## Granting a production admin
+
+`/admin` is gated by the `owner`/`dev` role on `profiles`, and the login page has
+self-signup disabled (`shouldCreateUser: false`). So a production admin is
+provisioned in two steps — **create the auth user, then grant the role** — against
+the **production** Supabase project. You do *not* run this on Vercel: Vercel only
+hosts the app, there's no shell there for one-off scripts.
+
+**Recommended — Supabase dashboard (no local secrets, no wrong-DB risk):**
+
+1. Supabase dashboard → production project → **Authentication → Users → Add user** →
+   enter the email. The `on_auth_user_created` trigger auto-creates their `profiles`
+   row as `customer`.
+2. **SQL Editor** → promote them:
+   ```sql
+   update public.profiles set role = 'owner'  -- or 'dev'
+   where id = (select id from auth.users where email = 'her@email.com');
+   ```
+3. They sign in via the magic link at `/admin/login` → dashboard access.
+
+**Alternative — run the grant script locally, pointed at production:**
+
+```bash
+vercel env pull .env.production.local   # pulls prod NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
+bun --env-file=.env.production.local scripts/grant-owner.ts her@email.com
+```
+
+- The account must already exist in prod auth (step 1), or the script exits with
+  `No user found`.
+- `--env-file` forces the prod creds. Otherwise `.env.local` (your **local**
+  Supabase) can win and you'd grant on the wrong database — verify the printed
+  user id is the production one.
+- `SUPABASE_SERVICE_ROLE_KEY` bypasses RLS. `.env.production.local` is gitignored
+  (`.env*`); delete it when done if you prefer.
 
 ## Roles
 
