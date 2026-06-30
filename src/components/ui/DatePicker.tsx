@@ -93,7 +93,7 @@ export function DatePicker({
         type="button"
         id={id}
         onClick={() => setOpen((o) => !o)}
-        className="flex h-11 w-full items-center justify-between rounded-md border border-line bg-paper px-3 text-base transition-[border-color] duration-150 ease-out-soft hover:border-ink focus:border-ink focus:outline-none"
+        className="flex h-11 w-full items-center justify-between rounded-none border border-line bg-paper px-3 text-base transition-[border-color] duration-150 ease-out-soft hover:border-ink focus:border-ink focus:outline-none"
       >
         <span className={datePart ? 'text-ink' : 'text-muted'}>{display}</span>
         <svg
@@ -166,7 +166,7 @@ export function DatePicker({
                 type="time"
                 value={timePart}
                 onChange={(e) => changeTime(e.target.value)}
-                className="h-9 flex-1 rounded-md border border-line bg-paper px-2 text-sm text-ink focus:border-ink focus:outline-none"
+                className="h-9 flex-1 rounded-none border border-line bg-paper px-2 text-sm text-ink focus:border-ink focus:outline-none"
               />
             </div>
           )}
