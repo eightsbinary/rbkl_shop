@@ -15,9 +15,12 @@ import { STEP_UP_REQUIRED } from '@/lib/step-up';
 import { type ProductInputT, saveProduct } from '@/server/actions/products';
 import { ImagePicker, type UploadedImage } from './ImagePicker';
 
+type ImageRow = { id: string; url_400: string; storage_path: string };
+
 export type ProductFormInitial = Partial<ProductInputT> & {
   id?: string;
-  imageRows?: { id: string; url_400: string }[];
+  imageRows?: ImageRow[];
+  heroImageId?: string | null;
   preorderCounts?: Record<string, number>;
 };
 
@@ -48,7 +51,8 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
     variantOverrides: initial.variantOverrides ?? [],
   });
   const preorderCounts = initial.preorderCounts ?? {};
-  const [images, setImages] = useState(initial.imageRows ?? []);
+  const [images, setImages] = useState<ImageRow[]>(initial.imageRows ?? []);
+  const [heroImageId, setHeroImageId] = useState<string | null>(initial.heroImageId ?? null);
   // Raw text the user is typing for each axis' values, kept separate from the
   // parsed `axes[i].values` array so in-progress separators (the comma you just
   // typed, a trailing space) aren't stripped out from under the cursor.
@@ -144,15 +148,52 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         url_1600: img.url_1600,
         alt: {},
       })
-      .select('id, url_400')
+      .select('id, url_400, storage_path')
       .single();
     if (insErr) {
       setError(insErr.message);
       return;
     }
     setImages((prev) => [...prev, data]);
+    // First image becomes the storefront cover automatically.
     if (images.length === 0) {
       await supa.from('products').update({ hero_image_id: data.id }).eq('id', productId);
+      setHeroImageId(data.id);
+    }
+  }
+
+  async function setHero(productId: string, imageId: string) {
+    const supa = createBrowserSupabase();
+    const { error: e } = await supa
+      .from('products')
+      .update({ hero_image_id: imageId })
+      .eq('id', productId);
+    if (e) {
+      setError(e.message);
+      return;
+    }
+    setHeroImageId(imageId);
+  }
+
+  async function deleteImage(productId: string, image: ImageRow) {
+    const supa = createBrowserSupabase();
+    // Remove all three resized objects (best-effort) then the DB row.
+    const paths = [400, 800, 1600].map((s) =>
+      image.storage_path.replace('-400.webp', `-${s}.webp`),
+    );
+    await supa.storage.from('product-images').remove(paths);
+    const { error: e } = await supa.from('product_images').delete().eq('id', image.id);
+    if (e) {
+      setError(e.message);
+      return;
+    }
+    const remaining = images.filter((i) => i.id !== image.id);
+    setImages(remaining);
+    // If the cover was deleted, fall back to the first remaining image.
+    if (heroImageId === image.id) {
+      const nextHero = remaining[0]?.id ?? null;
+      await supa.from('products').update({ hero_image_id: nextHero }).eq('id', productId);
+      setHeroImageId(nextHero);
     }
   }
 
@@ -362,17 +403,53 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         <h2 className="font-serif text-2xl text-ink">{t('images')}</h2>
         {state.id ? (
           <>
-            <div className="grid grid-cols-4 gap-3">
-              {images.map((img) => (
-                // biome-ignore lint/performance/noImgElement: admin-only preview, sizes vary, Next/Image not worth it
-                <img
-                  key={img.id}
-                  src={img.url_400}
-                  alt=""
-                  className="aspect-square w-full rounded object-cover"
-                />
-              ))}
-            </div>
+            {images.length > 0 && (
+              <>
+                <p className="text-xs text-muted">{t('coverHint')}</p>
+                <div className="grid grid-cols-3 gap-4 sm:grid-cols-4">
+                  {images.map((img) => {
+                    const isHero = heroImageId === img.id;
+                    return (
+                      <div key={img.id} className="space-y-1.5">
+                        <div className="relative">
+                          {/* biome-ignore lint/performance/noImgElement: admin-only preview */}
+                          <img
+                            src={img.url_400}
+                            alt=""
+                            className={`aspect-square w-full rounded object-cover ${isHero ? 'ring-2 ring-ink ring-offset-2' : ''}`}
+                          />
+                          {isHero && (
+                            <span className="absolute left-1.5 top-1.5 rounded-full bg-ink/85 px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-paper">
+                              {t('coverImage')}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          {isHero ? (
+                            <span className="text-muted">{t('coverImage')}</span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => state.id && setHero(state.id, img.id)}
+                              className="text-ink transition-colors hover:underline"
+                            >
+                              {t('setCover')}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => state.id && deleteImage(state.id, img)}
+                            className="text-error transition-colors hover:underline"
+                          >
+                            {t('deleteImage')}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
             <ImagePicker
               productId={state.id}
               onUploaded={(img) => state.id && attachImage(state.id, img)}

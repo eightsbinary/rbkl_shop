@@ -10,7 +10,11 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     await Promise.all([
       supa.from('products').select('*').eq('id', id).maybeSingle(),
       supa.from('variant_options').select('name, values, sort').eq('product_id', id).order('sort'),
-      supa.from('product_images').select('id, url_400').eq('product_id', id).order('sort'),
+      supa
+        .from('product_images')
+        .select('id, url_400, storage_path')
+        .eq('product_id', id)
+        .order('sort'),
       supa
         .from('variants')
         .select(
@@ -46,6 +50,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       (variants ?? []).map((v) => [JSON.stringify(v.option_values), v.preorder_count]),
     ),
     imageRows: images ?? [],
+    heroImageId: product.hero_image_id ?? null,
   };
 
   return (
