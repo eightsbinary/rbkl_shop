@@ -10,24 +10,32 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { CARRIERS } from '@/domain/carriers';
 import { STEP_UP_REQUIRED } from '@/lib/step-up';
-import { shipOrder } from '@/server/actions/ship-order';
+import { shipOrder, updateTracking } from '@/server/actions/ship-order';
 
 const CARRIER_ENTRIES = Object.entries(CARRIERS).map(([key, c]) => ({ key, label: c.label }));
 
-export function ShipOrderForm({ orderId }: { orderId: string }) {
+export interface ShipOrderFormProps {
+  orderId: string;
+  /** 'ship' marks a paid order shipped (+ buyer email); 'edit' silently corrects tracking. */
+  mode?: 'ship' | 'edit';
+  initial?: { carrier?: string; trackingNumber?: string; eta?: string; notes?: string };
+}
+
+export function ShipOrderForm({ orderId, mode = 'ship', initial }: ShipOrderFormProps) {
   const t = useTranslations('admin.orders');
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [carrier, setCarrier] = useState(CARRIER_ENTRIES[0]?.key ?? '');
-  const [trackingNumber, setTrackingNumber] = useState('');
-  const [eta, setEta] = useState('');
-  const [notes, setNotes] = useState('');
+  const [carrier, setCarrier] = useState(initial?.carrier ?? CARRIER_ENTRIES[0]?.key ?? '');
+  const [trackingNumber, setTrackingNumber] = useState(initial?.trackingNumber ?? '');
+  const [eta, setEta] = useState(initial?.eta ?? '');
+  const [notes, setNotes] = useState(initial?.notes ?? '');
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
     startTransition(async () => {
-      const res = await shipOrder({
+      const action = mode === 'edit' ? updateTracking : shipOrder;
+      const res = await action({
         orderId,
         carrier,
         trackingNumber: trackingNumber.trim(),
@@ -35,8 +43,7 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
         notesToBuyer: notes.trim() || undefined,
       });
       if (res && 'error' in res && res.error) setError(res.error);
-      // On success the action revalidates this path; the page re-renders with
-      // ship_status='shipped', which hides this form.
+      // On success the action revalidates this path and the page re-renders.
     });
   }
 
@@ -88,7 +95,13 @@ export function ShipOrderForm({ orderId }: { orderId: string }) {
       )}
 
       <Button type="submit" disabled={pending || trackingNumber.trim().length === 0}>
-        {pending ? t('ship.marking') : t('ship.markShipped')}
+        {mode === 'edit'
+          ? pending
+            ? t('ship.updating')
+            : t('ship.updateTracking')
+          : pending
+            ? t('ship.marking')
+            : t('ship.markShipped')}
       </Button>
     </form>
   );

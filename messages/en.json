@@ -293,7 +293,10 @@
         "labelNotes": "Note to buyer (optional)",
         "notesPlaceholder": "Anything the buyer should know…",
         "markShipped": "Mark as shipped",
-        "marking": "Marking shipped…"
+        "marking": "Marking shipped…",
+        "editTracking": "Edit tracking",
+        "updateTracking": "Update tracking",
+        "updating": "Updating…"
       },
       "paymentSection": "Payment",
       "slipReceived": "Payment slip received — review it below.",

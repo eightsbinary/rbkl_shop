@@ -79,3 +79,47 @@ export async function shipOrder(raw: ShipOrderInput) {
   revalidatePath(`/admin/orders/${input.orderId}`);
   return { ok: true as const };
 }
+
+/**
+ * Correct an already-shipped order's tracking details. Unlike shipOrder, this
+ * leaves ship_status and shipped_at untouched and does NOT re-send the shipped
+ * email — it's a silent correction of carrier/number/eta/notes.
+ */
+export async function updateTracking(raw: ShipOrderInput) {
+  const supa = await createServerSupabase();
+  await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
+
+  const parsed = ShipInput.safeParse(raw);
+  if (!parsed.success) return { error: 'Invalid shipping details' };
+  const input = parsed.data;
+
+  const svc = createServiceRoleSupabase();
+  const trackingUrl = buildTrackingUrl(input.carrier, input.trackingNumber);
+
+  const { data: updated, error } = await svc
+    .from('orders')
+    .update({
+      tracking_carrier: input.carrier,
+      tracking_number: input.trackingNumber,
+      tracking_url: trackingUrl,
+      estimated_delivery_date: input.estimatedDeliveryDate || null,
+      notes_to_buyer: input.notesToBuyer || null,
+    })
+    .eq('id', input.orderId)
+    .select('id')
+    .single();
+  if (error || !updated) return { error: error?.message ?? 'Update failed' };
+
+  await svc.from('order_events').insert({
+    order_id: updated.id,
+    type: 'order.tracking_updated',
+    payload: { carrier: input.carrier, number: input.trackingNumber, url: trackingUrl },
+    actor: 'owner',
+  });
+
+  revalidatePath('/admin/orders');
+  revalidatePath(`/admin/orders/${input.orderId}`);
+  return { ok: true as const };
+}

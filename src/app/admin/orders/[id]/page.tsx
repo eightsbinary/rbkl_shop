@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { EditTracking } from '@/components/admin/EditTracking';
 import { ShipOrderForm } from '@/components/admin/ShipOrderForm';
 import { SlipReview } from '@/components/admin/SlipReview';
 import { OrderStatusPill, ShipStatusPill } from '@/components/admin/StatusPill';
@@ -141,6 +142,17 @@ export default async function AdminOrderDetailPage({
                 {order.shipped_at && (
                   <p className="text-muted">{dateFmt.format(new Date(order.shipped_at))}</p>
                 )}
+                <div className="pt-2">
+                  <EditTracking
+                    orderId={order.id}
+                    initial={{
+                      carrier: order.tracking_carrier ?? undefined,
+                      trackingNumber: order.tracking_number ?? undefined,
+                      eta: order.estimated_delivery_date ?? undefined,
+                      notes: order.notes_to_buyer ?? undefined,
+                    }}
+                  />
+                </div>
               </div>
             ) : order.status === 'paid' ? (
               <div className="mt-4">
