@@ -337,26 +337,30 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         )}
       </section>
 
-      {state.id && (
-        <section className="space-y-4">
-          <h2 className="font-serif text-2xl text-ink">{t('images')}</h2>
-          <div className="grid grid-cols-4 gap-3">
-            {images.map((img) => (
-              // biome-ignore lint/performance/noImgElement: admin-only preview, sizes vary, Next/Image not worth it
-              <img
-                key={img.id}
-                src={img.url_400}
-                alt=""
-                className="aspect-square w-full rounded object-cover"
-              />
-            ))}
-          </div>
-          <ImagePicker
-            productId={state.id}
-            onUploaded={(img) => state.id && attachImage(state.id, img)}
-          />
-        </section>
-      )}
+      <section className="space-y-4">
+        <h2 className="font-serif text-2xl text-ink">{t('images')}</h2>
+        {state.id ? (
+          <>
+            <div className="grid grid-cols-4 gap-3">
+              {images.map((img) => (
+                // biome-ignore lint/performance/noImgElement: admin-only preview, sizes vary, Next/Image not worth it
+                <img
+                  key={img.id}
+                  src={img.url_400}
+                  alt=""
+                  className="aspect-square w-full rounded object-cover"
+                />
+              ))}
+            </div>
+            <ImagePicker
+              productId={state.id}
+              onUploaded={(img) => state.id && attachImage(state.id, img)}
+            />
+          </>
+        ) : (
+          <p className="text-sm text-muted">{t('saveFirstForImages')}</p>
+        )}
+      </section>
 
       {error === STEP_UP_REQUIRED ? (
         <StepUpPrompt />

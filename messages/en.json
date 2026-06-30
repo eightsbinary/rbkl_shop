@@ -200,6 +200,7 @@
       "saveCta": "Save changes",
       "createCta": "Create product",
       "addImage": "Add image",
+      "saveFirstForImages": "Save the product first, then reopen it to add images.",
       "uploading": "Resizing and uploading…",
       "preorderProduct": "Pre-order product (sell before stock)",
       "preorderShipDate": "Expected ship date",
