@@ -207,6 +207,8 @@
       "descEn": "คำอธิบาย (EN)",
       "basePrice": "ราคาตั้งต้น (บาท)",
       "weight": "น้ำหนัก (กรัม)",
+      "category": "หมวดหมู่",
+      "categoryPlaceholder": "เช่น เสื้อผ้า, อุปกรณ์เสริม",
       "featureOnLanding": "แสดงบนหน้าหลัก",
       "variants": "ตัวเลือกสินค้า",
       "axisName": "ชื่อแกน",

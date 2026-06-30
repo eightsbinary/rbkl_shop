@@ -250,6 +250,16 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
           </div>
         </div>
 
+        <div className="space-y-2 max-w-xs">
+          <Label htmlFor="category">{t('category')}</Label>
+          <Input
+            id="category"
+            value={state.category ?? ''}
+            onChange={(e) => setState({ ...state, category: e.target.value })}
+            placeholder={t('categoryPlaceholder')}
+          />
+        </div>
+
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="price">{t('basePrice')}</Label>
