@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
@@ -319,11 +320,10 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
 
         <div className="space-y-2 max-w-xs">
           <Label htmlFor="preorderShipDate">{t('preorderShipDate')}</Label>
-          <Input
+          <DatePicker
             id="preorderShipDate"
-            type="date"
             value={state.preorderShipDate ?? ''}
-            onChange={(e) => setState({ ...state, preorderShipDate: e.target.value || undefined })}
+            onChange={(val) => setState({ ...state, preorderShipDate: val || undefined })}
           />
         </div>
       </section>

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { type FormEvent, useState, useTransition } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
@@ -74,7 +75,7 @@ export function ShipOrderForm({ orderId, mode = 'ship', initial }: ShipOrderForm
 
       <div className="space-y-1.5">
         <Label htmlFor="eta">{t('ship.labelEta')}</Label>
-        <Input id="eta" type="date" value={eta} onChange={(e) => setEta(e.target.value)} />
+        <DatePicker id="eta" value={eta} onChange={setEta} />
       </div>
 
       <div className="space-y-1.5">

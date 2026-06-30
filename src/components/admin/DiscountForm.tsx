@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { type FormEvent, useState, useTransition } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
 import { Button } from '@/components/ui/Button';
+import { DatePicker } from '@/components/ui/DatePicker';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Select } from '@/components/ui/Select';
@@ -133,22 +134,20 @@ export function DiscountForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="startsAt">{t('labelStarts')}</Label>
-          <Input
+          <DatePicker
             id="startsAt"
-            type="datetime-local"
+            withTime
             value={v.startsAt}
-            onChange={(e) => set('startsAt', e.target.value)}
-            required
+            onChange={(val) => set('startsAt', val)}
           />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="endsAt">{t('labelEnds')}</Label>
-          <Input
+          <DatePicker
             id="endsAt"
-            type="datetime-local"
+            withTime
             value={v.endsAt}
-            onChange={(e) => set('endsAt', e.target.value)}
-            required
+            onChange={(val) => set('endsAt', val)}
           />
         </div>
       </div>
