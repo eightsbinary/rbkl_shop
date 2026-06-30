@@ -13,8 +13,9 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
   const t = await getTranslations('landing');
   const featured = await listFeaturedProducts(4);
 
-  const heroImg = featured[0]?.heroImage?.url_1600 ?? featured[0]?.heroImage?.url_800 ?? null;
-  const heroName = featured[0]?.name[locale] ?? featured[0]?.name.en ?? '';
+  // Brand hero image (public asset, matches the Figma design).
+  const heroImg = '/hero.png';
+  const heroName = `${t('heroLine1')} ${t('heroLine2')}`;
 
   return (
     <>

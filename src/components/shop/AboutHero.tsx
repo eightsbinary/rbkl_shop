@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function AboutHero({
   title,
   body1,
@@ -14,7 +16,15 @@ export function AboutHero({
         <p className="text-base leading-relaxed text-ink-soft">{body1}</p>
         <p className="text-base leading-relaxed text-ink-soft">{body2}</p>
       </div>
-      <div className="aspect-[4/5] w-full bg-field lg:aspect-[3/4]" />
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-field lg:aspect-[3/4]">
+        <Image
+          src="/about-hero.png"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+        />
+      </div>
     </section>
   );
 }

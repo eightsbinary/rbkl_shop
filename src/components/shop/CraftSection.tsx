@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function CraftSection({
   title,
   subtitle,
@@ -23,7 +25,14 @@ export function CraftSection({
       </div>
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-field">
-          <span className="absolute bottom-4 left-4 bg-ink-deep px-3 py-1 text-xs uppercase tracking-[0.12em] text-paper">
+          <Image
+            src="/about-craft.png"
+            alt=""
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 66vw, 100vw"
+          />
+          <span className="absolute bottom-4 left-4 z-10 bg-ink-deep px-3 py-1 text-xs uppercase tracking-[0.12em] text-paper">
             {caption}
           </span>
         </div>
