@@ -2,7 +2,7 @@
 
 Single-creator ecommerce store for [rainbykello](https://www.twitch.tv/rainbykello).
 
-**Status:** Plan 5 of 6 complete — Foundation + Catalog + Checkout + Operations + Sheets sync (dev-only two-way Google Sheets reconciliation) all green.
+**Status:** Roadmap complete — Foundation · Catalog · Checkout · Operations · Sheets sync (dev-only two-way Google Sheets reconciliation) · Security hardening (×2) · Editorial Mono redesign (home, PDP, about, cart) · Admin TH/EN i18n · Manual PromptPay payments (QR + slip verify) · Pre-orders. All green.
 **Spec:** [docs/superpowers/specs/2026-06-26-rb-shop-design.md](docs/superpowers/specs/2026-06-26-rb-shop-design.md)
 **Plans:** [docs/superpowers/plans/](docs/superpowers/plans/)
 
