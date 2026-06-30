@@ -73,6 +73,16 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
     });
   }
 
+  function addAxis() {
+    setState((s) => ({ ...s, axes: [...s.axes, { name: '', values: [] }] }));
+    setValuesText((v) => [...v, '']);
+  }
+
+  function removeAxis(idx: number) {
+    setState((s) => ({ ...s, axes: s.axes.filter((_, i) => i !== idx) }));
+    setValuesText((v) => v.filter((_, i) => i !== idx));
+  }
+
   function setOverride(
     optionValues: Record<string, string>,
     patch: { preorderEnabled?: boolean; preorderCap?: number | null },
@@ -269,9 +279,10 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
 
       <section className="space-y-6">
         <h2 className="font-serif text-2xl text-ink">{t('variants')}</h2>
+        <p className="text-xs text-muted">{t('variationsHint')}</p>
         {state.axes.map((axis, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: axes are user-mutated rows, name can repeat during edits
-          <div key={i} className="grid grid-cols-3 gap-4">
+          <div key={i} className="grid grid-cols-[1fr_2fr_auto] items-end gap-4">
             <div className="space-y-2">
               <Label htmlFor={`axis-name-${i}`}>{t('axisName')}</Label>
               <Input
@@ -280,7 +291,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
                 onChange={(e) => updateAxis(i, { name: e.target.value })}
               />
             </div>
-            <div className="col-span-2 space-y-2">
+            <div className="space-y-2">
               <Label htmlFor={`axis-values-${i}`}>{t('axisValues')}</Label>
               <Input
                 id={`axis-values-${i}`}
@@ -288,8 +299,18 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
                 onChange={(e) => updateAxisValues(i, e.target.value)}
               />
             </div>
+            <button
+              type="button"
+              onClick={() => removeAxis(i)}
+              className="h-11 px-2 text-sm text-error transition-colors hover:underline"
+            >
+              {t('removeVariation')}
+            </button>
           </div>
         ))}
+        <Button type="button" variant="outline" size="sm" onClick={addAxis}>
+          {t('addVariation')}
+        </Button>
 
         {generateVariants(state.axes).length > 0 && (
           <div className="space-y-3">
