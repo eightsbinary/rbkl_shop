@@ -27,11 +27,7 @@ export function Hero({
         <h1 className="max-w-3xl font-serif text-4xl leading-tight md:text-6xl">{title}</h1>
         <p className="max-w-md text-sm text-paper/80">{subtitle}</p>
         <Link href={`/${locale}/shop`}>
-          <Button
-            variant="outline"
-            size="md"
-            className="border-paper text-paper hover:bg-paper hover:text-ink"
-          >
+          <Button variant="outline-paper" size="md">
             {cta}
           </Button>
         </Link>

@@ -40,12 +40,7 @@ export function NewsletterBand({
               placeholder={placeholder}
               className="h-12 w-64 border border-paper/30 bg-transparent px-4 text-sm text-paper placeholder:text-paper/40 focus:border-paper focus:outline-none"
             />
-            <Button
-              type="submit"
-              variant="solid"
-              size="md"
-              className="border border-paper bg-paper text-ink hover:bg-paper/90"
-            >
+            <Button type="submit" variant="solid-paper" size="md">
               {cta}
             </Button>
           </form>

@@ -1,8 +1,20 @@
 import { type ButtonHTMLAttributes, forwardRef } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'solid';
+type Variant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'outline'
+  | 'solid'
+  | 'outline-paper'
+  | 'solid-paper';
 type Size = 'sm' | 'md' | 'lg';
 
+// NOTE: `className` is appended after these variant classes, but Tailwind resolves
+// conflicting utilities by stylesheet order, not string order — so overriding a
+// variant's colors via className is unreliable and can produce invisible text on
+// dark backgrounds. Pick a variant for the context instead (e.g. *-paper for dark
+// bands); only use className for layout (w-full, margins).
 const variantClasses: Record<Variant, string> = {
   primary: 'bg-ink text-paper hover:bg-ink-soft',
   secondary: 'bg-surface text-ink border border-line hover:bg-field',
@@ -11,6 +23,10 @@ const variantClasses: Record<Variant, string> = {
   outline:
     'rounded-none border border-ink bg-transparent text-ink uppercase tracking-[0.12em] hover:bg-ink hover:text-paper',
   solid: 'rounded-none bg-ink text-paper uppercase tracking-[0.12em] hover:bg-ink-soft',
+  // Paper-colored CTAs for dark backgrounds (hero overlay, Journal band)
+  'outline-paper':
+    'rounded-none border border-paper bg-transparent text-paper uppercase tracking-[0.12em] hover:bg-paper hover:text-ink',
+  'solid-paper': 'rounded-none bg-paper text-ink uppercase tracking-[0.12em] hover:bg-paper/90',
 };
 
 const sizeClasses: Record<Size, string> = {
