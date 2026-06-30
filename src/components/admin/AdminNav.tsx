@@ -24,11 +24,17 @@ export async function AdminNav() {
 
   return (
     <header className="border-b border-line bg-paper">
-      <div className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link href="/admin" className="font-serif text-lg text-ink">
-          admin
+      <div className="container mx-auto flex h-20 items-center justify-between px-6">
+        <Link
+          href="/admin"
+          className="font-serif text-2xl tracking-tight text-ink transition-colors hover:text-ink-soft"
+        >
+          rainbykello
+          <span className="ml-2 align-middle text-[10px] uppercase tracking-[0.2em] text-muted">
+            {t('badge')}
+          </span>
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-ink-soft">
+        <nav className="flex items-center gap-6 text-xs uppercase tracking-[0.14em] text-ink-soft">
           {links.map((l) => (
             <Link key={l.href} href={l.href} className={linkClass}>
               {l.label}
@@ -37,7 +43,7 @@ export async function AdminNav() {
           <form action={signOutAdmin}>
             <button
               type="submit"
-              className="text-muted transition-colors duration-150 ease-out-soft hover:text-ink active:scale-95"
+              className="uppercase tracking-[0.14em] text-muted transition-colors duration-150 ease-out-soft hover:text-ink active:scale-95"
             >
               {t('signOut')}
             </button>

@@ -170,6 +170,7 @@
   },
   "admin": {
     "nav": {
+      "badge": "studio",
       "products": "Products",
       "orders": "Orders",
       "discounts": "Discounts",
@@ -312,8 +313,9 @@
       "noSlip": "No slip uploaded."
     },
     "dashboard": {
-      "welcome": "Welcome.",
-      "intro": "Start with <link>Products</link>."
+      "badge": "Studio",
+      "welcome": "Welcome back.",
+      "intro": "Manage the shop from here. Start with <link>Products</link>."
     },
     "waitlists": {
       "title": "Waitlists",
