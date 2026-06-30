@@ -45,7 +45,7 @@ export default async function AdminProductsPage() {
             <Link
               key={p.id}
               href={`/admin/products/${p.id}/edit`}
-              className="group block overflow-hidden rounded-lg border border-line bg-paper transition-colors duration-150 ease-out-soft hover:border-ink"
+              className="group block overflow-hidden border border-line bg-surface transition-colors duration-150 ease-out-soft hover:border-ink"
             >
               <div className="relative aspect-square bg-field">
                 {hero?.url_400 ? (

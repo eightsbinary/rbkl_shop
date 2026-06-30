@@ -181,10 +181,10 @@ export function DiscountForm({
       )}
 
       <div className="flex items-center gap-3">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" variant="solid" disabled={pending}>
           {pending ? tc('saving') : mode === 'edit' ? tc('saveChanges') : t('createCta')}
         </Button>
-        <Button type="button" variant="ghost" onClick={() => router.push('/admin/discounts')}>
+        <Button type="button" variant="outline" onClick={() => router.push('/admin/discounts')}>
           {tc('cancel')}
         </Button>
       </div>

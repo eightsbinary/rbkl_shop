@@ -368,7 +368,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
         error && <p className="text-sm text-error">{error}</p>
       )}
       <div className="flex gap-3">
-        <Button type="submit" disabled={busy}>
+        <Button type="submit" variant="solid" disabled={busy}>
           {busy ? tc('saving') : state.id ? t('saveCta') : t('createCta')}
         </Button>
       </div>

@@ -15,13 +15,14 @@ export function StepUpPrompt() {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="space-y-2 rounded-md border p-3 text-sm">
+    <div className="space-y-2 border border-line bg-field p-4 text-sm">
       <p>{t('prompt')}</p>
       {sent ? (
         <p className="text-success">{t('sent')}</p>
       ) : (
         <Button
           type="button"
+          variant="solid"
           disabled={pending}
           onClick={() =>
             start(async () => {

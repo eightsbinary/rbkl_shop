@@ -38,9 +38,9 @@ export default async function AdminOrderDetailPage({
       <div className="space-y-5">
         <Link
           href="/admin/orders"
-          className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
+          className="inline-block text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
         >
-          <span aria-hidden>←</span> {t('backLink')}
+          {t('backLink')}
         </Link>
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-3">
@@ -56,7 +56,7 @@ export default async function AdminOrderDetailPage({
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="space-y-6">
-          <div className="rounded-lg border border-line bg-paper p-6">
+          <div className="border border-line bg-surface p-6">
             <h2 className="font-serif text-lg text-ink">{t('sectionItems')}</h2>
             <ul className="mt-3 space-y-2 text-sm">
               {items.map((it) => {
@@ -89,7 +89,7 @@ export default async function AdminOrderDetailPage({
             </dl>
           </div>
 
-          <div className="rounded-lg border border-line bg-paper p-6 text-sm text-ink-soft">
+          <div className="border border-line bg-surface p-6 text-sm text-ink-soft">
             <h2 className="font-serif text-lg text-ink">{t('sectionShipTo')}</h2>
             <p className="mt-3 text-ink">{address.fullName}</p>
             <p>
@@ -105,18 +105,18 @@ export default async function AdminOrderDetailPage({
 
         <section className="space-y-6">
           {order.status === 'awaiting_verification' ? (
-            <div className="rounded-lg border border-line bg-paper p-6">
+            <div className="border border-line bg-surface p-6">
               <h2 className="font-serif text-lg text-ink">{t('paymentSection')}</h2>
               <SlipReview orderId={order.id} imageUrl={slip?.imageUrl ?? null} />
             </div>
           ) : order.status === 'awaiting_payment' ? (
-            <div className="rounded-lg border border-line bg-paper p-6">
+            <div className="border border-line bg-surface p-6">
               <h2 className="font-serif text-lg text-ink">{t('paymentSection')}</h2>
               <p className="mt-3 text-sm text-muted">{t('awaitingPaymentNote')}</p>
             </div>
           ) : null}
 
-          <div className="rounded-lg border border-line bg-paper p-6">
+          <div className="border border-line bg-surface p-6">
             <h2 className="font-serif text-lg text-ink">{t('sectionFulfillment')}</h2>
             {order.ship_status === 'shipped' || order.ship_status === 'delivered' ? (
               <div className="mt-3 space-y-1 text-sm text-ink-soft">
@@ -163,7 +163,7 @@ export default async function AdminOrderDetailPage({
             )}
           </div>
 
-          <div className="rounded-lg border border-line bg-paper p-6">
+          <div className="border border-line bg-surface p-6">
             <h2 className="font-serif text-lg text-ink">{t('sectionActivity')}</h2>
             <ol className="mt-3 space-y-3 text-sm">
               {events.length === 0 && <li className="text-muted">{t('noEvents')}</li>}

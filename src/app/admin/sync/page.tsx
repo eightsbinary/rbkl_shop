@@ -27,34 +27,34 @@ export default async function AdminSyncPage() {
 
       <SyncPanel />
 
-      <div className="overflow-hidden rounded-lg border border-line bg-paper">
+      <div className="border border-line bg-surface">
         <table className="w-full text-sm">
-          <thead className="border-b border-line text-left text-muted">
+          <thead className="border-b border-line text-left text-xs uppercase tracking-[0.12em] text-muted">
             <tr>
-              <th className="px-4 py-3 font-medium">{t('colWhen')}</th>
-              <th className="px-4 py-3 font-medium">{t('colStatus')}</th>
-              <th className="px-4 py-3 font-medium">{t('colPulled')}</th>
-              <th className="px-4 py-3 font-medium">{t('colApplied')}</th>
-              <th className="px-4 py-3 font-medium">{t('colRejected')}</th>
+              <th className="px-5 py-4 font-medium">{t('colWhen')}</th>
+              <th className="px-5 py-4 font-medium">{t('colStatus')}</th>
+              <th className="px-5 py-4 font-medium">{t('colPulled')}</th>
+              <th className="px-5 py-4 font-medium">{t('colApplied')}</th>
+              <th className="px-5 py-4 font-medium">{t('colRejected')}</th>
             </tr>
           </thead>
           <tbody>
             {(runs ?? []).length === 0 && (
               <tr>
-                <td className="px-4 py-3 text-muted" colSpan={5}>
+                <td className="px-5 py-4 text-muted" colSpan={5}>
                   {t('empty')}
                 </td>
               </tr>
             )}
             {(runs ?? []).map((r) => (
               <tr key={r.id} className="border-b border-line last:border-0">
-                <td className="px-4 py-3 text-ink">{dateFmt.format(new Date(r.started_at))}</td>
-                <td className="px-4 py-3 text-ink-soft">
+                <td className="px-5 py-4 text-ink">{dateFmt.format(new Date(r.started_at))}</td>
+                <td className="px-5 py-4 text-ink-soft">
                   {r.error ? t('errorRow', { error: r.error }) : r.status}
                 </td>
-                <td className="px-4 py-3 text-ink-soft">{r.rows_pulled}</td>
-                <td className="px-4 py-3 text-ink-soft">{r.rows_applied}</td>
-                <td className="px-4 py-3 text-ink-soft">{r.rows_rejected}</td>
+                <td className="px-5 py-4 text-ink-soft">{r.rows_pulled}</td>
+                <td className="px-5 py-4 text-ink-soft">{r.rows_applied}</td>
+                <td className="px-5 py-4 text-ink-soft">{r.rows_rejected}</td>
               </tr>
             ))}
           </tbody>

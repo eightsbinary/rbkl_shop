@@ -94,7 +94,11 @@ export function ShipOrderForm({ orderId, mode = 'ship', initial }: ShipOrderForm
         error && <p className="text-sm text-error">{error}</p>
       )}
 
-      <Button type="submit" disabled={pending || trackingNumber.trim().length === 0}>
+      <Button
+        type="submit"
+        variant="solid"
+        disabled={pending || trackingNumber.trim().length === 0}
+      >
         {mode === 'edit'
           ? pending
             ? t('ship.updating')
