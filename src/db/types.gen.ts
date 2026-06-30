@@ -12,6 +12,24 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      about_content: {
+        Row: {
+          content: Json
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       discount_codes: {
         Row: {
           active: boolean

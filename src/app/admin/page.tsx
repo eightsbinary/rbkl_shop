@@ -15,6 +15,7 @@ export default async function AdminHome() {
     { href: '/admin/discounts', label: nav('discounts') },
     { href: '/admin/waitlists', label: nav('waitlists') },
     { href: '/admin/settings', label: nav('settings') },
+    { href: '/admin/about', label: nav('about') },
     ...(role === 'dev' ? [{ href: '/admin/sync', label: nav('sync') }] : []),
   ];
 

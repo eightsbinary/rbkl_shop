@@ -177,6 +177,7 @@
       "waitlists": "Waitlists",
       "sync": "Sync",
       "settings": "Settings",
+      "about": "About",
       "signOut": "Sign out"
     },
     "common": {
@@ -393,6 +394,36 @@
       "save": "Save zones",
       "saving": "Saving…",
       "saved": "Saved."
+    },
+    "about": {
+      "title": "About page",
+      "intro": "Edit the public About page. Leave a field blank to use the built-in default.",
+      "thLabel": "Thai",
+      "enLabel": "English",
+      "save": "Save About page",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "groups": {
+        "hero": "Hero",
+        "craft": "How it's made",
+        "inspiration": "Inspiration"
+      },
+      "fields": {
+        "heroTitle": "Hero title",
+        "heroBody1": "Hero paragraph 1",
+        "heroBody2": "Hero paragraph 2",
+        "craftTitle": "Section title",
+        "craftSubtitle": "Section subtitle",
+        "craftCaption": "Image caption",
+        "card1Title": "Card 1 title",
+        "card1Body": "Card 1 text",
+        "card2Title": "Card 2 title",
+        "card2Body": "Card 2 text",
+        "inspirationLabel": "Eyebrow label",
+        "inspirationTitle": "Section title",
+        "inspirationBody1": "Paragraph 1",
+        "inspirationBody2": "Paragraph 2"
+      }
     }
   }
 }
