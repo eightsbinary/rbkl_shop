@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { StepUpPrompt } from '@/components/admin/StepUpPrompt';
+import { UploadField } from '@/components/admin/UploadField';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -101,16 +102,11 @@ export function PaymentSettingsForm({
             className="h-40 w-40 rounded-md border border-line object-contain"
           />
         )}
-        <input
+        <UploadField
           id="qr-upload"
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
+          onFile={(f) => void handleQrFile(f)}
           disabled={uploading}
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void handleQrFile(f);
-          }}
-          className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-md file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
+          dropHint={t('dropHint')}
         />
         <p className="text-xs text-muted">{t('uploadQr')}</p>
         {uploading && <p className="text-sm text-muted">{t('uploading')}</p>}

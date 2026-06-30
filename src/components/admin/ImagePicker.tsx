@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { UploadField } from '@/components/admin/UploadField';
 import { Label } from '@/components/ui/Label';
 import { createBrowserSupabase } from '@/db/client';
 import { IMAGE_SIZES, resizeImageToWebp } from '@/lib/images';
@@ -66,16 +67,11 @@ export function ImagePicker({
   return (
     <div className="space-y-2">
       <Label htmlFor="image-upload">{t('addImage')}</Label>
-      <input
+      <UploadField
         id="image-upload"
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
+        onFile={(f) => void handleFile(f)}
         disabled={busy}
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) void handleFile(f);
-        }}
-        className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-md file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
+        dropHint={t('dropHint')}
       />
       {busy && <p className="text-sm text-muted">{t('uploading')}</p>}
       {error && <p className="text-sm text-error">{error}</p>}
