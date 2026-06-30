@@ -38,11 +38,17 @@ export function CraftSection({
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
           {[
-            { t: card1Title, b: card1Body },
-            { t: card2Title, b: card2Body },
+            { t: card1Title, b: card1Body, icon: '/Icon_1.png', w: 17, h: 27 },
+            { t: card2Title, b: card2Body, icon: '/Icon_2.png', w: 27, h: 27 },
           ].map((c) => (
             <div key={c.t} className="space-y-3 border border-line bg-surface p-6">
-              <div className="h-6 w-6 border border-ink" aria-hidden={true} />
+              <Image
+                src={c.icon}
+                alt=""
+                width={c.w}
+                height={c.h}
+                className="h-6 w-auto object-contain"
+              />
               <h3 className="font-serif text-xl text-ink">{c.t}</h3>
               <p className="text-sm leading-relaxed text-ink-soft">{c.b}</p>
             </div>
