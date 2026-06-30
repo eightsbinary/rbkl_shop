@@ -99,7 +99,7 @@ export function PaymentSettingsForm({
           <img
             src={previewUrl}
             alt="PromptPay QR"
-            className="h-40 w-40 rounded-md border border-line object-contain"
+            className="h-56 w-56 border border-line object-contain"
           />
         )}
         <UploadField

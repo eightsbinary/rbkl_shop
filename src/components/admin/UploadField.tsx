@@ -65,7 +65,7 @@ export function UploadField({
         accept="image/jpeg,image/png,image/webp"
         disabled={disabled}
         onChange={(e) => pick(e.target.files?.[0])}
-        className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-md file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
+        className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-none file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
       />
       <p className="text-xs text-muted">{dropHint}</p>
     </div>

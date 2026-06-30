@@ -92,16 +92,16 @@ export function PaymentPanel({
       {status !== 'awaiting_verification' && (
         <div className="space-y-4">
           {qrUrl ? (
-            <div className="bg-field inline-block rounded-sm p-4">
+            <div className="bg-field inline-block p-4">
               {/* biome-ignore lint/performance/noImgElement: QR is a user-uploaded image of
                   unknown host/size; next/image's remotePatterns coupling would crash the
                   order page for any Supabase host not pre-listed. */}
               <img
                 src={qrUrl}
                 alt="PromptPay QR"
-                width={192}
-                height={192}
-                className="object-contain"
+                width={288}
+                height={288}
+                className="h-72 w-72 max-w-full object-contain"
               />
             </div>
           ) : (
@@ -148,7 +148,7 @@ function FileUploader({
           const f = e.target.files?.[0];
           if (f) onFile(f);
         }}
-        className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-md file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
+        className="block w-full text-sm text-ink-soft file:mr-4 file:rounded-none file:border-0 file:bg-ink file:px-4 file:py-2 file:text-paper hover:file:bg-ink-soft"
       />
       {busy && <p className="text-sm text-muted">{t('uploading')}</p>}
       {error && <p className="text-sm text-error">{error}</p>}
