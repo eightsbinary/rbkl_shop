@@ -66,10 +66,10 @@ export default async function AdminOrdersPage({
             <Link
               key={f.key}
               href={f.href}
-              className={`rounded-full px-3 py-1 text-sm capitalize transition-all duration-150 ease-out-soft active:scale-95 ${
+              className={`rounded-full px-3.5 py-1.5 text-xs uppercase tracking-[0.1em] transition-all duration-150 ease-out-soft active:scale-95 ${
                 isActive
                   ? 'bg-ink text-paper'
-                  : 'border border-line text-ink-soft hover:border-rose hover:text-ink'
+                  : 'border border-line text-ink-soft hover:border-ink hover:text-ink'
               }`}
             >
               {f.label}

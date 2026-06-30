@@ -26,7 +26,7 @@ export default async function AdminProductsPage() {
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
         <Link href="/admin/products/new">
-          <Button>{t('newProduct')}</Button>
+          <Button variant="solid">{t('newProduct')}</Button>
         </Link>
       </div>
 
