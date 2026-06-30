@@ -49,12 +49,28 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
   });
   const preorderCounts = initial.preorderCounts ?? {};
   const [images, setImages] = useState(initial.imageRows ?? []);
+  // Raw text the user is typing for each axis' values, kept separate from the
+  // parsed `axes[i].values` array so in-progress separators (the comma you just
+  // typed, a trailing space) aren't stripped out from under the cursor.
+  const [valuesText, setValuesText] = useState<string[]>(() =>
+    (initial.axes ?? DEFAULT_AXES).map((a) => a.values.join(', ')),
+  );
 
   function updateAxis(idx: number, patch: { name?: string; values?: string[] }) {
     setState((s) => ({
       ...s,
       axes: s.axes.map((a, i) => (i === idx ? { ...a, ...patch } : a)),
     }));
+  }
+
+  function updateAxisValues(idx: number, text: string) {
+    setValuesText((prev) => prev.map((v, i) => (i === idx ? text : v)));
+    updateAxis(idx, {
+      values: text
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),
+    });
   }
 
   function setOverride(
@@ -268,15 +284,8 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
               <Label htmlFor={`axis-values-${i}`}>{t('axisValues')}</Label>
               <Input
                 id={`axis-values-${i}`}
-                value={axis.values.join(', ')}
-                onChange={(e) =>
-                  updateAxis(i, {
-                    values: e.target.value
-                      .split(',')
-                      .map((s) => s.trim())
-                      .filter(Boolean),
-                  })
-                }
+                value={valuesText[i] ?? axis.values.join(', ')}
+                onChange={(e) => updateAxisValues(i, e.target.value)}
               />
             </div>
           </div>

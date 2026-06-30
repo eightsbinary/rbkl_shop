@@ -48,6 +48,22 @@
     font-family: var(--font-sans);
   }
 
+  /* Clickable affordance — Tailwind v4's reset drops the default pointer on
+     buttons; restore it for every interactive control so admins/users can tell
+     what is clickable. */
+  button:not(:disabled),
+  select:not(:disabled),
+  summary,
+  [role="button"],
+  label:has(> input[type="checkbox"]:not(:disabled)),
+  label:has(> input[type="radio"]:not(:disabled)) {
+    cursor: pointer;
+  }
+
+  input[type="file"]:not(:disabled)::file-selector-button {
+    cursor: pointer;
+  }
+
   ::selection {
     background: var(--color-line);
     color: var(--color-ink);

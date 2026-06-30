@@ -34,21 +34,23 @@ export default async function AdminOrderDetailPage({
 
   return (
     <div className="space-y-8">
-      <div className="space-y-3">
+      <div className="space-y-5">
         <Link
           href="/admin/orders"
-          className="text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
+          className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors duration-150 ease-out-soft hover:text-ink"
         >
-          {t('backLink')}
+          <span aria-hidden>←</span> {t('backLink')}
         </Link>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-serif text-3xl text-ink">#{order.number}</h1>
-          <OrderStatusPill status={order.status} />
-          <ShipStatusPill status={order.ship_status} />
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-serif text-3xl text-ink">#{order.number}</h1>
+            <OrderStatusPill status={order.status} />
+            <ShipStatusPill status={order.ship_status} />
+          </div>
+          <p className="text-sm text-muted">
+            {order.customer_email} · {t('placed')} {dateFmt.format(new Date(order.created_at))}
+          </p>
         </div>
-        <p className="text-sm text-muted">
-          {order.customer_email} · {t('placed')} {dateFmt.format(new Date(order.created_at))}
-        </p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">

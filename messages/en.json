@@ -342,6 +342,7 @@
       "qrLabel": "PromptPay QR",
       "uploadQr": "Upload QR image",
       "uploading": "Uploading…",
+      "qrUploaded": "QR uploaded ✓ — remember to Save.",
       "accountLabel": "Account name / label",
       "instructionsEn": "Instructions (EN)",
       "instructionsTh": "Instructions (TH)",

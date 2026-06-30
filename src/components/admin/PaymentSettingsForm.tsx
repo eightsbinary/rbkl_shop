@@ -28,6 +28,7 @@ export function PaymentSettingsForm({
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialQrUrl);
   const [uploading, setUploading] = useState(false);
+  const [justUploaded, setJustUploaded] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [accountLabel, setAccountLabel] = useState(initialAccountLabel);
@@ -40,6 +41,7 @@ export function PaymentSettingsForm({
   async function handleQrFile(file: File) {
     setUploading(true);
     setUploadError(null);
+    setJustUploaded(false);
     try {
       const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
       const path = `qr/${Date.now()}.${ext}`;
@@ -58,6 +60,7 @@ export function PaymentSettingsForm({
       const { data: pub } = supa.storage.from('payment-assets').getPublicUrl(path);
       setUploadedPath(path);
       setPreviewUrl(pub.publicUrl);
+      setJustUploaded(true);
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : 'Upload failed');
     } finally {
@@ -88,7 +91,7 @@ export function PaymentSettingsForm({
   return (
     <div className="space-y-6">
       {/* QR upload */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <Label htmlFor="qr-upload">{t('qrLabel')}</Label>
         {previewUrl && (
           // biome-ignore lint/performance/noImgElement: QR preview; next/image not needed for admin-only upload
@@ -111,6 +114,7 @@ export function PaymentSettingsForm({
         />
         <p className="text-xs text-muted">{t('uploadQr')}</p>
         {uploading && <p className="text-sm text-muted">{t('uploading')}</p>}
+        {justUploaded && !uploading && <p className="text-sm text-success">{t('qrUploaded')}</p>}
         {uploadError && <p className="text-sm text-error">{uploadError}</p>}
       </div>
 

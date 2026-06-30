@@ -342,6 +342,7 @@
       "qrLabel": "QR PromptPay",
       "uploadQr": "อัปโหลดรูป QR",
       "uploading": "กำลังอัปโหลด…",
+      "qrUploaded": "อัปโหลด QR แล้ว ✓ — อย่าลืมกดบันทึก",
       "accountLabel": "ชื่อบัญชี / ป้ายกำกับ",
       "instructionsEn": "คำแนะนำ (EN)",
       "instructionsTh": "คำแนะนำ (TH)",
