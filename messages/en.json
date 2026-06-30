@@ -210,6 +210,7 @@
       "axisName": "Axis name",
       "axisValues": "Values (comma separated)",
       "images": "Images",
+      "noImage": "No image",
       "saveCta": "Save changes",
       "createCta": "Create product",
       "addImage": "Add image",
