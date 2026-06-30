@@ -49,6 +49,12 @@ export function proxy(request: NextRequest) {
       : (intlMiddleware(request) as NextResponse);
 
   for (const [k, v] of Object.entries(headerMap)) response.headers.set(k, v);
+
+  // Keep crawlers/bots out of the dashboard and API — the admin login is now
+  // linked from the storefront header, so it must never be indexed.
+  if (isAdmin || isApi) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  }
   return response;
 }
 
