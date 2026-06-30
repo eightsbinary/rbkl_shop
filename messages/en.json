@@ -59,7 +59,20 @@
   },
   "footer": {
     "copyright": "© rainbykello",
-    "follow": "follow"
+    "follow": "follow",
+    "track": "Track your order"
+  },
+  "track": {
+    "title": "Track your order",
+    "subtitle": "Enter your order number and the email you used at checkout.",
+    "numberLabel": "Order number",
+    "numberPlaceholder": "e.g. RB-1042",
+    "emailLabel": "Email",
+    "cta": "Find my order",
+    "submitting": "Searching…",
+    "notFound": "We couldn’t find an order with that number and email. Please check both and try again.",
+    "verifyFailed": "Verification failed — please retry.",
+    "rateLimited": "Too many attempts — please wait a moment and try again."
   },
   "locale": {
     "switchToOther": "TH"

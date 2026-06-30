@@ -1,7 +1,9 @@
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 
 export function Footer() {
   const t = useTranslations('footer');
+  const locale = useLocale();
   return (
     <footer className="border-t border-line bg-paper">
       <div className="container mx-auto flex flex-col gap-8 px-6 py-16 sm:flex-row sm:items-start sm:justify-between">
@@ -12,6 +14,9 @@ export function Footer() {
           </p>
         </div>
         <div className="flex items-center gap-6 text-xs uppercase tracking-[0.14em] text-ink-soft">
+          <Link href={`/${locale}/track`} className="transition-colors hover:text-ink">
+            {t('track')}
+          </Link>
           <a
             href="https://www.instagram.com/rainbykello/"
             target="_blank"
