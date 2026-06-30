@@ -6,7 +6,9 @@
   "nav": {
     "shop": "shop",
     "about": "about",
-    "cart": "cart"
+    "cart": "cart",
+    "dashboard": "dashboard",
+    "login": "login"
   },
   "landing": {
     "heroLine1": "made slowly,",
@@ -323,6 +325,7 @@
     "login": {
       "badge": "admin",
       "title": "Sign in",
+      "subtitle": "Enter your creator email and we’ll send a one-time sign-in link.",
       "emailLabel": "Email",
       "sending": "Sending…",
       "sendCta": "Send magic link",

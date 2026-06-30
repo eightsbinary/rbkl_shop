@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { CartIcon } from '@/components/cart/CartIcon';
+import { DashboardLink } from './DashboardLink';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
 export function Header() {
@@ -24,6 +25,7 @@ export function Header() {
           rainbykello
         </Link>
         <div className="flex items-center justify-end gap-5 text-xs uppercase tracking-[0.14em] text-ink-soft">
+          <DashboardLink />
           <CartIcon label={t('cart')} />
           <LocaleSwitcher />
         </div>
