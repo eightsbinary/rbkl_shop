@@ -25,6 +25,12 @@
     "journalThanks": "Thanks — you're on the list.",
     "journalError": "Something went wrong — please try again."
   },
+  "notFound": {
+    "eyebrow": "error 404",
+    "title": "Page not found",
+    "body": "The page you're looking for doesn't exist or has moved.",
+    "cta": "Back to home"
+  },
   "shop": {
     "title": "shop",
     "emptyState": "nothing in the shop right now",

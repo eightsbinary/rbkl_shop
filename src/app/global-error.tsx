@@ -7,6 +7,7 @@
  * layout (or anything above the locale segment) throws. Styling is inline on
  * purpose: globals.css is imported by the root layout, which may itself have
  * failed, so we can't rely on the stylesheet or Tailwind theme classes here.
+ * Values mirror the Editorial Mono theme in globals.css.
  */
 
 const css = `
@@ -15,16 +16,14 @@ const css = `
     to   { opacity: 1; transform: translateY(0); }
   }
   .rb-retry:hover {
-    background-color: #3a3330;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px -12px rgba(31, 26, 23, 0.55);
+    background-color: #3a3a3a;
+    transform: translateY(-1px);
   }
   .rb-retry:active {
-    transform: translateY(0) scale(0.97);
-    box-shadow: 0 4px 10px -8px rgba(31, 26, 23, 0.55);
+    transform: translateY(0) scale(0.98);
   }
   .rb-retry:focus-visible {
-    outline: 2px solid #c9a0a0;
+    outline: 2px solid #111111;
     outline-offset: 3px;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -50,8 +49,8 @@ export default function GlobalError({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#faf7f2',
-          color: '#1f1a17',
+          backgroundColor: '#fbfbfa',
+          color: '#111111',
           fontFamily: 'ui-sans-serif, system-ui, sans-serif',
           WebkitFontSmoothing: 'antialiased',
         }}
@@ -76,7 +75,7 @@ export default function GlobalError({
               fontSize: '0.75rem',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: '#a87e7e',
+              color: '#5e5e5e',
             }}
           >
             something broke
@@ -86,8 +85,9 @@ export default function GlobalError({
               margin: '0.75rem 0 0',
               fontSize: '1.75rem',
               fontWeight: 600,
-              fontFamily: 'ui-serif, Georgia, serif',
-              color: '#1f1a17',
+              letterSpacing: '-0.01em',
+              fontFamily: "'Libre Caslon Text', Georgia, 'Times New Roman', serif",
+              color: '#111111',
             }}
           >
             We hit an unexpected snag
@@ -97,7 +97,7 @@ export default function GlobalError({
               margin: '0.75rem 0 1.75rem',
               fontSize: '0.95rem',
               lineHeight: 1.6,
-              color: '#7a7370',
+              color: '#5e5e5e',
             }}
           >
             Sorry about that. Try again — if it keeps happening, the shop will be back to normal
@@ -108,7 +108,7 @@ export default function GlobalError({
                   display: 'block',
                   marginTop: '0.75rem',
                   fontSize: '0.75rem',
-                  color: '#a89f99',
+                  color: '#8a8a8a',
                 }}
               >
                 ref: {error.digest}
@@ -121,16 +121,18 @@ export default function GlobalError({
             className="rb-retry"
             style={{
               appearance: 'none',
-              border: '1px solid #1f1a17',
-              borderRadius: '8px',
-              backgroundColor: '#1f1a17',
-              color: '#faf7f2',
-              padding: '0.7rem 1.6rem',
-              fontSize: '0.9rem',
+              border: '1px solid #111111',
+              borderRadius: 0,
+              backgroundColor: '#111111',
+              color: '#fbfbfa',
+              padding: '0.8rem 1.8rem',
+              fontSize: '0.8rem',
               fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.12em',
               cursor: 'pointer',
               transition:
-                'transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms ease',
+                'transform 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease',
             }}
           >
             Try again
