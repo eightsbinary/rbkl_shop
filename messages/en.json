@@ -180,6 +180,7 @@
       "orders": "Orders",
       "discounts": "Discounts",
       "waitlists": "Waitlists",
+      "newsletter": "Newsletter",
       "sync": "Sync",
       "settings": "Settings",
       "about": "About",
@@ -349,6 +350,16 @@
       "colStock": "Stock",
       "inStock": "{count} in stock — will notify",
       "soldOut": "sold out"
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Fans who signed up for product updates.",
+      "empty": "No subscribers yet.",
+      "download": "Download CSV",
+      "colEmail": "email",
+      "colLanguage": "language",
+      "colSource": "source",
+      "colDate": "date"
     },
     "sync": {
       "title": "Sheets sync",

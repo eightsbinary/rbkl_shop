@@ -180,6 +180,7 @@
       "orders": "คำสั่งซื้อ",
       "discounts": "โค้ดส่วนลด",
       "waitlists": "รายการรอ",
+      "newsletter": "จดหมายข่าว",
       "sync": "ซิงค์",
       "settings": "ตั้งค่า",
       "about": "เกี่ยวกับ",
@@ -349,6 +350,16 @@
       "colStock": "สต็อก",
       "inStock": "มีสต็อก {count} ชิ้น — จะแจ้งเตือน",
       "soldOut": "ขายหมด"
+    },
+    "newsletter": {
+      "title": "จดหมายข่าว",
+      "description": "แฟน ๆ ที่สมัครรับข่าวสารสินค้า",
+      "empty": "ยังไม่มีผู้สมัคร",
+      "download": "ดาวน์โหลด CSV",
+      "colEmail": "อีเมล",
+      "colLanguage": "ภาษา",
+      "colSource": "ที่มา",
+      "colDate": "วันที่"
     },
     "sync": {
       "title": "ซิงค์ชีต",
