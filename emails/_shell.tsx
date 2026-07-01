@@ -1,21 +1,17 @@
 import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '@react-email/components';
 import type { CSSProperties, ReactNode } from 'react';
+import { BRAND } from '@/lib/brand';
 
 /** Buyer language. Every order/waitlist row carries this, so each email is sent
  *  wholly in the buyer's language rather than bilingually. */
 export type Locale = 'th' | 'en';
 
-// Fixed frame copy (tagline + footer), localized per buyer.
-const chrome = {
-  en: {
-    tagline: 'made slowly, shipped warmly',
-    footer: "You're receiving this because you placed an order or asked to be notified.",
-  },
-  th: {
-    tagline: 'ทำอย่างตั้งใจ ส่งด้วยหัวใจ',
-    footer: 'คุณได้รับอีเมลฉบับนี้เพราะสั่งซื้อสินค้าหรือขอรับการแจ้งเตือนจากเรา',
-  },
-} as const satisfies Record<Locale, { tagline: string; footer: string }>;
+// Footer line, localized per buyer. The tagline is sourced from BRAND so email,
+// receipt, and social images share one canonical wording.
+const footerCopy = {
+  en: "You're receiving this because you placed an order or asked to be notified.",
+  th: 'คุณได้รับอีเมลฉบับนี้เพราะสั่งซื้อสินค้าหรือขอรับการแจ้งเตือนจากเรา',
+} as const satisfies Record<Locale, string>;
 
 // Editorial Mono palette (mirrors globals.css @theme). Emails use inline styles
 // because most mail clients strip <style> and external CSS. The rose* keys are
@@ -100,12 +96,12 @@ export function EmailShell({
       <Body style={main}>
         <Container style={container}>
           <Section>
-            <Text style={brand}>rainbykello</Text>
-            <Text style={eyebrow(locale)}>{chrome[locale].tagline}</Text>
+            <Text style={brand}>{BRAND.name}</Text>
+            <Text style={eyebrow(locale)}>{BRAND.tagline[locale]}</Text>
           </Section>
           {children}
           <Hr style={{ borderColor: c.line, margin: '32px 0 16px' }} />
-          <Text style={footer}>{chrome[locale].footer}</Text>
+          <Text style={footer}>{footerCopy[locale]}</Text>
         </Container>
       </Body>
     </Html>

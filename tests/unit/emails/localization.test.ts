@@ -1,10 +1,10 @@
 import { render } from '@react-email/components';
-import { describe, expect, it } from 'vitest';
 import OrderPaid, { subject as orderPaidSubject } from 'emails/OrderPaid';
 import OrderShipped, { subject as orderShippedSubject } from 'emails/OrderShipped';
 import SlipReceived, { subject as slipReceivedSubject } from 'emails/SlipReceived';
 import SlipRejected, { subject as slipRejectedSubject } from 'emails/SlipRejected';
 import WaitlistRestock, { subject as waitlistRestockSubject } from 'emails/WaitlistRestock';
+import { describe, expect, it } from 'vitest';
 
 const hasThai = (s: string) => /[฀-๿]/.test(s);
 
@@ -50,7 +50,9 @@ describe('email localization', () => {
   });
 
   it('renders WaitlistRestock in the buyer language', async () => {
-    const th = await render(WaitlistRestock({ locale: 'th', productName: 'Riso', productUrl: '#' }));
+    const th = await render(
+      WaitlistRestock({ locale: 'th', productName: 'Riso', productUrl: '#' }),
+    );
     expect(th).toContain('กลับมาวางขาย');
   });
 

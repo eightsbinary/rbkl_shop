@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import type { Database } from '@/db/types.gen';
+import { BRAND } from '@/lib/brand';
 
 type Order = Database['public']['Tables']['orders']['Row'];
 type Item = Database['public']['Tables']['order_items']['Row'];
@@ -28,7 +29,7 @@ export function ReceiptDoc({
       <header className="border-b border-line pb-6 mb-6 flex items-start justify-between">
         <div>
           <p className="font-serif text-2xl text-ink">{t('shopName')}</p>
-          <p className="text-xs text-muted">made slowly, shipped warmly</p>
+          <p className="text-xs text-muted">{BRAND.tagline[locale]}</p>
         </div>
         <div className="text-right text-sm text-ink-soft">
           <p>
@@ -69,10 +70,10 @@ export function ReceiptDoc({
       <table className="w-full text-sm mb-8">
         <thead>
           <tr className="border-b border-line text-left text-muted">
-            <th className="py-2 font-medium">Item</th>
-            <th className="py-2 font-medium text-right">Qty</th>
-            <th className="py-2 font-medium text-right">Unit</th>
-            <th className="py-2 font-medium text-right">Line</th>
+            <th className="py-2 font-medium">{t('item')}</th>
+            <th className="py-2 font-medium text-right">{t('qty')}</th>
+            <th className="py-2 font-medium text-right">{t('unit')}</th>
+            <th className="py-2 font-medium text-right">{t('lineTotal')}</th>
           </tr>
         </thead>
         <tbody>
