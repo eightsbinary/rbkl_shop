@@ -14,7 +14,16 @@ const EnvSchema = z.object({
 export type Env = z.infer<typeof EnvSchema>;
 
 export function parseEnv(raw: Record<string, string | undefined>): Env {
-  const result = EnvSchema.safeParse(raw);
+  // Treat empty/whitespace-only values as unset. `.env` files and many hosts
+  // materialise "declared but blank" vars as "" rather than omitting them, and
+  // "" is not `undefined` — so without this, an empty optional var (e.g. a blank
+  // UPSTASH_REDIS_REST_URL placeholder) would fail .url()/.min(1) instead of
+  // falling back to its dev default.
+  const normalized: Record<string, string | undefined> = {};
+  for (const [key, value] of Object.entries(raw)) {
+    normalized[key] = value !== undefined && value.trim() === '' ? undefined : value;
+  }
+  const result = EnvSchema.safeParse(normalized);
   if (!result.success) {
     const issues = result.error.issues
       .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
