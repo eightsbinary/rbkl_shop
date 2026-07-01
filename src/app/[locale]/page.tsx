@@ -53,11 +53,13 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       )}
 
       <NewsletterBand
+        locale={locale}
         title={t('journalTitle')}
         subtitle={t('journalSubtitle')}
         placeholder={t('journalPlaceholder')}
         cta={t('journalCta')}
         thanks={t('journalThanks')}
+        error={t('journalError')}
       />
     </>
   );

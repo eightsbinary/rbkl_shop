@@ -22,7 +22,8 @@
     "journalSubtitle": "Sign up for infrequent dispatches on new arrivals, restocks, and studio process. No noise, just warmth.",
     "journalPlaceholder": "Email address",
     "journalCta": "Subscribe",
-    "journalThanks": "Thanks — you're on the list."
+    "journalThanks": "Thanks — you're on the list.",
+    "journalError": "Something went wrong — please try again."
   },
   "shop": {
     "title": "shop",
