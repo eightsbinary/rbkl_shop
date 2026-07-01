@@ -1,6 +1,22 @@
 import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '@react-email/components';
 import type { CSSProperties, ReactNode } from 'react';
 
+/** Buyer language. Every order/waitlist row carries this, so each email is sent
+ *  wholly in the buyer's language rather than bilingually. */
+export type Locale = 'th' | 'en';
+
+// Fixed frame copy (tagline + footer), localized per buyer.
+const chrome = {
+  en: {
+    tagline: 'made slowly, shipped warmly',
+    footer: "You're receiving this because you placed an order or asked to be notified.",
+  },
+  th: {
+    tagline: 'ทำอย่างตั้งใจ ส่งด้วยหัวใจ',
+    footer: 'คุณได้รับอีเมลฉบับนี้เพราะสั่งซื้อสินค้าหรือขอรับการแจ้งเตือนจากเรา',
+  },
+} as const satisfies Record<Locale, { tagline: string; footer: string }>;
+
 // Editorial Mono palette (mirrors globals.css @theme). Emails use inline styles
 // because most mail clients strip <style> and external CSS. The rose* keys are
 // kept for back-compat and revalued to neutrals — the rose accent is retired,
@@ -18,10 +34,13 @@ export const c = {
 
 // Shared font stacks. The web uses Caslon (serif) + Inter (sans); neither loads
 // reliably in mail clients, so we name them first and fall back to the closest
-// email-safe faces — matching globals.css's own fallback chain.
+// email-safe faces — matching globals.css's own fallback chain. Thai faces are
+// appended so Thai copy renders in a proper face (per-glyph fallback) instead of
+// tofu when the Latin faces lack Thai glyphs.
 const sansStack =
-  "'Inter', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
-const serifStack = "'Libre Caslon Text', Georgia, 'Times New Roman', serif";
+  "'Inter', 'IBM Plex Thai', 'Sarabun', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+const serifStack =
+  "'Libre Caslon Text', Georgia, 'Noto Serif Thai', 'IBM Plex Thai', 'Times New Roman', serif";
 
 const main: CSSProperties = {
   backgroundColor: c.paperWarm,
@@ -48,13 +67,15 @@ const brand: CSSProperties = {
   color: c.ink,
 };
 
-const eyebrow: CSSProperties = {
+// Wide tracking + uppercase suit the Latin eyebrow but pull Thai vowel/tone marks
+// apart, so Thai uses a gentler treatment.
+const eyebrow = (locale: Locale): CSSProperties => ({
   margin: '6px 0 0',
   fontSize: '11px',
-  letterSpacing: '0.16em',
-  textTransform: 'uppercase',
+  letterSpacing: locale === 'th' ? '0.04em' : '0.16em',
+  textTransform: locale === 'th' ? 'none' : 'uppercase',
   color: c.muted,
-};
+});
 
 const footer: CSSProperties = {
   margin: '8px 0 0',
@@ -62,23 +83,29 @@ const footer: CSSProperties = {
   color: c.muted,
 };
 
-/** Shared branded email frame: header, body slot, footer. */
-export function EmailShell({ preview, children }: { preview: string; children: ReactNode }) {
+/** Shared branded email frame: header, body slot, footer — all in `locale`. */
+export function EmailShell({
+  preview,
+  locale,
+  children,
+}: {
+  preview: string;
+  locale: Locale;
+  children: ReactNode;
+}) {
   return (
-    <Html lang="en">
+    <Html lang={locale}>
       <Head />
       <Preview>{preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section>
             <Text style={brand}>rainbykello</Text>
-            <Text style={eyebrow}>made slowly, shipped warmly</Text>
+            <Text style={eyebrow(locale)}>{chrome[locale].tagline}</Text>
           </Section>
           {children}
           <Hr style={{ borderColor: c.line, margin: '32px 0 16px' }} />
-          <Text style={footer}>
-            You're receiving this because you placed an order or asked to be notified.
-          </Text>
+          <Text style={footer}>{chrome[locale].footer}</Text>
         </Container>
       </Body>
     </Html>

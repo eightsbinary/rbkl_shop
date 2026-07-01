@@ -1,6 +1,6 @@
 'use server';
 
-import SlipRejected from 'emails/SlipRejected';
+import SlipRejected, { subject as slipRejectedSubject } from 'emails/SlipRejected';
 import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase, createServiceRoleSupabase } from '@/db/server';
 import { sendEmail } from '@/lib/email';
@@ -69,8 +69,8 @@ export async function rejectSlip(orderId: string, reason: string): Promise<Resul
     const orderUrl = `${siteUrl()}/${locale}/order/${orderId}?t=${signOrderToken(orderId, order.customer_email)}`;
     await sendEmail({
       to: order.customer_email,
-      subject: `Action needed — order ${order.number}`,
-      react: SlipRejected({ orderNumber: order.number, orderUrl, reason: trimmed }),
+      subject: slipRejectedSubject(locale, order.number),
+      react: SlipRejected({ locale, orderNumber: order.number, orderUrl, reason: trimmed }),
     });
   } catch (err) {
     console.error('[rejectSlip] email failed', err);

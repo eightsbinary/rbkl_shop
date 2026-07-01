@@ -1,4 +1,4 @@
-import WaitlistRestock from 'emails/WaitlistRestock';
+import WaitlistRestock, { subject as waitlistRestockSubject } from 'emails/WaitlistRestock';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabase } from '@/db/server';
 import { sendEmail } from '@/lib/email';
@@ -84,8 +84,8 @@ export async function GET(req: NextRequest) {
       try {
         await sendEmail({
           to: entry.email,
-          subject: `${entry.productName} is back in stock`,
-          react: WaitlistRestock({ productName: entry.productName, productUrl }),
+          subject: waitlistRestockSubject(entry.locale, entry.productName),
+          react: WaitlistRestock({ locale: entry.locale, productName: entry.productName, productUrl }),
         });
       } catch (err) {
         console.error('[notify-waitlist] email failed', err);

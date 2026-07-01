@@ -1,6 +1,6 @@
 'use server';
 
-import SlipReceived from 'emails/SlipReceived';
+import SlipReceived, { subject as slipReceivedSubject } from 'emails/SlipReceived';
 import { createServiceRoleSupabase } from '@/db/server';
 import { sendEmail } from '@/lib/email';
 import { verifyOrderToken } from '@/lib/order-token';
@@ -41,8 +41,8 @@ export async function submitSlip(input: {
     const orderUrl = `${siteUrl()}/${locale}/order/${order.id}?t=${input.token}`;
     await sendEmail({
       to: order.customer_email,
-      subject: `Slip received — order ${order.number}`,
-      react: SlipReceived({ orderNumber: order.number, orderUrl }),
+      subject: slipReceivedSubject(locale, order.number),
+      react: SlipReceived({ locale, orderNumber: order.number, orderUrl }),
     });
   } catch (err) {
     console.error('[submitSlip] email failed', err);

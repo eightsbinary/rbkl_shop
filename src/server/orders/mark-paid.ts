@@ -1,6 +1,6 @@
 import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import OrderPaid from 'emails/OrderPaid';
+import OrderPaid, { subject as orderPaidSubject } from 'emails/OrderPaid';
 import type { Database } from '@/db/types.gen';
 import { formatMoney, money } from '@/domain/money';
 import { sendEmail } from '@/lib/email';
@@ -71,8 +71,9 @@ export async function markOrderPaid(
     const orderUrl = `${siteUrl()}/${locale}/order/${orderId}?t=${signOrderToken(orderId, order.customer_email)}`;
     await sendEmail({
       to: order.customer_email,
-      subject: `Payment received — order ${order.number}`,
+      subject: orderPaidSubject(locale, order.number),
       react: OrderPaid({
+        locale,
         orderNumber: order.number,
         orderUrl,
         items: emailItems,

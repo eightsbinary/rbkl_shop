@@ -1,6 +1,6 @@
 'use server';
 
-import OrderShipped from 'emails/OrderShipped';
+import OrderShipped, { subject as orderShippedSubject } from 'emails/OrderShipped';
 import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
 import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
@@ -62,8 +62,9 @@ export async function shipOrder(raw: ShipOrderInput) {
     const orderUrl = `${siteUrl()}/${locale}/order/${updated.id}?t=${signOrderToken(updated.id, updated.customer_email)}`;
     await sendEmail({
       to: updated.customer_email,
-      subject: `Your order ${updated.number} is on the way`,
+      subject: orderShippedSubject(locale, updated.number),
       react: OrderShipped({
+        locale,
         orderNumber: updated.number,
         carrier: input.carrier,
         trackingNumber: input.trackingNumber,
