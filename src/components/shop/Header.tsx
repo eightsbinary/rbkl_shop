@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { CartIcon } from '@/components/cart/CartIcon';
@@ -21,9 +22,11 @@ export function Header() {
         </nav>
         <Link
           href={`/${locale}`}
-          className="justify-self-center font-serif text-2xl tracking-tight text-ink"
+          className="flex items-center gap-2.5 justify-self-center font-serif text-2xl tracking-tight"
         >
-          rainbykello
+          <Image src="/cross.svg" alt="" width={13} height={13} />
+          <span className="wordmark-ombre">rainbykello</span>
+          <Image src="/cross.svg" alt="" width={13} height={13} />
         </Link>
         <div className="flex items-center justify-end gap-5 text-xs uppercase tracking-[0.14em] text-ink-soft">
           <DashboardLink />

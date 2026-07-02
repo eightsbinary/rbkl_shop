@@ -30,6 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local scratch (design mockups, WIP files) — never committed
+/tmp/
+
 # env files (can opt-in for committing if needed)
 .env*
 # …except the placeholder template (no secrets — real values live in .env.local)
