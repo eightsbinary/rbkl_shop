@@ -1,4 +1,14 @@
-import { Body, Container, Head, Hr, Html, Preview, Section, Text } from '@react-email/components';
+import {
+  Body,
+  Container,
+  Font,
+  Head,
+  Hr,
+  Html,
+  Preview,
+  Section,
+  Text,
+} from '@react-email/components';
 import type { CSSProperties, ReactNode } from 'react';
 import { BRAND } from '@/lib/brand';
 
@@ -28,15 +38,22 @@ export const c = {
   line: '#e2e2e2',
 } as const;
 
-// Shared font stacks. The web uses Caslon (serif) + Inter (sans); neither loads
-// reliably in mail clients, so we name them first and fall back to the closest
-// email-safe faces — matching globals.css's own fallback chain. Thai faces are
-// appended so Thai copy renders in a proper face (per-glyph fallback) instead of
-// tofu when the Latin faces lack Thai glyphs.
+// Shared font stacks, mirroring globals.css: Caslon (serif) / Inter (sans),
+// with Thai glyphs falling through to IBM Plex Sans Thai — the exact face the
+// storefront loads via next/font. Clients that honor @font-face (Apple Mail,
+// Mailpit preview, …) download it via the <Font> tags below; Gmail strips
+// webfonts and falls back to Sarabun/Thai system faces later in the stack.
 const sansStack =
-  "'Inter', 'IBM Plex Thai', 'Sarabun', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+  "'Inter', 'IBM Plex Sans Thai', 'Sarabun', ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 const serifStack =
-  "'Libre Caslon Text', Georgia, 'Noto Serif Thai', 'IBM Plex Thai', 'Times New Roman', serif";
+  "'Libre Caslon Text', 'IBM Plex Sans Thai', Georgia, 'Noto Serif Thai', 'Times New Roman', serif";
+
+// Thai-subset woff2 files for IBM Plex Sans Thai (Google Fonts v11), regular +
+// semibold — the two weights the emails use (body copy / headings).
+const plexThai = {
+  400: 'https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JPje1VVIzcq1HzJq2AEdo2Tj_qvLqMHdYgVcM.woff2',
+  600: 'https://fonts.gstatic.com/s/ibmplexsansthai/v11/m8JMje1VVIzcq1HzJq2AEdo2Tj_qvLqE1vI1fuJHa74.woff2',
+} as const;
 
 const main: CSSProperties = {
   backgroundColor: c.paperWarm,
@@ -94,7 +111,18 @@ export function EmailShell({
 }) {
   return (
     <Html lang={locale}>
-      <Head />
+      <Head>
+        {([400, 600] as const).map((weight) => (
+          <Font
+            key={weight}
+            fontFamily="IBM Plex Sans Thai"
+            fallbackFontFamily={['Helvetica', 'Arial', 'sans-serif']}
+            webFont={{ url: plexThai[weight], format: 'woff2' }}
+            fontWeight={weight}
+            fontStyle="normal"
+          />
+        ))}
+      </Head>
       <Preview>{preview}</Preview>
       <Body style={main}>
         <Container style={container}>

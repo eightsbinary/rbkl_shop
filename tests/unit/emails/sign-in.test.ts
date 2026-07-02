@@ -34,4 +34,13 @@ describe('SignIn email', () => {
     expect(subject()).toContain('เข้าสู่ระบบ');
     expect(subject().toLowerCase()).toContain('sign-in');
   });
+
+  it("embeds the store's Thai webfont (IBM Plex Sans Thai) for capable clients", async () => {
+    const html = await render(SignIn());
+    // @font-face for the exact face the storefront loads via next/font …
+    expect(html).toContain('fonts.gstatic.com/s/ibmplexsansthai');
+    // … and the stacks must name the real family (not the old 'IBM Plex Thai').
+    expect(html).toContain('IBM Plex Sans Thai');
+    expect(html).not.toMatch(/'IBM Plex Thai'/);
+  });
 });
