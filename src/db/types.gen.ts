@@ -30,6 +30,24 @@ export type Database = {
         }
         Relationships: []
       }
+      app_settings: {
+        Row: {
+          email_provider: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          email_provider?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          email_provider?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       discount_codes: {
         Row: {
           active: boolean

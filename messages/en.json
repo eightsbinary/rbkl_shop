@@ -410,7 +410,14 @@
       "instructionsTh": "Instructions (TH)",
       "save": "Save",
       "saving": "Saving…",
-      "saved": "Saved."
+      "saved": "Saved.",
+      "emailSection": "Email",
+      "emailSectionHint": "Which service sends order confirmations, shipping updates, and other transactional email. Takes effect on the next email sent.",
+      "emailProviderLabel": "Email provider",
+      "providerGmail": "Gmail SMTP",
+      "providerGmailHint": "Default — sends from the shop's Gmail via an App Password. Free, ~500 emails/day.",
+      "providerResend": "Resend",
+      "providerResendHint": "Needs a verified custom domain. Switch here once one is registered."
     },
     "shipping": {
       "sectionTitle": "Shipping zones",

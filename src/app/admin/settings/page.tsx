@@ -1,13 +1,19 @@
 import { getTranslations } from 'next-intl/server';
+import { EmailProviderForm } from '@/components/admin/EmailProviderForm';
 import { PaymentSettingsForm } from '@/components/admin/PaymentSettingsForm';
 import { ShippingZonesForm } from '@/components/admin/ShippingZonesForm';
+import { getEmailProvider } from '@/server/queries/app-settings';
 import { getPaymentSettings } from '@/server/queries/payment-settings';
 import { getShippingZones } from '@/server/queries/shipping';
 
 export default async function AdminSettingsPage() {
   const t = await getTranslations('admin.settings');
   const ts = await getTranslations('admin.shipping');
-  const [settings, zones] = await Promise.all([getPaymentSettings(), getShippingZones()]);
+  const [settings, zones, emailProvider] = await Promise.all([
+    getPaymentSettings(),
+    getShippingZones(),
+    getEmailProvider(),
+  ]);
 
   return (
     <div className="max-w-2xl space-y-12">
@@ -25,6 +31,12 @@ export default async function AdminSettingsPage() {
       <section className="space-y-6 border-t border-line pt-12">
         <h2 className="font-serif text-xl text-ink">{ts('sectionTitle')}</h2>
         <ShippingZonesForm initial={zones} />
+      </section>
+
+      <section className="space-y-6 border-t border-line pt-12">
+        <h2 className="font-serif text-xl text-ink">{t('emailSection')}</h2>
+        <p className="text-sm text-muted">{t('emailSectionHint')}</p>
+        <EmailProviderForm initialProvider={emailProvider} />
       </section>
     </div>
   );

@@ -410,7 +410,14 @@
       "instructionsTh": "คำแนะนำ (TH)",
       "save": "บันทึก",
       "saving": "กำลังบันทึก…",
-      "saved": "บันทึกแล้ว"
+      "saved": "บันทึกแล้ว",
+      "emailSection": "อีเมล",
+      "emailSectionHint": "เลือกบริการที่ใช้ส่งอีเมลยืนยันคำสั่งซื้อ อัปเดตการจัดส่ง และอีเมลระบบอื่น ๆ มีผลกับอีเมลฉบับถัดไป",
+      "emailProviderLabel": "ผู้ให้บริการอีเมล",
+      "providerGmail": "Gmail SMTP",
+      "providerGmailHint": "ค่าเริ่มต้น — ส่งจาก Gmail ของร้านผ่าน App Password ฟรี ประมาณ 500 ฉบับ/วัน",
+      "providerResend": "Resend",
+      "providerResendHint": "ต้องมีโดเมนที่ยืนยันแล้ว ค่อยสลับมาใช้เมื่อจดโดเมนแล้ว"
     },
     "shipping": {
       "sectionTitle": "เขตการจัดส่ง",

@@ -3,6 +3,7 @@ import { render } from '@react-email/components';
 import { createTransport } from 'nodemailer';
 import type { ReactElement } from 'react';
 import { Resend } from 'resend';
+import { createServiceRoleSupabase } from '@/db/server';
 
 export interface SendEmailInput {
   to: string;
@@ -15,11 +16,23 @@ export type SendEmailResult = { ok: true; dryRun: boolean } | { ok: false; error
 type Provider = 'resend' | 'gmail';
 
 /**
- * Pick the email provider. Defaults to Gmail; set `EMAIL_PROVIDER=resend` to
- * switch (e.g. once a domain is registered). Each provider dry-runs on its own
- * when its credentials are absent.
+ * Pick the email provider. The admin Settings toggle (`app_settings.email_provider`)
+ * is authoritative; if the DB can't be read, fall back to the `EMAIL_PROVIDER`
+ * env var, then to Gmail. Each provider dry-runs on its own when its credentials
+ * are absent.
  */
-function resolveProvider(): Provider {
+async function resolveProvider(): Promise<Provider> {
+  try {
+    const { data } = await createServiceRoleSupabase()
+      .from('app_settings')
+      .select('email_provider')
+      .eq('id', 'singleton')
+      .maybeSingle();
+    if (data?.email_provider === 'resend') return 'resend';
+    if (data?.email_provider === 'gmail') return 'gmail';
+  } catch {
+    // DB unreachable — fall through to the env/default below.
+  }
   return process.env.EMAIL_PROVIDER === 'resend' ? 'resend' : 'gmail';
 }
 
@@ -71,5 +84,6 @@ async function sendViaGmail(input: SendEmailInput): Promise<SendEmailResult> {
  * flow that's otherwise working.
  */
 export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult> {
-  return resolveProvider() === 'resend' ? sendViaResend(input) : sendViaGmail(input);
+  const provider = await resolveProvider();
+  return provider === 'resend' ? sendViaResend(input) : sendViaGmail(input);
 }
