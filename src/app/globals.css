@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Theme switching hangs off html[data-theme], set pre-paint by the inline
+   script in src/app/layout.tsx (stored choice, else prefers-color-scheme). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   /* Editorial Mono — neutral monochrome (token names kept for back-compat; rose* + paper-warm
      revalued to neutrals so the ~21 not-yet-restyled files degrade gracefully to mono). */
@@ -20,6 +24,11 @@
   --color-warn: #8a6a3d;
   --color-error: #a83e40;
 
+  /* Constant across themes — text/controls over dark editorial bands and
+     imagery (hero, Journal band), where inverting would break legibility. */
+  --color-paper-fixed: #fbfbfa;
+  --color-ink-fixed: #111111;
+
   --font-serif: var(--font-caslon), var(--font-plex-thai), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), var(--font-plex-thai), ui-sans-serif, system-ui, sans-serif;
 
@@ -35,6 +44,48 @@
 @layer base {
   :root {
     color-scheme: light;
+  }
+
+  /* Editorial Mono, inverted. Dark bands (ink-deep) stay dark but sit slightly
+     above the page background so sections still register. */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-ink: #ededea;
+    --color-ink-soft: #c2c2bf;
+    --color-ink-deep: #202020;
+    --color-paper: #121212;
+    --color-surface: #1a1a1a;
+    --color-field: #232323;
+    --color-paper-warm: #232323;
+    --color-muted: #9c9c98;
+    --color-line: #2e2e2e;
+    --color-rose: #ededea;
+    --color-rose-deep: #ffffff;
+    --color-rose-soft: #2e2e2e;
+    --color-success: #7fae8f;
+    --color-warn: #c9a06a;
+    --color-error: #e08a8c;
+  }
+
+  /* Pinned-light subtree (print-oriented receipt). Mirrors the light @theme
+     palette above — keep the two in sync. */
+  .light-scope {
+    color-scheme: light;
+    --color-ink: #111111;
+    --color-ink-soft: #3a3a3a;
+    --color-ink-deep: #1a1a1a;
+    --color-paper: #fbfbfa;
+    --color-surface: #ffffff;
+    --color-field: #f3f3f4;
+    --color-paper-warm: #f3f3f4;
+    --color-muted: #5e5e5e;
+    --color-line: #e2e2e2;
+    --color-rose: #111111;
+    --color-rose-deep: #000000;
+    --color-rose-soft: #e2e2e2;
+    --color-success: #4a6b56;
+    --color-warn: #8a6a3d;
+    --color-error: #a83e40;
   }
 
   html {

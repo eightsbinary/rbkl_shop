@@ -20,7 +20,7 @@ export default async function ReceiptPage({
   if (!data) notFound();
 
   return (
-    <section className="bg-paper-warm py-12 print:bg-white print:py-0">
+    <section className="light-scope bg-paper-warm py-12 print:bg-white print:py-0">
       <div className="container mx-auto px-6 print:px-0">
         <div className="mb-6 flex justify-end print:hidden">
           <PrintButton />

@@ -34,7 +34,7 @@ export function CraftSection({
             className="object-cover"
             sizes="(min-width: 1024px) 66vw, 100vw"
           />
-          <span className="absolute bottom-4 left-4 z-10 bg-ink-deep px-3 py-1 text-xs uppercase tracking-[0.12em] text-paper">
+          <span className="absolute bottom-4 left-4 z-10 bg-ink-deep px-3 py-1 text-xs uppercase tracking-[0.12em] text-paper-fixed">
             {caption}
           </span>
         </div>

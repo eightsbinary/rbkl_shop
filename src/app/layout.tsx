@@ -30,6 +30,22 @@ export const metadata: Metadata = {
   description: 'merchandise — made slowly, shipped warmly',
 };
 
+// Runs before first paint so the page never flashes the wrong theme. Mirrors
+// resolveTheme() in src/lib/theme.ts: explicit stored choice, else system.
+const themeInitScript = `(function () {
+  var theme = 'light';
+  try {
+    var stored = localStorage.getItem('rb-theme');
+    theme =
+      stored === 'light' || stored === 'dark'
+        ? stored
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+  } catch (_) {}
+  document.documentElement.dataset.theme = theme;
+})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,7 +57,11 @@ export default function RootLayout({
       className={`${caslon.variable} ${inter.variable} ${plexThai.variable}`}
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static theme bootstrap, no user input */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {children}
+      </body>
     </html>
   );
 }

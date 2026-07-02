@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { CartIcon } from '@/components/cart/CartIcon';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { DashboardLink } from './DashboardLink';
 import { LocaleSwitcher } from './LocaleSwitcher';
 
@@ -27,6 +28,7 @@ export function Header() {
         <div className="flex items-center justify-end gap-5 text-xs uppercase tracking-[0.14em] text-ink-soft">
           <DashboardLink />
           <CartIcon label={t('cart')} />
+          <ThemeToggle label={t('theme')} />
           <LocaleSwitcher />
         </div>
       </div>

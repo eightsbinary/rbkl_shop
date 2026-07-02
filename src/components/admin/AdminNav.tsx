@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { AdminLocaleToggle } from '@/components/admin/AdminLocaleToggle';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { signOutAdmin } from '@/server/actions/auth';
 
 const linkClass =
@@ -50,6 +51,7 @@ export async function AdminNav() {
               {t('signOut')}
             </button>
           </form>
+          <ThemeToggle label={t('theme')} />
           <AdminLocaleToggle />
         </nav>
       </div>

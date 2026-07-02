@@ -23,10 +23,12 @@ const variantClasses: Record<Variant, string> = {
   outline:
     'rounded-none border border-ink bg-transparent text-ink uppercase tracking-[0.12em] hover:bg-ink hover:text-paper',
   solid: 'rounded-none bg-ink text-paper uppercase tracking-[0.12em] hover:bg-ink-soft',
-  // Paper-colored CTAs for dark backgrounds (hero overlay, Journal band)
+  // Light CTAs for dark bands (hero overlay, Journal band) — fixed tokens so
+  // they stay light-on-dark in both themes.
   'outline-paper':
-    'rounded-none border border-paper bg-transparent text-paper uppercase tracking-[0.12em] hover:bg-paper hover:text-ink',
-  'solid-paper': 'rounded-none bg-paper text-ink uppercase tracking-[0.12em] hover:bg-paper/90',
+    'rounded-none border border-paper-fixed bg-transparent text-paper-fixed uppercase tracking-[0.12em] hover:bg-paper-fixed hover:text-ink-fixed',
+  'solid-paper':
+    'rounded-none bg-paper-fixed text-ink-fixed uppercase tracking-[0.12em] hover:bg-paper-fixed/90',
 };
 
 const sizeClasses: Record<Size, string> = {
