@@ -1,4 +1,4 @@
-# rb_shop
+# rbkl_shop
 
 Single-creator ecommerce store for [rainbykello](https://www.twitch.tv/rainbykello).
 
