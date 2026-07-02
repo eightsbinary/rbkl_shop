@@ -47,6 +47,10 @@ if (createErr) {
   }
   console.log(`User ${email} already exists — promoting to owner.`);
 }
+if (!userId) {
+  console.error('User created but no id returned — check the account in Studio.');
+  process.exit(1);
+}
 
 const { error: updateErr } = await supa.from('profiles').update({ role: 'owner' }).eq('id', userId);
 if (updateErr) {
