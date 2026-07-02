@@ -85,7 +85,11 @@ export async function GET(req: NextRequest) {
         await sendEmail({
           to: entry.email,
           subject: waitlistRestockSubject(entry.locale, entry.productName),
-          react: WaitlistRestock({ locale: entry.locale, productName: entry.productName, productUrl }),
+          react: WaitlistRestock({
+            locale: entry.locale,
+            productName: entry.productName,
+            productUrl,
+          }),
         });
       } catch (err) {
         console.error('[notify-waitlist] email failed', err);
