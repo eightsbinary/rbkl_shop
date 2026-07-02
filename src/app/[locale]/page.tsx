@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FeaturedBento } from '@/components/shop/FeaturedBento';
@@ -33,7 +34,10 @@ export default async function LandingPage({ params }: { params: Promise<{ locale
       {featured.length > 0 && (
         <section className="container mx-auto space-y-16 px-6 py-24 lg:px-16">
           <div className="flex items-end justify-between border-b border-line pb-4">
-            <h2 className="font-serif text-3xl text-ink">{t('featuredTitle')}</h2>
+            <h2 className="flex items-center gap-3 font-serif text-3xl text-ink">
+              <Image src="/cross-ornate.svg" alt="" width={22} height={22} />
+              {t('featuredTitle')}
+            </h2>
             <Link
               href={`/${locale}/shop`}
               className="text-xs uppercase tracking-[0.12em] text-muted transition-colors hover:text-ink"

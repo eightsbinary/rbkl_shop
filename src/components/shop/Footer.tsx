@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -8,7 +9,10 @@ export function Footer() {
     <footer className="border-t border-line bg-paper">
       <div className="container mx-auto flex flex-col gap-8 px-6 py-16 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-3">
-          <p className="font-serif text-xl text-ink">rainbykello</p>
+          <p className="flex items-center gap-2 font-serif text-xl">
+            <Image src="/cross.svg" alt="" width={11} height={11} />
+            <span className="wordmark-ombre">rainbykello</span>
+          </p>
           <p className="text-xs uppercase tracking-[0.14em] text-muted">
             {t('copyright')} {new Date().getFullYear()}
           </p>

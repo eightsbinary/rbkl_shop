@@ -182,6 +182,20 @@
 }
 
 @layer utilities {
+  /* Brand wordmark ombre ("her hair" — Reliquary mockup, tmp/Untitled-1).
+     Dark matches the mockup exactly; light deepens the same hues so the name
+     stays legible on paper. */
+  .wordmark-ombre {
+    background-image: linear-gradient(100deg, #9a68c4 0%, #5b87c9 34%, #3e9e7e 64%, #c2913f 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  :root[data-theme="dark"] .wordmark-ombre {
+    background-image: linear-gradient(100deg, #d6b9f3 0%, #a9caf3 34%, #a6e7cf 64%, #f5d99f 100%);
+  }
+
   .animate-rise {
     animation: rb-rise 0.5s var(--ease-out-soft) both;
   }
