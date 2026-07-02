@@ -43,12 +43,12 @@ export function NewsletterBand({
   }
 
   return (
-    <section className="bg-ink-deep px-6 py-24 text-center text-paper">
+    <section className="bg-ink-deep px-6 py-24 text-center text-paper-fixed">
       <div className="mx-auto max-w-xl space-y-5">
         <h2 className="font-serif text-3xl">{title}</h2>
-        <p className="text-sm text-paper/70">{subtitle}</p>
+        <p className="text-sm text-paper-fixed/70">{subtitle}</p>
         {status === 'done' ? (
-          <p className="text-sm text-paper/90">{thanks}</p>
+          <p className="text-sm text-paper-fixed/90">{thanks}</p>
         ) : (
           <form className="flex flex-col items-center gap-3" onSubmit={onSubmit}>
             <div className="flex items-center justify-center gap-0">
@@ -59,14 +59,14 @@ export function NewsletterBand({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={placeholder}
                 disabled={status === 'pending'}
-                className="h-12 w-64 border border-paper/30 bg-transparent px-4 text-sm text-paper placeholder:text-paper/40 focus:border-paper focus:outline-none"
+                className="h-12 w-64 border border-paper-fixed/30 bg-transparent px-4 text-sm text-paper-fixed placeholder:text-paper-fixed/40 focus:border-paper-fixed focus:outline-none"
               />
               <Button type="submit" variant="solid-paper" size="md" disabled={status === 'pending'}>
                 {cta}
               </Button>
             </div>
             {status === 'error' && (
-              <p role="alert" className="text-sm text-paper/80">
+              <p role="alert" className="text-sm text-paper-fixed/80">
                 {error}
               </p>
             )}

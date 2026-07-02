@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { AppearanceForm } from '@/components/admin/AppearanceForm';
 import { EmailProviderForm } from '@/components/admin/EmailProviderForm';
 import { PaymentSettingsForm } from '@/components/admin/PaymentSettingsForm';
 import { ProductCopyForm } from '@/components/admin/ProductCopyForm';
@@ -8,19 +9,23 @@ import { getEmailProvider } from '@/server/queries/app-settings';
 import { getPaymentSettings } from '@/server/queries/payment-settings';
 import { getProductCopy } from '@/server/queries/product-copy';
 import { getShippingZones } from '@/server/queries/shipping';
+import { getSiteAppearance } from '@/server/queries/site-appearance';
 
 export default async function AdminSettingsPage() {
   const t = await getTranslations('admin.settings');
   const ts = await getTranslations('admin.shipping');
   const tc = await getTranslations('admin.productCopy');
-  const [settings, zones, emailProvider, productCopy, pdpEn, pdpTh] = await Promise.all([
-    getPaymentSettings(),
-    getShippingZones(),
-    getEmailProvider(),
-    getProductCopy(),
-    getTranslations({ locale: 'en', namespace: 'pdp' }),
-    getTranslations({ locale: 'th', namespace: 'pdp' }),
-  ]);
+  const [settings, zones, emailProvider, productCopy, appearance, pdpEn, pdpTh] = await Promise.all(
+    [
+      getPaymentSettings(),
+      getShippingZones(),
+      getEmailProvider(),
+      getProductCopy(),
+      getSiteAppearance(),
+      getTranslations({ locale: 'en', namespace: 'pdp' }),
+      getTranslations({ locale: 'th', namespace: 'pdp' }),
+    ],
+  );
 
   // Effective values to pre-fill: stored override, else the i18n default.
   const copyInitial = Object.fromEntries(
@@ -61,6 +66,12 @@ export default async function AdminSettingsPage() {
         <h2 className="font-serif text-xl text-ink">{t('emailSection')}</h2>
         <p className="text-sm text-muted">{t('emailSectionHint')}</p>
         <EmailProviderForm initialProvider={emailProvider} />
+      </section>
+
+      <section className="space-y-6 border-t border-line pt-12">
+        <h2 className="font-serif text-xl text-ink">{t('appearanceSection')}</h2>
+        <p className="text-sm text-muted">{t('appearanceSectionHint')}</p>
+        <AppearanceForm initial={appearance} />
       </section>
     </div>
   );

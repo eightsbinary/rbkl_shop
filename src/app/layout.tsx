@@ -41,7 +41,13 @@ export default function RootLayout({
       className={`${caslon.variable} ${inter.variable} ${plexThai.variable}`}
       suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        {/* Deliberately synchronous: sets data-theme before first paint (see
+            public/theme-init.js). Inline is not an option — the admin CSP
+            drops 'unsafe-inline' for scripts. */}
+        <script src="/theme-init.js" />
+        {children}
+      </body>
     </html>
   );
 }
