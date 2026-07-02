@@ -10,7 +10,7 @@ export default async function AdminSyncPage() {
   const t = await getTranslations('admin.sync');
   const supa = await createServerSupabase();
   const role = await getCurrentRole(supa);
-  if (role !== 'dev') notFound(); // dev-only screen
+  if (role !== 'owner' && role !== 'dev') notFound();
 
   const { data: runs } = await supa
     .from('sheet_sync_runs')
@@ -18,11 +18,23 @@ export default async function AdminSyncPage() {
     .order('started_at', { ascending: false })
     .limit(20);
 
+  const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+
   return (
     <div className="space-y-8">
       <div className="space-y-1">
         <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
         <p className="text-sm text-muted">{t('description')}</p>
+        {spreadsheetId && (
+          <a
+            href={`https://docs.google.com/spreadsheets/d/${spreadsheetId}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block pt-2 text-sm text-ink underline underline-offset-4 transition-colors hover:text-ink-soft"
+          >
+            {t('openSheet')} ↗
+          </a>
+        )}
       </div>
 
       <SyncPanel />

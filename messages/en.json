@@ -384,6 +384,7 @@
     "sync": {
       "title": "Sheets sync",
       "description": "Reconcile the Google Sheet with the database. The DB is authoritative; the sheet is overwritten with a fresh snapshot every run.",
+      "openSheet": "Open the Google Sheet",
       "colWhen": "When",
       "colStatus": "Status",
       "colPulled": "Pulled",
