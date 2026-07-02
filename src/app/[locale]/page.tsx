@@ -4,27 +4,29 @@ import { FeaturedBento } from '@/components/shop/FeaturedBento';
 import { Hero } from '@/components/shop/Hero';
 import { NewsletterBand } from '@/components/shop/NewsletterBand';
 import { Button } from '@/components/ui/Button';
+import type { HomeField } from '@/domain/home-content';
 import type { Locale } from '@/i18n/routing';
+import { getHomeHero } from '@/server/queries/home';
 import { listFeaturedProducts } from '@/server/queries/products';
 
 export default async function LandingPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('landing');
-  const featured = await listFeaturedProducts(4);
+  const [featured, hero] = await Promise.all([listFeaturedProducts(4), getHomeHero()]);
 
-  // Brand hero image (public asset, matches the Figma design).
-  const heroImg = '/hero.png';
-  const heroName = `${t('heroLine1')} ${t('heroLine2')}`;
+  // Admin override for this locale, else the i18n default.
+  const v = (field: HomeField) => hero.content[field]?.[locale]?.trim() || t(field);
+  const heroName = `${v('heroLine1')} ${v('heroLine2')}`;
 
   return (
     <>
       <Hero
         locale={locale}
-        title={`${t('heroLine1')} ${t('heroLine2')}`}
-        subtitle={t('heroSubtitle')}
-        cta={t('heroCta')}
-        imageUrl={heroImg}
+        title={heroName}
+        subtitle={v('heroSubtitle')}
+        cta={v('heroCta')}
+        imageUrl={hero.imageUrl}
         imageAlt={heroName}
       />
 

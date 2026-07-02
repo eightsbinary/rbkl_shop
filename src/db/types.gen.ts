@@ -99,6 +99,27 @@ export type Database = {
         }
         Relationships: []
       }
+      home_content: {
+        Row: {
+          content: Json
+          id: string
+          images: Json
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          id?: string
+          images?: Json
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          images?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string

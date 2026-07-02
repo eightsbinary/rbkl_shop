@@ -57,6 +57,12 @@ describe('POST /api/storage/sign-asset-upload', () => {
     expect(signCalls).toEqual([{ bucket: 'about-assets', path: 'about/hero-2.png' }]);
   });
 
+  it('signs home/ paths against home-assets', async () => {
+    const res = await POST(req('home/hero-1.webp'));
+    expect(res.status).toBe(200);
+    expect(signCalls).toEqual([{ bucket: 'home-assets', path: 'home/hero-1.webp' }]);
+  });
+
   it('rejects paths outside the known prefixes', async () => {
     expect((await POST(req('products/x.png'))).status).toBe(400);
     expect((await POST(req('about/../qr/x.png'))).status).toBe(400);

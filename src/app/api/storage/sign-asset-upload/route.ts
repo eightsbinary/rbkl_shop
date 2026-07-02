@@ -7,6 +7,7 @@ import { createServerSupabase } from '@/db/server';
 const PREFIX_BUCKETS = [
   { pattern: /^qr\/[\w-]+(\.[\w-]+)*$/, bucket: 'payment-assets' },
   { pattern: /^about\/[\w-]+(\.[\w-]+)*$/, bucket: 'about-assets' },
+  { pattern: /^home\/[\w-]+(\.[\w-]+)*$/, bucket: 'home-assets' },
 ] as const;
 
 export async function POST(request: NextRequest) {

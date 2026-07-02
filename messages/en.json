@@ -189,6 +189,7 @@
       "newsletter": "Newsletter",
       "sync": "Sync",
       "settings": "Settings",
+      "home": "Home",
       "about": "About",
       "signOut": "Sign out"
     },
@@ -446,6 +447,26 @@
       "remove": "Remove",
       "empty": "No shipping zones yet — add one so checkout can quote a rate.",
       "save": "Save zones",
+      "saving": "Saving…",
+      "saved": "Saved."
+    },
+    "home": {
+      "title": "Homepage hero",
+      "intro": "Edit the homepage hero. Leave a field blank to use the built-in default.",
+      "thLabel": "Thai",
+      "enLabel": "English",
+      "fields": {
+        "heroLine1": "Title line 1",
+        "heroLine2": "Title line 2",
+        "heroSubtitle": "Description",
+        "heroCta": "Button text"
+      },
+      "imageHeading": "Hero photo",
+      "usingDefault": "Using the built-in photo.",
+      "useDefault": "Use default",
+      "dropHint": "Drag & drop an image, paste it (Ctrl+V), or use the file picker.",
+      "uploading": "Uploading…",
+      "save": "Save hero",
       "saving": "Saving…",
       "saved": "Saved."
     },
