@@ -62,7 +62,13 @@ export default function AdminLoginPage() {
               {submitting ? t('sending') : t('sendCta')}
             </Button>
             {status === 'sent' && (
-              <p className="border-l-2 border-success pl-3 text-sm text-success">{t('sentMsg')}</p>
+              <p className="border-l-2 border-success pl-3 text-sm text-success">
+                {t('sentMsg')}
+                {/* NODE_ENV is inlined at build time — the Mailpit hint only ships in dev builds. */}
+                {process.env.NODE_ENV === 'development' && (
+                  <span className="mt-1 block text-xs text-muted">{t('sentMsgDev')}</span>
+                )}
+              </p>
             )}
             {typeof status === 'object' && 'error' in status && (
               <p className="border-l-2 border-error pl-3 text-sm text-error">{status.error}</p>

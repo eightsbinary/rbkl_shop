@@ -20,6 +20,7 @@ export function BuyPanel({
   basePriceThb,
   isPreorder,
   preorderShipDate,
+  accordions,
 }: {
   name: string;
   description: string;
@@ -29,6 +30,13 @@ export function BuyPanel({
   basePriceThb: number;
   isPreorder: boolean;
   preorderShipDate: string | null;
+  /** Admin-editable accordion copy; falls back to i18n when absent. */
+  accordions?: {
+    detailsTitle: string;
+    detailsBody: string;
+    shippingTitle: string;
+    shippingBody: string;
+  };
 }) {
   const t = useTranslations('pdp');
   const [selection, setSelection] = useState<Record<string, string>>({});
@@ -154,8 +162,12 @@ export function BuyPanel({
       </div>
 
       <div className="border-t border-line">
-        <Accordion title={t('detailsTitle')}>{t('detailsBody')}</Accordion>
-        <Accordion title={t('shippingTitle')}>{t('shippingBody')}</Accordion>
+        <Accordion title={accordions?.detailsTitle ?? t('detailsTitle')}>
+          {accordions?.detailsBody ?? t('detailsBody')}
+        </Accordion>
+        <Accordion title={accordions?.shippingTitle ?? t('shippingTitle')}>
+          {accordions?.shippingBody ?? t('shippingBody')}
+        </Accordion>
       </div>
     </div>
   );

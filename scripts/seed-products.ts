@@ -62,6 +62,7 @@ const SEED: SeedProduct[] = [
     basePriceThb: 590,
     weightGrams: 220,
     category: 'apparel',
+    featured: true,
     sizes: ['S', 'M', 'L', 'XL'],
     stockPerVariant: 10,
   },
@@ -76,6 +77,7 @@ const SEED: SeedProduct[] = [
     basePriceThb: 290,
     weightGrams: 320,
     category: 'stationery',
+    featured: true,
     stockPerVariant: 30,
   },
   {
@@ -89,6 +91,7 @@ const SEED: SeedProduct[] = [
     basePriceThb: 350,
     weightGrams: 400,
     category: 'homeware',
+    featured: true,
     stockPerVariant: 25,
   },
 ];

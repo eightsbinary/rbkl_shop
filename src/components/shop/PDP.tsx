@@ -7,7 +7,22 @@ function imgAlt(img: { alt: unknown }, locale: 'th' | 'en', fallback: string): s
   return a?.[locale] ?? a?.en ?? fallback;
 }
 
-export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 'en' }) {
+export interface AccordionCopy {
+  detailsTitle: string;
+  detailsBody: string;
+  shippingTitle: string;
+  shippingBody: string;
+}
+
+export function PDP({
+  data,
+  locale,
+  accordions,
+}: {
+  data: ProductDetailData;
+  locale: 'th' | 'en';
+  accordions?: AccordionCopy;
+}) {
   const nameObj = data.product.name as { th?: string; en?: string };
   const descObj = data.product.description as { th?: string; en?: string };
   const name = nameObj[locale] ?? nameObj.en ?? nameObj.th ?? data.product.slug;
@@ -60,6 +75,7 @@ export function PDP({ data, locale }: { data: ProductDetailData; locale: 'th' | 
             basePriceThb={data.product.base_price_thb}
             isPreorder={data.product.is_preorder}
             preorderShipDate={data.product.preorder_ship_date}
+            accordions={accordions}
           />
         </div>
       </div>
