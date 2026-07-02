@@ -696,6 +696,27 @@ export type Database = {
         }
         Relationships: []
       }
+      site_appearance: {
+        Row: {
+          bg_dark: string | null
+          bg_light: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          bg_dark?: string | null
+          bg_light?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          bg_dark?: string | null
+          bg_light?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       variant_options: {
         Row: {
           id: string

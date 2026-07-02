@@ -435,6 +435,12 @@
       "emailProviderLabel": "Email provider",
       "providerGmail": "Gmail SMTP",
       "providerGmailHint": "Default — sends from the shop's Gmail via an App Password. Free, ~500 emails/day.",
+      "appearanceSection": "Appearance",
+      "appearanceSectionHint": "Storefront background per theme. Pick colors that keep enough contrast with the text.",
+      "bgLight": "Background — light mode",
+      "bgDark": "Background — dark mode",
+      "bgDefault": "default",
+      "bgReset": "Reset",
       "providerResend": "Resend",
       "providerResendHint": "Needs a verified custom domain. Switch here once one is registered."
     },

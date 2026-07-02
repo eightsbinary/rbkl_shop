@@ -435,6 +435,12 @@
       "emailProviderLabel": "ผู้ให้บริการอีเมล",
       "providerGmail": "Gmail SMTP",
       "providerGmailHint": "ค่าเริ่มต้น — ส่งจาก Gmail ของร้านผ่าน App Password ฟรี ประมาณ 500 ฉบับ/วัน",
+      "appearanceSection": "การแสดงผล",
+      "appearanceSectionHint": "สีพื้นหลังหน้าร้านแยกตามโหมด เลือกสีที่ตัดกับตัวอักษรให้อ่านง่าย",
+      "bgLight": "สีพื้นหลัง — โหมดสว่าง",
+      "bgDark": "สีพื้นหลัง — โหมดมืด",
+      "bgDefault": "ค่าเริ่มต้น",
+      "bgReset": "รีเซ็ต",
       "providerResend": "Resend",
       "providerResendHint": "ต้องมีโดเมนที่ยืนยันแล้ว ค่อยสลับมาใช้เมื่อจดโดเมนแล้ว"
     },
