@@ -1,0 +1,43 @@
+# Frequent cron triggers — Vercel Hobby only allows daily crons, so GitHub
+# Actions drives the real schedule and vercel.json keeps a daily fallback.
+# Setup (repo → Settings): variable SITE_URL (e.g. https://rbkl-shop.vercel.app)
+# and secret CRON_SECRET (same value as the Vercel env var).
+name: cron
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # release-stale every 30 min
+    - cron: '0 * * * *' # notify-waitlist hourly (also matches the 30-min tick)
+  workflow_dispatch:
+
+jobs:
+  release-stale:
+    runs-on: ubuntu-latest
+    if: vars.SITE_URL != ''
+    steps:
+      - name: Release stale order reservations
+        run: |
+          code=$(curl -s -o /tmp/body -w '%{http_code}' \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/release-stale")
+          cat /tmp/body
+          [ "$code" = "200" ]
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+  notify-waitlist:
+    runs-on: ubuntu-latest
+    # Hourly only: run on the on-the-hour tick (GH passes the matched cron).
+    if: vars.SITE_URL != '' && (github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: Send waitlist restock notifications
+        run: |
+          code=$(curl -s -o /tmp/body -w '%{http_code}' \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$SITE_URL/api/cron/notify-waitlist")
+          cat /tmp/body
+          [ "$code" = "200" ]
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
