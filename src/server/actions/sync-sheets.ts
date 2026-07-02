@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { requireDev, stepUpGuard } from '@/db/auth';
+import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase, createServiceRoleSupabase } from '@/db/server';
 import { sheetsClientFromEnv } from '@/lib/sheets/client';
 import { runSheetSyncCycle } from '@/server/sheets/cycle';
@@ -12,7 +12,7 @@ export async function syncSheets(): Promise<
   { ok: true; applied: number; rejected: number } | { error: string }
 > {
   const supa = await createServerSupabase();
-  await requireDev(supa);
+  await requireOwnerOrDev(supa);
   const gate = await stepUpGuard(supa);
   if (gate) return gate;
 

@@ -1,12 +1,8 @@
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { getCurrentRole } from '@/db/auth';
-import { createServerSupabase } from '@/db/server';
 import { getSalesDashboard } from '@/server/queries/sales-summary';
 
 export default async function AdminHome() {
-  const supa = await createServerSupabase();
-  const role = await getCurrentRole(supa);
   const t = await getTranslations('admin.dashboard');
   const nav = await getTranslations('admin.nav');
   const locale = (await getLocale()) === 'th' ? 'th' : 'en';
@@ -33,7 +29,7 @@ export default async function AdminHome() {
     { href: '/admin/settings', label: nav('settings') },
     { href: '/admin/home', label: nav('home') },
     { href: '/admin/about', label: nav('about') },
-    ...(role === 'dev' ? [{ href: '/admin/sync', label: nav('sync') }] : []),
+    { href: '/admin/sync', label: nav('sync') },
   ];
 
   return (

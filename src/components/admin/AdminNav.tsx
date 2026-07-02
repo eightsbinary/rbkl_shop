@@ -1,16 +1,12 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { AdminLocaleToggle } from '@/components/admin/AdminLocaleToggle';
-import { getCurrentRole } from '@/db/auth';
-import { createServerSupabase } from '@/db/server';
 import { signOutAdmin } from '@/server/actions/auth';
 
 const linkClass =
   'relative transition-colors duration-150 ease-out-soft after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-200 after:ease-out-soft hover:text-ink hover:after:scale-x-100';
 
 export async function AdminNav() {
-  const supa = await createServerSupabase();
-  const role = await getCurrentRole(supa);
   const t = await getTranslations('admin.nav');
 
   const links = [
@@ -22,7 +18,7 @@ export async function AdminNav() {
     { href: '/admin/settings', label: t('settings') },
     { href: '/admin/home', label: t('home') },
     { href: '/admin/about', label: t('about') },
-    ...(role === 'dev' ? [{ href: '/admin/sync', label: t('sync') }] : []),
+    { href: '/admin/sync', label: t('sync') },
   ];
 
   return (
