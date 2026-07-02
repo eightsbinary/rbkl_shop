@@ -8,6 +8,7 @@ export function CraftSection({
   card1Body,
   card2Title,
   card2Body,
+  image = '/about-craft.png',
 }: {
   title: string;
   subtitle: string;
@@ -16,6 +17,7 @@ export function CraftSection({
   card1Body: string;
   card2Title: string;
   card2Body: string;
+  image?: string;
 }) {
   return (
     <section className="container mx-auto space-y-12 px-6 py-20 lg:px-16">
@@ -26,7 +28,7 @@ export function CraftSection({
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-field">
           <Image
-            src="/about-craft.png"
+            src={image}
             alt=""
             fill
             className="object-cover"

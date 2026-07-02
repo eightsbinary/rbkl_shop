@@ -449,6 +449,15 @@
         "craft": "How it's made",
         "inspiration": "Inspiration"
       },
+      "images": {
+        "heading": "Photos",
+        "hint": "Each section shows one photo. Upload new images or pick from earlier uploads — an image can be reused across sections. \"Use default\" restores the built-in photo.",
+        "usingDefault": "Using the built-in photo.",
+        "useDefault": "Use default",
+        "dropHint": "Drag & drop an image, paste it (Ctrl+V), or use the file picker.",
+        "uploading": "Uploading…",
+        "save": "Save photos"
+      },
       "fields": {
         "heroTitle": "Hero title",
         "heroBody1": "Hero paragraph 1",

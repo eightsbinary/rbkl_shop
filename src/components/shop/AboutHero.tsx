@@ -4,10 +4,12 @@ export function AboutHero({
   title,
   body1,
   body2,
+  image = '/about-hero.png',
 }: {
   title: string;
   body1: string;
   body2: string;
+  image?: string;
 }) {
   return (
     <section className="container mx-auto grid gap-12 px-6 py-20 lg:grid-cols-2 lg:items-center lg:px-16">
@@ -18,7 +20,7 @@ export function AboutHero({
       </div>
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-field lg:aspect-[3/4]">
         <Image
-          src="/about-hero.png"
+          src={image}
           alt=""
           fill
           className="object-cover"

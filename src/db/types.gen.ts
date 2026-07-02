@@ -16,16 +16,19 @@ export type Database = {
         Row: {
           content: Json
           id: string
+          images: Json
           updated_at: string
         }
         Insert: {
           content?: Json
           id?: string
+          images?: Json
           updated_at?: string
         }
         Update: {
           content?: Json
           id?: string
+          images?: Json
           updated_at?: string
         }
         Relationships: []
