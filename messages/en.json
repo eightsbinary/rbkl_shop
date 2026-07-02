@@ -344,7 +344,20 @@
     "dashboard": {
       "badge": "Studio",
       "welcome": "Welcome back.",
-      "intro": "Manage the shop from here. Start with <link>Products</link>."
+      "intro": "Manage the shop from here. Start with <link>Products</link>.",
+      "stats": {
+        "heading": "Sales at a glance",
+        "today": "Today",
+        "last7d": "Last 7 days",
+        "last30d": "Last 30 days",
+        "allTime": "All time",
+        "orderCount": "{count, plural, =0 {no orders} one {# order} other {# orders}}",
+        "aov": "Avg. order",
+        "awaitingPayment": "Awaiting payment",
+        "toShip": "To ship",
+        "topProducts": "Best sellers",
+        "sold": "{count} sold"
+      }
     },
     "waitlists": {
       "title": "Waitlists",
