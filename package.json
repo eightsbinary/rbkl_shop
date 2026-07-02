@@ -20,6 +20,7 @@
     "db:reset": "supabase db reset",
     "create:admin": "$npm_execpath run scripts/create-admin.ts",
     "seed:products": "$npm_execpath run scripts/seed-products.ts",
+    "seed:demo": "$npm_execpath run scripts/seed-demo.ts",
     "grant:owner": "$npm_execpath run scripts/grant-owner.ts",
     "grant:dev": "$npm_execpath run scripts/grant-dev.ts"
   },
