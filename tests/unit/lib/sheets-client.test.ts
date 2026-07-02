@@ -125,7 +125,7 @@ describe('SheetsClient.getValues', () => {
 });
 
 describe('SheetsClient.updateValues', () => {
-  it('PUTs the grid to the tab range with USER_ENTERED input', async () => {
+  it('clears the tab, then PUTs the grid with USER_ENTERED input', async () => {
     const fetchMock = vi.fn<typeof fetch>(
       async () => new Response(JSON.stringify({}), { status: 200 }),
     );
@@ -141,7 +141,13 @@ describe('SheetsClient.updateValues', () => {
       ['v1', '3'],
     ]);
 
-    const [url, init] = fetchMock.mock.calls[0] ?? [];
+    // Clear first — otherwise rows deleted from the DB linger below the
+    // freshly written grid forever.
+    const [clearUrl, clearInit] = fetchMock.mock.calls[0] ?? [];
+    expect(String(clearUrl)).toContain('/values/variants:clear');
+    expect((clearInit as RequestInit).method).toBe('POST');
+
+    const [url, init] = fetchMock.mock.calls[1] ?? [];
     expect((init as RequestInit).method).toBe('PUT');
     expect(String(url)).toContain('valueInputOption=USER_ENTERED');
     expect(JSON.parse((init as RequestInit).body as string)).toMatchObject({

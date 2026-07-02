@@ -68,8 +68,16 @@ export class SheetsClient {
     if (!res.ok) throw new Error(`Sheets addTab ${tab} failed: ${res.status}`);
   }
 
-  /** Overwrite a tab starting at A1 with the given grid. */
+  /** Overwrite a tab with the given grid. Clears first — values.update only
+   *  covers the written range, so rows deleted from the DB would otherwise
+   *  linger below the fresh grid forever. */
   async updateValues(tab: string, values: string[][]): Promise<void> {
+    const clearRes = await fetch(
+      `${BASE}/${this.spreadsheetId}/values/${encodeURIComponent(tab)}:clear`,
+      { method: 'POST', headers: { Authorization: `Bearer ${await this.token()}` } },
+    );
+    if (!clearRes.ok) throw new Error(`Sheets clear ${tab} failed: ${clearRes.status}`);
+
     const range = `${tab}!A1`;
     const url =
       `${BASE}/${this.spreadsheetId}/values/${encodeURIComponent(range)}` +
