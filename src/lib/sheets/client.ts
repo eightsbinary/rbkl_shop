@@ -33,9 +33,29 @@ export class SheetsClient {
       `${BASE}/${this.spreadsheetId}/values/${encodeURIComponent(tab)}` +
       `?valueRenderOption=UNFORMATTED_VALUE`;
     const res = await fetch(url, { headers: { Authorization: `Bearer ${await this.token()}` } });
+    if (res.status === 400) {
+      // An unparseable range means the tab doesn't exist yet (fresh spreadsheet).
+      // Create it and report it empty; the sync cycle then pushes the DB
+      // snapshot into it, so setup needs no manual tab creation.
+      await this.addTab(tab);
+      return [];
+    }
     if (!res.ok) throw new Error(`Sheets getValues ${tab} failed: ${res.status}`);
     const json = (await res.json()) as { values?: string[][] };
     return json.values ?? [];
+  }
+
+  /** Create an empty tab with the given title. */
+  private async addTab(tab: string): Promise<void> {
+    const res = await fetch(`${BASE}/${this.spreadsheetId}:batchUpdate`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${await this.token()}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ requests: [{ addSheet: { properties: { title: tab } } }] }),
+    });
+    if (!res.ok) throw new Error(`Sheets addTab ${tab} failed: ${res.status}`);
   }
 
   /** Overwrite a tab starting at A1 with the given grid. */

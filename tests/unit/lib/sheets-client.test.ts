@@ -17,6 +17,48 @@ beforeEach(() => {
 });
 
 describe('SheetsClient.getValues', () => {
+  it('creates the tab and returns an empty grid when the range 400s (missing tab)', async () => {
+    const calls: Array<{ url: string; method: string; body?: string }> = [];
+    const fetchMock = vi.fn<typeof fetch>(async (url, init) => {
+      calls.push({
+        url: String(url),
+        method: init?.method ?? 'GET',
+        body: init?.body as string | undefined,
+      });
+      // First read 400s (tab missing); the batchUpdate that creates it succeeds.
+      if (calls.length === 1) return new Response('bad range', { status: 400 });
+      return new Response(JSON.stringify({}), { status: 200 });
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    const client = new SheetsClient({
+      clientEmail: 'svc@x.iam',
+      privateKey: 'KEY',
+      spreadsheetId: 'SID',
+    });
+    const grid = await client.getValues('products');
+
+    expect(grid).toEqual([]);
+    expect(calls[1]?.url).toContain('/SID:batchUpdate');
+    expect(calls[1]?.method).toBe('POST');
+    expect(JSON.parse(calls[1]?.body ?? '{}')).toEqual({
+      requests: [{ addSheet: { properties: { title: 'products' } } }],
+    });
+  });
+
+  it('still throws on non-400 failures', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>(async () => new Response('forbidden', { status: 403 })),
+    );
+    const client = new SheetsClient({
+      clientEmail: 'svc@x.iam',
+      privateKey: 'KEY',
+      spreadsheetId: 'SID',
+    });
+    await expect(client.getValues('products')).rejects.toThrow('403');
+  });
+
   it('GETs the A1 range with a bearer token and returns the value grid', async () => {
     const fetchMock = vi.fn<typeof fetch>(
       async () =>
