@@ -43,7 +43,7 @@ describe('SheetsClient.getValues', () => {
       ['pk', 'version'],
       ['v1', '2'],
     ]);
-    const [url, init] = fetchMock.mock.calls[0]!;
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(String(url)).toContain('/SID/values/variants');
     expect((init as RequestInit).headers).toMatchObject({ Authorization: 'Bearer tok_123' });
   });
@@ -66,7 +66,7 @@ describe('SheetsClient.updateValues', () => {
       ['v1', '3'],
     ]);
 
-    const [url, init] = fetchMock.mock.calls[0]!;
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect((init as RequestInit).method).toBe('PUT');
     expect(String(url)).toContain('valueInputOption=USER_ENTERED');
     expect(JSON.parse((init as RequestInit).body as string)).toMatchObject({

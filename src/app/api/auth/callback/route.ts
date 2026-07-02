@@ -14,8 +14,7 @@ export async function GET(request: Request) {
   // Only allow same-origin relative paths — never an attacker-supplied absolute
   // or protocol-relative URL (open-redirect guard).
   const nextParam = searchParams.get('next');
-  const next =
-    nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/admin';
+  const next = nextParam?.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/admin';
 
   if (code) {
     const supabase = await createServerSupabase();
