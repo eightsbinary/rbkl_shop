@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:types": "$npm_execpath run scripts/pull-types.ts",
+    "sheets:env": "$npm_execpath run scripts/setup-sheets-env.ts",
     "db:migrate": "supabase db push",
     "db:reset": "supabase db reset",
     "grant:owner": "$npm_execpath run scripts/grant-owner.ts",
