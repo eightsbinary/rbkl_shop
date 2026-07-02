@@ -129,7 +129,10 @@ for (const seed of SEED) {
   const urls: Partial<Record<number, string>> = {};
   let storagePath = '';
   for (const size of IMAGE_SIZES) {
-    const webp = await sharp(source).resize({ width: size, withoutEnlargement: true }).webp({ quality: 90 }).toBuffer();
+    const webp = await sharp(source)
+      .resize({ width: size, withoutEnlargement: true })
+      .webp({ quality: 90 })
+      .toBuffer();
     const path = `products/${product.id}/${stamp}-${size}.webp`;
     const { error: upErr } = await supa.storage
       .from('product-images')
@@ -185,7 +188,9 @@ for (const seed of SEED) {
     process.exit(1);
   }
 
-  console.log(`✓ ${seed.slug} — ${seed.name.en}, ฿${seed.basePriceThb}, ${optionSets.length} variant(s)`);
+  console.log(
+    `✓ ${seed.slug} — ${seed.name.en}, ฿${seed.basePriceThb}, ${optionSets.length} variant(s)`,
+  );
 }
 
 console.log('Done.');

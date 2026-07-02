@@ -47,3 +47,8 @@ supabase/.temp
 *.log
 .vscode/
 .idea/
+
+# Local-only artifacts
+.playwright-mcp/
+# Product photoshoot sources (uploaded to storage by seed:products)
+public/products/

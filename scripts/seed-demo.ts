@@ -26,7 +26,9 @@ const { count } = await supa
   .select('id', { count: 'exact', head: true })
   .eq('notes_internal', SEED_TAG);
 if ((count ?? 0) > 0) {
-  console.log('Demo data already seeded — skipped. (Delete orders with notes_internal=seed-demo to reseed.)');
+  console.log(
+    'Demo data already seeded — skipped. (Delete orders with notes_internal=seed-demo to reseed.)',
+  );
   process.exit(0);
 }
 
@@ -44,9 +46,7 @@ function pick(slug: string, optionValues?: Record<string, string>) {
   const p = products?.find((x) => x.slug === slug);
   if (!p) throw new Error(`missing product ${slug}`);
   const v = optionValues
-    ? p.variants.find(
-        (x) => JSON.stringify(x.option_values) === JSON.stringify(optionValues),
-      )
+    ? p.variants.find((x) => JSON.stringify(x.option_values) === JSON.stringify(optionValues))
     : p.variants[0];
   if (!v) throw new Error(`missing variant for ${slug}`);
   return { product: p, variant: v };
@@ -90,57 +90,107 @@ interface DemoOrder {
 const DEMO: DemoOrder[] = [
   // Today — fresh unpaid order (shows in "awaiting payment").
   {
-    email: 'mali@example.com', name: 'มะลิ ใจดี', locale: 'th',
-    status: 'awaiting_payment', createdDaysAgo: 0, shipping: 50,
+    email: 'mali@example.com',
+    name: 'มะลิ ใจดี',
+    locale: 'th',
+    status: 'awaiting_payment',
+    createdDaysAgo: 0,
+    shipping: 50,
     lines: [{ slug: 'aura-tote', qty: 1 }],
   },
   // Today — paid, not shipped yet (revenue "today" + "to ship").
   {
-    email: 'ploy@example.com', name: 'พลอย รักดี', locale: 'th',
-    status: 'paid', shipStatus: 'pending', createdDaysAgo: 0, paidDaysAgo: 0, shipping: 50,
+    email: 'ploy@example.com',
+    name: 'พลอย รักดี',
+    locale: 'th',
+    status: 'paid',
+    shipStatus: 'pending',
+    createdDaysAgo: 0,
+    paidDaysAgo: 0,
+    shipping: 50,
     lines: [{ slug: 'nano-tee', qty: 2, optionValues: { size: 'M' } }],
   },
   // 2 days ago — paid, being prepared (7-day revenue + "to ship").
   {
-    email: 'nok@example.com', name: 'นก สুขใจ', locale: 'th',
-    status: 'paid', shipStatus: 'preparing', createdDaysAgo: 2, paidDaysAgo: 2, shipping: 50,
-    lines: [{ slug: 'nano-mug', qty: 1 }, { slug: 'nano-notebook', qty: 1 }],
+    email: 'nok@example.com',
+    name: 'นก สুขใจ',
+    locale: 'th',
+    status: 'paid',
+    shipStatus: 'preparing',
+    createdDaysAgo: 2,
+    paidDaysAgo: 2,
+    shipping: 50,
+    lines: [
+      { slug: 'nano-mug', qty: 1 },
+      { slug: 'nano-notebook', qty: 1 },
+    ],
   },
   // 5 days ago — paid and shipped with tracking (7-day revenue).
   {
-    email: 'james@example.com', name: 'James Miller', locale: 'en',
-    status: 'paid', shipStatus: 'shipped', createdDaysAgo: 5, paidDaysAgo: 5, shipping: 120,
+    email: 'james@example.com',
+    name: 'James Miller',
+    locale: 'en',
+    status: 'paid',
+    shipStatus: 'shipped',
+    createdDaysAgo: 5,
+    paidDaysAgo: 5,
+    shipping: 120,
     lines: [{ slug: 'nano-tee', qty: 1, optionValues: { size: 'L' } }],
     tracking: { carrier: 'thailand_post', number: 'EG123456789TH' },
   },
   // 20 days ago — delivered (30-day revenue).
   {
-    email: 'fah@example.com', name: 'ฟ้า แจ่มใส', locale: 'th',
-    status: 'paid', shipStatus: 'delivered', createdDaysAgo: 20, paidDaysAgo: 20, shipping: 50,
+    email: 'fah@example.com',
+    name: 'ฟ้า แจ่มใส',
+    locale: 'th',
+    status: 'paid',
+    shipStatus: 'delivered',
+    createdDaysAgo: 20,
+    paidDaysAgo: 20,
+    shipping: 50,
     lines: [{ slug: 'aura-tote', qty: 2 }],
   },
   // 40 days ago — delivered (all-time revenue only).
   {
-    email: 'aom@example.com', name: 'ออม บุญมี', locale: 'th',
-    status: 'paid', shipStatus: 'delivered', createdDaysAgo: 40, paidDaysAgo: 40, shipping: 50,
+    email: 'aom@example.com',
+    name: 'ออม บุญมี',
+    locale: 'th',
+    status: 'paid',
+    shipStatus: 'delivered',
+    createdDaysAgo: 40,
+    paidDaysAgo: 40,
+    shipping: 50,
     lines: [{ slug: 'nano-notebook', qty: 3 }],
   },
   // Cancelled before payment (3 days ago) — excluded from revenue.
   {
-    email: 'beam@example.com', name: 'บีม ทองดี', locale: 'th',
-    status: 'cancelled', createdDaysAgo: 3, shipping: 50,
+    email: 'beam@example.com',
+    name: 'บีม ทองดี',
+    locale: 'th',
+    status: 'cancelled',
+    createdDaysAgo: 3,
+    shipping: 50,
     lines: [{ slug: 'nano-mug', qty: 2 }],
   },
   // Refunded (15 days ago) — excluded from revenue.
   {
-    email: 'sara@example.com', name: 'Sara Cole', locale: 'en',
-    status: 'refunded', createdDaysAgo: 15, paidDaysAgo: 15, shipping: 120,
+    email: 'sara@example.com',
+    name: 'Sara Cole',
+    locale: 'en',
+    status: 'refunded',
+    createdDaysAgo: 15,
+    paidDaysAgo: 15,
+    shipping: 120,
     lines: [{ slug: 'nano-tee', qty: 1, optionValues: { size: 'S' } }],
   },
   // Failed payment (today) — excluded from revenue.
   {
-    email: 'ton@example.com', name: 'ต้น กล้าหาญ', locale: 'th',
-    status: 'failed', createdDaysAgo: 0, shipping: 50,
+    email: 'ton@example.com',
+    name: 'ต้น กล้าหาญ',
+    locale: 'th',
+    status: 'failed',
+    createdDaysAgo: 0,
+    shipping: 50,
     lines: [{ slug: 'aura-tote', qty: 1 }],
   },
 ];
@@ -169,12 +219,12 @@ for (const demo of DEMO) {
       created_at: daysAgo(demo.createdDaysAgo, 3),
       paid_at: demo.paidDaysAgo !== undefined ? daysAgo(demo.paidDaysAgo) : null,
       ship_status: demo.shipStatus ?? 'pending',
-      shipped_at: demo.shipStatus === 'shipped' || demo.shipStatus === 'delivered'
-        ? daysAgo(Math.max(0, (demo.paidDaysAgo ?? 0) - 1))
-        : null,
-      delivered_at: demo.shipStatus === 'delivered'
-        ? daysAgo(Math.max(0, (demo.paidDaysAgo ?? 0) - 3))
-        : null,
+      shipped_at:
+        demo.shipStatus === 'shipped' || demo.shipStatus === 'delivered'
+          ? daysAgo(Math.max(0, (demo.paidDaysAgo ?? 0) - 1))
+          : null,
+      delivered_at:
+        demo.shipStatus === 'delivered' ? daysAgo(Math.max(0, (demo.paidDaysAgo ?? 0) - 3)) : null,
       tracking_carrier: demo.tracking?.carrier ?? null,
       tracking_number: demo.tracking?.number ?? null,
       notes_internal: SEED_TAG,
@@ -205,7 +255,9 @@ for (const demo of DEMO) {
     console.error(`✗ items for ${order.number} failed:`, itemsErr.message);
     process.exit(1);
   }
-  console.log(`✓ order ${order.number} — ${demo.status}/${demo.shipStatus ?? '-'} ฿${subtotal + demo.shipping} (${demo.email})`);
+  console.log(
+    `✓ order ${order.number} — ${demo.status}/${demo.shipStatus ?? '-'} ฿${subtotal + demo.shipping} (${demo.email})`,
+  );
 }
 
 // Waitlist entries on the tote (2 pending, 1 already notified).
@@ -229,9 +281,24 @@ else console.log('✓ 3 waitlist entries (aura-tote)');
 // Newsletter subscribers.
 const { error: nlErr } = await supa.from('newsletter_subscribers').upsert(
   [
-    { email: 'mali@example.com', locale: 'th' as const, source: 'home_band', status: 'active' as const },
-    { email: 'james@example.com', locale: 'en' as const, source: 'checkout', status: 'active' as const },
-    { email: 'ploy@example.com', locale: 'th' as const, source: 'home_band', status: 'active' as const },
+    {
+      email: 'mali@example.com',
+      locale: 'th' as const,
+      source: 'home_band',
+      status: 'active' as const,
+    },
+    {
+      email: 'james@example.com',
+      locale: 'en' as const,
+      source: 'checkout',
+      status: 'active' as const,
+    },
+    {
+      email: 'ploy@example.com',
+      locale: 'th' as const,
+      source: 'home_band',
+      status: 'active' as const,
+    },
     {
       email: 'gone@example.com',
       locale: 'en' as const,
