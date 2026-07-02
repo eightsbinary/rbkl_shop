@@ -63,6 +63,13 @@ max_frequency = "1s"
 otp_length = 6
 otp_expiry = 3600
 
+# Branded magic-link email — generated from emails/SignIn.tsx via
+# `bun run emails:auth`. Hosted Supabase ignores this: paste the file's
+# contents into Dashboard → Auth → Emails → Magic Link at deploy time.
+[auth.email.template.magic_link]
+subject = "ลิงก์เข้าสู่ระบบ rainbykello · Your sign-in link"
+content_path = "./supabase/templates/magic_link.html"
+
 [edge_runtime]
 enabled = true
 policy = "oneshot"

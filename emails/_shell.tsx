@@ -84,10 +84,13 @@ export function EmailShell({
   preview,
   locale,
   children,
+  footerText,
 }: {
   preview: string;
   locale: Locale;
   children: ReactNode;
+  /** Override the default order/waitlist footer (e.g. for auth emails). */
+  footerText?: string;
 }) {
   return (
     <Html lang={locale}>
@@ -101,7 +104,7 @@ export function EmailShell({
           </Section>
           {children}
           <Hr style={{ borderColor: c.line, margin: '32px 0 16px' }} />
-          <Text style={footer}>{footerCopy[locale]}</Text>
+          <Text style={footer}>{footerText ?? footerCopy[locale]}</Text>
         </Container>
       </Body>
     </Html>
