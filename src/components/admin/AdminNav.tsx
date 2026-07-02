@@ -39,6 +39,9 @@ export async function AdminNav() {
               {l.label}
             </Link>
           ))}
+          <Link href="/" className={`${linkClass} text-muted`}>
+            {t('storefront')} ↗
+          </Link>
           <form action={signOutAdmin}>
             <button
               type="submit"
