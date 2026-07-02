@@ -402,7 +402,8 @@
       "emailLabel": "Email",
       "sending": "Sending…",
       "sendCta": "Send magic link",
-      "sentMsg": "Check your inbox (or Mailpit at http://127.0.0.1:54324 for local dev)."
+      "sentMsg": "Check your inbox — the sign-in link is on its way.",
+      "sentMsgDev": "Local dev: the email lands in Mailpit at http://127.0.0.1:54324"
     },
     "stepUp": {
       "prompt": "For your security, confirm it’s you before this action.",
@@ -447,6 +448,21 @@
       "remove": "Remove",
       "empty": "No shipping zones yet — add one so checkout can quote a rate.",
       "save": "Save zones",
+      "saving": "Saving…",
+      "saved": "Saved."
+    },
+    "productCopy": {
+      "heading": "Product page",
+      "hint": "The \"Details & Care\" and \"Shipping & Returns\" accordions shown on every product page. Leave a field blank to use the built-in default.",
+      "thLabel": "Thai",
+      "enLabel": "English",
+      "fields": {
+        "detailsTitle": "Details section title",
+        "detailsBody": "Details section text",
+        "shippingTitle": "Shipping section title",
+        "shippingBody": "Shipping section text"
+      },
+      "save": "Save product page",
       "saving": "Saving…",
       "saved": "Saved."
     },
