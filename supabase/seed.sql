@@ -1,0 +1,2 @@
+-- Local dev seed. Empty for now.
+-- Plan 2 (Catalog) adds products + variants + image seed data.
