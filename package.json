@@ -19,6 +19,7 @@
     "db:migrate": "supabase db push",
     "db:reset": "supabase db reset",
     "create:admin": "$npm_execpath run scripts/create-admin.ts",
+    "seed:products": "$npm_execpath run scripts/seed-products.ts",
     "grant:owner": "$npm_execpath run scripts/grant-owner.ts",
     "grant:dev": "$npm_execpath run scripts/grant-dev.ts"
   },
@@ -48,6 +49,7 @@
     "@types/react-dom": "19",
     "@vitest/coverage-v8": "^4.1.9",
     "happy-dom": "^20.10.6",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.9"
