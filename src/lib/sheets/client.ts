@@ -41,8 +41,18 @@ export class SheetsClient {
       return [];
     }
     if (!res.ok) throw new Error(`Sheets getValues ${tab} failed: ${res.status}`);
-    const json = (await res.json()) as { values?: string[][] };
-    return json.values ?? [];
+    // UNFORMATTED_VALUE returns native JSON types (numbers, booleans) — the
+    // sync layer expects strings matching the DB snapshot's serialization
+    // (booleans as TRUE/FALSE, per readSnapshot), or every pushed boolean
+    // cell would read back as a spurious edit on the next cycle.
+    const json = (await res.json()) as { values?: unknown[][] };
+    return (json.values ?? []).map((row) =>
+      row.map((cell) => {
+        if (cell === null || cell === undefined) return '';
+        if (typeof cell === 'boolean') return cell ? 'TRUE' : 'FALSE';
+        return String(cell);
+      }),
+    );
   }
 
   /** Create an empty tab with the given title. */

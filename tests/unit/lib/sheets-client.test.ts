@@ -17,6 +17,39 @@ beforeEach(() => {
 });
 
 describe('SheetsClient.getValues', () => {
+  it('normalizes UNFORMATTED_VALUE cells (numbers, booleans) to strings', async () => {
+    // UNFORMATTED_VALUE returns native JSON types; the sync layer expects a
+    // string grid matching the DB snapshot's serialization.
+    const fetchMock = vi.fn<typeof fetch>(
+      async () =>
+        new Response(
+          JSON.stringify({
+            values: [
+              ['pk', 'version', 'price_thb', 'is_active'],
+              ['v1', 2, 590, true],
+              ['v2', 1, null, false],
+            ],
+          }),
+          { status: 200 },
+        ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const client = new SheetsClient({
+      clientEmail: 'svc@x.iam',
+      privateKey: 'KEY',
+      spreadsheetId: 'SID',
+    });
+    // Booleans render as TRUE/FALSE — the same convention readSnapshot uses,
+    // so a pushed value that Sheets coerced to a boolean cell doesn't read
+    // back as a spurious edit on every cycle.
+    expect(await client.getValues('variants')).toEqual([
+      ['pk', 'version', 'price_thb', 'is_active'],
+      ['v1', '2', '590', 'TRUE'],
+      ['v2', '1', '', 'FALSE'],
+    ]);
+  });
+
   it('creates the tab and returns an empty grid when the range 400s (missing tab)', async () => {
     const calls: Array<{ url: string; method: string; body?: string }> = [];
     const fetchMock = vi.fn<typeof fetch>(async (url, init) => {
