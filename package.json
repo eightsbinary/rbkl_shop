@@ -17,6 +17,7 @@
     "sheets:env": "$npm_execpath run scripts/setup-sheets-env.ts",
     "db:migrate": "supabase db push",
     "db:reset": "supabase db reset",
+    "create:admin": "$npm_execpath run scripts/create-admin.ts",
     "grant:owner": "$npm_execpath run scripts/grant-owner.ts",
     "grant:dev": "$npm_execpath run scripts/grant-dev.ts"
   },
