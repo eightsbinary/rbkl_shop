@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { OrdersTable } from '@/components/admin/OrdersTable';
+import { Input } from '@/components/ui/Input';
 import {
   listAdminOrders,
   ORDER_STATUSES,
@@ -11,15 +12,16 @@ import {
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; ship?: string }>;
+  searchParams: Promise<{ status?: string; ship?: string; q?: string }>;
 }) {
-  const { status, ship } = await searchParams;
+  const { status, ship, q } = await searchParams;
   const active = ORDER_STATUSES.includes(status as OrderStatus)
     ? (status as OrderStatus)
     : undefined;
   const activeShip: ShipStatus | undefined =
     ship === 'awaiting_stock' ? 'awaiting_stock' : undefined;
-  const orders = await listAdminOrders(activeShip ? undefined : active, activeShip);
+  const search = q?.trim() || undefined;
+  const orders = await listAdminOrders(activeShip ? undefined : active, activeShip, search);
 
   const t = await getTranslations('admin.orders');
 
@@ -32,23 +34,33 @@ export default async function AdminOrdersPage({
     refunded: t('orderStatus.refunded'),
   };
 
+  const withSearch = (href: string) =>
+    search ? `${href}${href.includes('?') ? '&' : '?'}q=${encodeURIComponent(search)}` : href;
+
   const filters: {
     key: OrderStatus | 'all' | 'ship_awaiting_stock';
     label: string;
     href: string;
   }[] = [
-    { key: 'all', label: t('filterAll'), href: '/admin/orders' },
+    { key: 'all', label: t('filterAll'), href: withSearch('/admin/orders') },
     ...ORDER_STATUSES.map((s) => ({
       key: s as OrderStatus | 'all' | 'ship_awaiting_stock',
       label: orderStatusLabels[s],
-      href: `/admin/orders?status=${s}`,
+      href: withSearch(`/admin/orders?status=${s}`),
     })),
     {
       key: 'ship_awaiting_stock',
       label: t('filterAwaitingStock'),
-      href: '/admin/orders?ship=awaiting_stock',
+      href: withSearch('/admin/orders?ship=awaiting_stock'),
     },
   ];
+
+  // The filter (without q) the search form submits into and the ✕ clears back to.
+  const filterHref = activeShip
+    ? '/admin/orders?ship=awaiting_stock'
+    : active
+      ? `/admin/orders?status=${active}`
+      : '/admin/orders';
 
   return (
     <div className="space-y-8">
@@ -77,6 +89,37 @@ export default async function AdminOrdersPage({
           );
         })}
       </nav>
+
+      <form action="/admin/orders" method="get" className="flex max-w-md items-center gap-3">
+        {activeShip ? (
+          <input type="hidden" name="ship" value="awaiting_stock" />
+        ) : (
+          active && <input type="hidden" name="status" value={active} />
+        )}
+        <Input
+          type="search"
+          name="q"
+          defaultValue={search ?? ''}
+          placeholder={t('searchPlaceholder')}
+          aria-label={t('searchPlaceholder')}
+          className="h-10 text-sm"
+        />
+        <button
+          type="submit"
+          className="h-10 shrink-0 border border-ink px-4 text-xs uppercase tracking-[0.12em] text-ink transition-colors hover:bg-ink hover:text-paper"
+        >
+          {t('searchCta')}
+        </button>
+        {search && (
+          <Link
+            href={filterHref}
+            aria-label={t('searchClear')}
+            className="shrink-0 text-sm text-muted transition-colors hover:text-ink"
+          >
+            ✕
+          </Link>
+        )}
+      </form>
 
       <OrdersTable orders={orders} />
     </div>
