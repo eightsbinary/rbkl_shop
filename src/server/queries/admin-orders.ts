@@ -1,6 +1,7 @@
 import 'server-only';
 import { createServerSupabase } from '@/db/server';
 import type { Database } from '@/db/types.gen';
+import { searchPattern } from '@/server/queries/search';
 
 export type OrderStatus = Database['public']['Enums']['order_status'];
 export type ShipStatus = Database['public']['Enums']['ship_status'];
@@ -24,17 +25,6 @@ export const ORDER_STATUSES: OrderStatus[] = [
   'refunded',
 ];
 
-/** Turn a raw search term into a `%…%` ilike pattern safe to embed in a
- *  PostgREST `or()` filter: strips or() metacharacters (`,()"\`) and escapes
- *  ilike wildcards so input matches literally. Null when nothing searchable. */
-export function orderSearchPattern(raw: string): string | null {
-  const cleaned = raw
-    .trim()
-    .replace(/[,()"\\]/g, '')
-    .replace(/[%_]/g, (c) => `\\${c}`);
-  return cleaned ? `%${cleaned}%` : null;
-}
-
 /** List orders for the admin table, newest first, optionally filtered by
  *  status and/or ship status and/or a search term (order number or email). */
 export async function listAdminOrders(
@@ -49,7 +39,7 @@ export async function listAdminOrders(
     .order('created_at', { ascending: false });
   if (status) query = query.eq('status', status);
   if (shipStatus) query = query.eq('ship_status', shipStatus);
-  const pattern = search ? orderSearchPattern(search) : null;
+  const pattern = search ? searchPattern(search) : null;
   if (pattern) query = query.or(`number.ilike.${pattern},customer_email.ilike.${pattern}`);
   const { data } = await query;
   return data ?? [];

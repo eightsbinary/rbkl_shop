@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { Button } from '@/components/ui/Button';
-import { createServerSupabase } from '@/db/server';
+import { listAdminProducts } from '@/server/queries/admin-products';
 
 const STATUS_BADGE: Record<string, string> = {
   active: 'bg-success/15 text-success',
@@ -9,14 +10,14 @@ const STATUS_BADGE: Record<string, string> = {
   archived: 'bg-muted/15 text-muted',
 };
 
-export default async function AdminProductsPage() {
-  const supa = await createServerSupabase();
-  const { data: products } = await supa
-    .from('products')
-    .select(
-      'id, slug, status, name, base_price_thb, is_featured, hero_image:product_images!products_hero_image_fk(url_400)',
-    )
-    .order('updated_at', { ascending: false });
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const search = q?.trim() || undefined;
+  const products = await listAdminProducts(search);
 
   const t = await getTranslations('admin.products');
   const tc = await getTranslations('admin.common');
@@ -30,8 +31,15 @@ export default async function AdminProductsPage() {
         </Link>
       </div>
 
+      <AdminSearchForm
+        action="/admin/products"
+        placeholder={t('searchPlaceholder')}
+        search={search}
+        clearHref="/admin/products"
+      />
+
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {(products ?? []).map((p) => {
+        {products.map((p) => {
           const nameObj = p.name as { en?: string; th?: string };
           const name = nameObj.en ?? nameObj.th ?? p.slug;
           const hero = Array.isArray(p.hero_image) ? p.hero_image[0] : p.hero_image;

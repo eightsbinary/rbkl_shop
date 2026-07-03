@@ -197,6 +197,8 @@
       "theme": "Toggle dark mode"
     },
     "common": {
+      "searchCta": "Search",
+      "searchClear": "Clear search",
       "status": "Status",
       "draft": "Draft",
       "active": "Active",
@@ -210,6 +212,7 @@
     },
     "products": {
       "title": "Products",
+      "searchPlaceholder": "Search name or slug…",
       "newProduct": "New product",
       "editProduct": "Edit product",
       "colName": "Name",
@@ -281,8 +284,6 @@
       "filterAll": "All",
       "filterAwaitingStock": "Awaiting stock",
       "searchPlaceholder": "Search order # or email…",
-      "searchCta": "Search",
-      "searchClear": "Clear search",
       "backLink": "← Orders",
       "placed": "placed",
       "colOrder": "Order",
@@ -380,6 +381,7 @@
     "newsletter": {
       "title": "Newsletter",
       "description": "Fans who signed up for product updates.",
+      "searchPlaceholder": "Search email…",
       "empty": "No subscribers yet.",
       "download": "Download CSV",
       "colEmail": "email",

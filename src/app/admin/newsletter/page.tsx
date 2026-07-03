@@ -1,10 +1,17 @@
 import { getTranslations } from 'next-intl/server';
+import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { NewsletterTable } from '@/components/admin/NewsletterTable';
 import { listNewsletterSubscribers } from '@/server/queries/admin-newsletter';
 
-export default async function AdminNewsletterPage() {
+export default async function AdminNewsletterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const search = q?.trim() || undefined;
   const t = await getTranslations('admin.newsletter');
-  const subscribers = await listNewsletterSubscribers();
+  const subscribers = await listNewsletterSubscribers(search);
 
   return (
     <div className="space-y-8">
@@ -20,6 +27,12 @@ export default async function AdminNewsletterPage() {
           {t('download')}
         </a>
       </div>
+      <AdminSearchForm
+        action="/admin/newsletter"
+        placeholder={t('searchPlaceholder')}
+        search={search}
+        clearHref="/admin/newsletter"
+      />
       <NewsletterTable subscribers={subscribers} />
     </div>
   );

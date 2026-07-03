@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { OrdersTable } from '@/components/admin/OrdersTable';
-import { Input } from '@/components/ui/Input';
 import {
   listAdminOrders,
   ORDER_STATUSES,
@@ -90,36 +90,18 @@ export default async function AdminOrdersPage({
         })}
       </nav>
 
-      <form action="/admin/orders" method="get" className="flex max-w-md items-center gap-3">
+      <AdminSearchForm
+        action="/admin/orders"
+        placeholder={t('searchPlaceholder')}
+        search={search}
+        clearHref={filterHref}
+      >
         {activeShip ? (
           <input type="hidden" name="ship" value="awaiting_stock" />
         ) : (
           active && <input type="hidden" name="status" value={active} />
         )}
-        <Input
-          type="search"
-          name="q"
-          defaultValue={search ?? ''}
-          placeholder={t('searchPlaceholder')}
-          aria-label={t('searchPlaceholder')}
-          className="h-10 text-sm"
-        />
-        <button
-          type="submit"
-          className="h-10 shrink-0 border border-ink px-4 text-xs uppercase tracking-[0.12em] text-ink transition-colors hover:bg-ink hover:text-paper"
-        >
-          {t('searchCta')}
-        </button>
-        {search && (
-          <Link
-            href={filterHref}
-            aria-label={t('searchClear')}
-            className="shrink-0 text-sm text-muted transition-colors hover:text-ink"
-          >
-            ✕
-          </Link>
-        )}
-      </form>
+      </AdminSearchForm>
 
       <OrdersTable orders={orders} />
     </div>

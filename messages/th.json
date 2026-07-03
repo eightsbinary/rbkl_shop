@@ -197,6 +197,8 @@
       "theme": "สลับโหมดมืด"
     },
     "common": {
+      "searchCta": "ค้นหา",
+      "searchClear": "ล้างการค้นหา",
       "status": "สถานะ",
       "draft": "ฉบับร่าง",
       "active": "เผยแพร่",
@@ -210,6 +212,7 @@
     },
     "products": {
       "title": "สินค้า",
+      "searchPlaceholder": "ค้นหาชื่อหรือ slug…",
       "newProduct": "สินค้าใหม่",
       "editProduct": "แก้ไขสินค้า",
       "colName": "ชื่อ",
@@ -281,8 +284,6 @@
       "filterAll": "ทั้งหมด",
       "filterAwaitingStock": "รอสินค้าเข้า",
       "searchPlaceholder": "ค้นหาเลขคำสั่งซื้อหรืออีเมล…",
-      "searchCta": "ค้นหา",
-      "searchClear": "ล้างการค้นหา",
       "backLink": "← คำสั่งซื้อ",
       "placed": "สั่งเมื่อ",
       "colOrder": "คำสั่งซื้อ",
@@ -380,6 +381,7 @@
     "newsletter": {
       "title": "จดหมายข่าว",
       "description": "แฟน ๆ ที่สมัครรับข่าวสารสินค้า",
+      "searchPlaceholder": "ค้นหาอีเมล…",
       "empty": "ยังไม่มีผู้สมัคร",
       "download": "ดาวน์โหลด CSV",
       "colEmail": "อีเมล",

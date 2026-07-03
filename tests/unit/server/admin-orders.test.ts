@@ -26,28 +26,29 @@ vi.mock('@/db/server', () => {
   return { createServerSupabase: async () => ({ from: () => builder }) };
 });
 
-import { listAdminOrders, orderSearchPattern } from '@/server/queries/admin-orders';
+import { listAdminOrders } from '@/server/queries/admin-orders';
+import { searchPattern } from '@/server/queries/search';
 
-describe('orderSearchPattern', () => {
+describe('searchPattern', () => {
   it('wraps the term in wildcards for a partial match', () => {
-    expect(orderSearchPattern('RB-1042')).toBe('%RB-1042%');
+    expect(searchPattern('RB-1042')).toBe('%RB-1042%');
   });
 
   it('escapes ilike wildcards so user input matches literally', () => {
-    expect(orderSearchPattern('50%_off')).toBe('%50\\%\\_off%');
+    expect(searchPattern('50%_off')).toBe('%50\\%\\_off%');
   });
 
   it('strips PostgREST or() metacharacters', () => {
-    expect(orderSearchPattern('a,b(c)"d\\e')).toBe('%abcde%');
+    expect(searchPattern('a,b(c)"d\\e')).toBe('%abcde%');
   });
 
   it('returns null for blank or whitespace-only input', () => {
-    expect(orderSearchPattern('')).toBeNull();
-    expect(orderSearchPattern('   ')).toBeNull();
+    expect(searchPattern('')).toBeNull();
+    expect(searchPattern('   ')).toBeNull();
   });
 
   it('returns null when stripping leaves nothing', () => {
-    expect(orderSearchPattern('(),"')).toBeNull();
+    expect(searchPattern('(),"')).toBeNull();
   });
 });
 
