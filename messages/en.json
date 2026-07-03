@@ -74,7 +74,7 @@
     "title": "Track your order",
     "subtitle": "Enter your order number and the email you used at checkout.",
     "numberLabel": "Order number",
-    "numberPlaceholder": "e.g. RB-1042",
+    "numberPlaceholder": "e.g. RVWCRZ9ASWCG",
     "emailLabel": "Email",
     "cta": "Find my order",
     "submitting": "Searching…",
