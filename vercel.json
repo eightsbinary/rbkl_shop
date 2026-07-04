@@ -1,7 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
-    { "path": "/api/cron/release-stale", "schedule": "0 20 * * *" },
-    { "path": "/api/cron/notify-waitlist", "schedule": "30 20 * * *" }
-  ]
+    {
+      "path": "/api/cron/release-stale",
+      "schedule": "0 20 * * *"
+    },
+    {
+      "path": "/api/cron/notify-waitlist",
+      "schedule": "30 20 * * *"
+    }
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "develop": false
+    }
+  }
 }
