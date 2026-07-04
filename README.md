@@ -2,7 +2,17 @@
 
 Single-creator ecommerce store for [rainbykello](https://www.twitch.tv/rainbykello).
 
-**Status:** Roadmap complete — Foundation · Catalog · Checkout · Operations · Sheets sync (dev-only two-way Google Sheets reconciliation) · Security hardening (×2) · Editorial Mono redesign (home, PDP, about, cart) · Admin TH/EN i18n · Manual PromptPay payments (QR + slip verify) · Pre-orders. All green.
+**Status:** Roadmap complete — Foundation · Catalog · Checkout · Operations · Sheets sync (two-way Google Sheets reconciliation with preview-before-apply) · Security hardening (×2) · Editorial Mono redesign (home, PDP, about, cart) · Admin TH/EN i18n · Manual PromptPay payments (QR + slip verify) · Pre-orders. All green.
+
+**2026-07-04 operations batch (live):**
+- **Admin search everywhere** — Orders (number/email), Products (name TH/EN or slug), Newsletter (email), Waitlists (product), Discounts (code), plus a global search on the dashboard (`/admin/search`) that fans one query across all sections.
+- **Buyer order self-service** — "Track order" in the header + footer; `/track` looks up by order number + email, or emails the buyer links to all their orders if they lost the number ("Don't know your order number?").
+- **Pre-order lifecycle completed** — orders paid with pre-order items sit in *awaiting stock*; a new admin "Stock arrived — start preparing" button moves them to *preparing* and emails the buyer; the order page shows each pre-order item's expected ship date; full pre-orders offer the waitlist; the waitlist cron also notifies when pre-order slots open (not just restocks).
+- **Email live via Gmail SMTP** (App Password), confirmed end-to-end in production; Resend remains as an alternative provider.
+- **Distributed rate limiting** live via Upstash Redis.
+- **Sheets sync enabled in production** with a preview-before-apply safeguard (see below).
+- **Brand accents** — gold Latin cross favicon, email-header dagger mark, ombre wordmark in the admin nav.
+- **Deploys** — Vercel↔GitHub connected: push to `main` auto-deploys production; `develop` previews disabled (Preview env has no Supabase vars).
 **Spec:** [docs/superpowers/specs/2026-06-26-rb-shop-design.md](docs/superpowers/specs/2026-06-26-rb-shop-design.md)
 **Plans:** [docs/superpowers/plans/](docs/superpowers/plans/)
 
@@ -61,7 +71,7 @@ src/
   db/        Supabase client factories + role-check helpers + generated types
   lib/       Cross-cutting: env validation, brand tokens, email, order-token
   server/    Server actions + queries (admin orders/waitlists, discounts, ship-order)
-emails/      React Email templates (OrderPaid, OrderShipped, WaitlistRestock)
+emails/      React Email templates (OrderPaid, OrderShipped, SlipReceived/Rejected, PreorderPreparing, WaitlistRestock, OrderLinks, SignIn)
 tests/unit/  Vitest unit tests mirroring src/
 supabase/    Migrations + RLS policies + seed
 scripts/     One-shot CLI scripts (run locally with `bun run scripts/*.ts`)
@@ -134,48 +144,64 @@ Only a `dev` can grant or revoke roles. The first `dev` is bootstrapped via `scr
 11. `/admin/orders` → the order shows status **paid** / shipping **preparing**. Open it.
 12. Fill the ship form (carrier + tracking number) → "Mark as shipped". The buyer's
     `/order/[id]` page now shows **Shipped** with a tracking link, and a shipping
-    email is sent (logged to console unless `RESEND_API_KEY` is set).
+    email is sent (logged to console unless Gmail/Resend credentials are set).
 13. `/admin/discounts` → create a code; it applies at checkout.
 14. On a sold-out variant's product page, the "notify me" form adds a waitlist
     entry visible under `/admin/waitlists`.
 
-## Transactional email (Resend)
+## Transactional email (Gmail SMTP, with Resend as alternative)
 
-Order confirmation, shipping, and waitlist-restock emails go through a thin
-`src/lib/email.ts` abstraction. Templates live in `emails/` as
+Order confirmation, slip received/rejected, pre-order preparing, shipping,
+waitlist, and order-recovery emails go through a thin `src/lib/email.ts`
+abstraction. Templates live in `emails/` as
 [React Email](https://react.email) components.
 
-- **No key set →** `sendEmail` logs a dry-run line to the console and returns
+The provider is chosen by the admin Settings toggle (`app_settings.email_provider`),
+falling back to the `EMAIL_PROVIDER` env var, defaulting to **Gmail**.
+
+- **Gmail (production today):** set `GMAIL_USER` + `GMAIL_APP_PASSWORD`
+  (a Google [App Password](https://myaccount.google.com/apppasswords), not the
+  account password). Gmail forces the sender to the authenticated account;
+  `MAIL_FROM` only controls the display name.
+- **Resend (once a domain is registered):** set `RESEND_API_KEY`
+  (free tier: 3K emails/mo) and optionally `RESEND_FROM`.
+- **Neither configured →** `sendEmail` logs a dry-run line and returns
   `{ ok: true, dryRun: true }`. Local dev and the test suite never send real mail.
-- **To send for real →** set `RESEND_API_KEY` (free tier: 3K emails/mo). Optionally
-  override the sender with `RESEND_FROM` (defaults to Resend's shared
-  `onboarding@resend.dev`).
 
 ```bash
-RESEND_API_KEY=re_...                       # optional — omit for dry-run logging
-RESEND_FROM="rainbykello <onboarding@resend.dev>"   # optional
+GMAIL_USER=you@gmail.com                    # production sender account
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx      # App Password (2FA required)
 NEXT_PUBLIC_SITE_URL=https://your-domain    # used for links in emails (defaults to localhost:3000)
 ```
 
-## Background jobs (Vercel Cron)
+> **⚠️ Env values on Vercel:** Next.js strips wrapping quotes from `.env.local`;
+> Vercel keeps them verbatim. When copying a quoted value (especially JSON) into
+> a Vercel env var, strip the quotes first or the value won't parse in production.
 
-Two hourly-ish jobs run as `GET` handlers under `src/app/api/cron/`, gated by a
-shared bearer secret:
+## Background jobs (GitHub Actions cron + Vercel daily fallback)
 
-| Route | Schedule (`vercel.json`) | Does |
+Two jobs run as `GET` handlers under `src/app/api/cron/`, gated by a shared
+bearer secret. Vercel's Hobby plan only allows **daily** crons, so the real
+cadence is driven by GitHub Actions (`.github/workflows/cron.yml`, needs repo
+variable `SITE_URL` + secret `CRON_SECRET`) and `vercel.json` keeps a daily
+fallback:
+
+| Route | Real cadence (GH Actions) | Does |
 |---|---|---|
 | `/api/cron/release-stale` | every 30 min | Cancels `awaiting_payment` orders older than 30 min and releases their reserved stock |
-| `/api/cron/notify-waitlist` | hourly | Emails up to 20 oldest waiters per restocked variant, 4-hour gap between batches |
+| `/api/cron/notify-waitlist` | hourly | Emails up to 20 oldest waiters per variant that's available again (restock **or** open pre-order slots), 4-hour gap between batches |
 
-Set `CRON_SECRET` in the environment; Vercel injects it as
-`Authorization: Bearer <CRON_SECRET>` on scheduled invocations. Requests without
-the matching header get `401`. Trigger locally with:
+The 30-min `release-stale` query also doubles as a **Supabase free-tier
+keep-alive** — the project can never hit the 7-idle-day auto-pause.
+
+Set `CRON_SECRET` in both Vercel and the GitHub repo secrets. Requests without
+the matching `Authorization: Bearer` header get `401`. Trigger locally with:
 
 ```bash
 curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/release-stale
 ```
 
-## Google Sheets sync (dev-only)
+## Google Sheets sync (preview-before-apply)
 
 A safe two-way sync between the DB and a Google Sheet for products, variants, and
 orders. The DB is authoritative; the sheet is overwritten with a fresh snapshot
@@ -188,7 +214,18 @@ sheet with the service-account email as **Editor**, then set:
     GOOGLE_SERVICE_ACCOUNT_JSON='{"client_email":"...","private_key":"..."}'
     GOOGLE_SHEETS_SPREADSHEET_ID=<id from the sheet URL>
 
-Trigger from `/admin/sync` (dev role only) with "Sync now" (debounced 5 min).
+(The code tolerates the wrapping quotes either way — see the env warning above.)
+
+Run it from `/admin/sync` (owner or dev) in two steps:
+
+1. **Preview changes** — a dry run that lists every cell that would change
+   (`old → new`) plus edits that would be rejected. Nothing is written.
+2. **Apply** — the real run (debounced 5 min). With no pending changes the same
+   button reads "Sync & refresh sheet" and just refreshes the sheet snapshot.
+
+> **First run:** hit Preview, then "Sync & refresh sheet" once — that fills the
+> sheet tabs with the current catalog. After that the owner workflow is:
+> edit the sheet → Preview → check the list → Apply.
 
 ## Security hardening
 

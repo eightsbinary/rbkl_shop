@@ -25,6 +25,9 @@ export default async function AdminSyncPage() {
       <div className="space-y-1">
         <h1 className="font-serif text-3xl text-ink">{t('title')}</h1>
         <p className="text-sm text-muted">{t('description')}</p>
+        <p className="text-sm text-ink-soft">
+          {(runs ?? []).length === 0 ? t('firstRunHint') : t('workflowHint')}
+        </p>
         {spreadsheetId && (
           <a
             href={`https://docs.google.com/spreadsheets/d/${spreadsheetId}`}

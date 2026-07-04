@@ -425,6 +425,8 @@
       "noChanges": "No changes — the sheet matches the shop. Apply will just refresh the sheet snapshot.",
       "previewTitle": "{count} pending change(s) — nothing is saved until you apply",
       "previewRejected": "{count} edit(s) will be rejected (read-only column, stale row, or invalid value).",
+      "firstRunHint": "First time here? Run Preview, then “Sync & refresh sheet” once — that fills the sheet tabs with the current catalog so there's something to edit.",
+      "workflowHint": "Workflow: edit the sheet → Preview changes → check the list → Apply. Nothing is saved until you apply.",
       "colWhen": "When",
       "colStatus": "Status",
       "colPulled": "Pulled",
