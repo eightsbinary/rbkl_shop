@@ -47,4 +47,39 @@ describe('runSheetSyncCycle (pure cycle)', () => {
     expect(result.applied).toBe(1);
     expect(result.rejected).toBe(0);
   });
+
+  it('dry run reports the would-be changes but writes NOTHING (no db apply, no sheet push)', async () => {
+    const { runSheetSyncCycle } = await import('@/server/sheets/cycle');
+    read.mockResolvedValue({
+      table: 'variants',
+      rows: [
+        {
+          pk: 'v1',
+          version: 2,
+          values: { sku: 'TEE', price_thb: '500', stock_available: '10', is_active: 'TRUE' },
+        },
+      ],
+    });
+    getValues.mockResolvedValue([
+      ['pk', 'version', 'sku', 'price_thb', 'stock_available', 'is_active'],
+      ['v1', '2', 'TEE', '500', '7', 'TRUE'],
+    ]);
+
+    const result = await runSheetSyncCycle({ getValues, updateValues } as never, {
+      dryRun: true,
+    });
+
+    expect(apply).not.toHaveBeenCalled();
+    expect(updateValues).not.toHaveBeenCalled();
+    expect(result.applied).toBe(1);
+    expect(result.details).toEqual([
+      {
+        table_name: 'variants',
+        row_pk: 'v1',
+        column_name: 'stock_available',
+        from: '10',
+        to: '7',
+      },
+    ]);
+  });
 });

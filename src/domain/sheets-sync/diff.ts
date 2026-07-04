@@ -17,9 +17,19 @@ export interface RejectOp {
   attempted_value: string;
 }
 
+/** Human-readable record of one cell that would change — powers the preview. */
+export interface ChangeDetail {
+  table_name: SyncTable;
+  row_pk: string;
+  column_name: string;
+  from: string;
+  to: string;
+}
+
 export interface DiffResult {
   applies: ApplyOp[];
   rejects: RejectOp[];
+  details: ChangeDetail[];
   counts: { applied: number; rejected: number };
 }
 
@@ -31,6 +41,7 @@ export function diffSnapshots(
   const dbByPk = new Map(db.rows.map((r) => [r.pk, r]));
   const applies: ApplyOp[] = [];
   const rejects: RejectOp[] = [];
+  const details: ChangeDetail[] = [];
   let appliedCount = 0;
 
   for (const sheetRow of sheet.rows) {
@@ -67,6 +78,13 @@ export function diffSnapshots(
         continue;
       }
       changes[col.key] = parsed.value;
+      details.push({
+        table_name: schema.table,
+        row_pk: sheetRow.pk,
+        column_name: col.key,
+        from: dbVal,
+        to: sheetVal,
+      });
       appliedCount += 1;
     }
 
@@ -80,5 +98,10 @@ export function diffSnapshots(
     }
   }
 
-  return { applies, rejects, counts: { applied: applies.length, rejected: rejects.length } };
+  return {
+    applies,
+    rejects,
+    details,
+    counts: { applied: applies.length, rejected: rejects.length },
+  };
 }

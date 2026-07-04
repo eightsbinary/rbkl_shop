@@ -3,10 +3,49 @@
 import { revalidatePath } from 'next/cache';
 import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase, createServiceRoleSupabase } from '@/db/server';
+import type { ChangeDetail } from '@/domain/sheets-sync/diff';
 import { sheetsClientFromEnv } from '@/lib/sheets/client';
 import { runSheetSyncCycle } from '@/server/sheets/cycle';
 
 const DEBOUNCE_MS = 5 * 60_000;
+const PREVIEW_DETAIL_CAP = 100;
+
+export type PreviewResult =
+  | { ok: true; pulled: number; applied: number; rejected: number; details: ChangeDetail[] }
+  | { error: string };
+
+/**
+ * Safeguard: dry-run the sync and report exactly which cells would change
+ * (old → new), without touching the database or the sheet. The panel shows
+ * this before offering the real apply, so a bad sheet edit is caught by eye
+ * before it lands. Read-only — no debounce, no audit row.
+ */
+export async function previewSheets(): Promise<PreviewResult> {
+  const supa = await createServerSupabase();
+  await requireOwnerOrDev(supa);
+  const gate = await stepUpGuard(supa);
+  if (gate) return gate;
+
+  const client = sheetsClientFromEnv();
+  if (!client)
+    return {
+      error:
+        'Sheets not configured (set GOOGLE_SERVICE_ACCOUNT_JSON + GOOGLE_SHEETS_SPREADSHEET_ID)',
+    };
+
+  try {
+    const result = await runSheetSyncCycle(client, { dryRun: true });
+    return {
+      ok: true,
+      pulled: result.pulled,
+      applied: result.applied,
+      rejected: result.rejected,
+      details: result.details.slice(0, PREVIEW_DETAIL_CAP),
+    };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Preview failed' };
+  }
+}
 
 export async function syncSheets(): Promise<
   { ok: true; applied: number; rejected: number } | { error: string }

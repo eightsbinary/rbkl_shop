@@ -76,3 +76,25 @@ describe('diffSnapshots', () => {
     expect(r.rejects.filter((x) => x.reason === 'run_cap')).toHaveLength(5);
   });
 });
+
+describe('diffSnapshots change details (preview)', () => {
+  it('emits a from/to detail for every applied cell', () => {
+    const r = diffSnapshots(db, sheetRow({ stock_available: '7' }), SCHEMAS.variants);
+    expect(r.details).toEqual([
+      {
+        table_name: 'variants',
+        row_pk: 'v1',
+        column_name: 'stock_available',
+        from: '10',
+        to: '7',
+      },
+    ]);
+  });
+
+  it('emits no details for rejected or unchanged cells', () => {
+    const stale = diffSnapshots(db, sheetRow({ stock_available: '7' }, 1), SCHEMAS.variants);
+    expect(stale.details).toEqual([]);
+    const same = diffSnapshots(db, sheetRow({}), SCHEMAS.variants);
+    expect(same.details).toEqual([]);
+  });
+});
