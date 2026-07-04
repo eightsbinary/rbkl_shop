@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { AdminLocaleToggle } from '@/components/admin/AdminLocaleToggle';
@@ -27,10 +28,11 @@ export async function AdminNav() {
       <div className="container mx-auto flex h-20 items-center justify-between px-6">
         <Link
           href="/admin"
-          className="font-serif text-2xl tracking-tight text-ink transition-colors hover:text-ink-soft"
+          className="flex items-center gap-2 font-serif text-2xl tracking-tight text-ink transition-colors hover:text-ink-soft"
         >
-          rainbykello
-          <span className="ml-2 align-middle text-[10px] uppercase tracking-[0.2em] text-muted">
+          <Image src="/cross.svg" alt="" width={13} height={13} />
+          <span className="wordmark-ombre">rainbykello</span>
+          <span className="align-middle text-[10px] uppercase tracking-[0.2em] text-muted">
             {t('badge')}
           </span>
         </Link>

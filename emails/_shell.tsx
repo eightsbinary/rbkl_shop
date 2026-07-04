@@ -127,7 +127,12 @@ export function EmailShell({
       <Body style={main}>
         <Container style={container}>
           <Section>
-            <Text style={brand}>{BRAND.name}</Text>
+            <Text style={brand}>
+              {/* Text glyph, not an image: Gmail strips SVG and blocks remote
+                  images by default, but a serif dagger renders everywhere and
+                  echoes the storefront's gold Latin cross. */}
+              <span style={{ color: '#b6a681' }}>†</span> {BRAND.name}
+            </Text>
             <Text style={eyebrow(locale)}>{BRAND.tagline[locale]}</Text>
           </Section>
           {children}
