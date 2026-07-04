@@ -94,15 +94,28 @@ export class SheetsClient {
   }
 }
 
-/** Build a client from env, or null if Sheets isn't configured. */
+/** Strip one layer of wrapping quotes: Next.js dotenv removes them from
+ *  .env.local, but Vercel env vars keep them verbatim, so a quoted value
+ *  copy-pasted between the two would otherwise break JSON.parse. */
+const unquote = (v: string) => v.trim().replace(/^(['"])([\s\S]*)\1$/, '$2');
+
+/** Build a client from env, or null if Sheets isn't configured. Malformed
+ *  credentials also yield null (logged) — a bad env var must degrade to
+ *  "not configured", never crash the caller. */
 export function sheetsClientFromEnv(): SheetsClient | null {
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
   const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
   if (!raw || !spreadsheetId) return null;
-  const creds = JSON.parse(raw) as { client_email: string; private_key: string };
-  return new SheetsClient({
-    clientEmail: creds.client_email,
-    privateKey: creds.private_key.replace(/\\n/g, '\n'),
-    spreadsheetId,
-  });
+  try {
+    const creds = JSON.parse(unquote(raw)) as { client_email: string; private_key: string };
+    if (!creds.client_email || !creds.private_key) throw new Error('missing fields');
+    return new SheetsClient({
+      clientEmail: creds.client_email,
+      privateKey: creds.private_key.replace(/\\n/g, '\n'),
+      spreadsheetId: unquote(spreadsheetId),
+    });
+  } catch (err) {
+    console.error('[sheets] GOOGLE_SERVICE_ACCOUNT_JSON is not valid JSON — sync disabled', err);
+    return null;
+  }
 }

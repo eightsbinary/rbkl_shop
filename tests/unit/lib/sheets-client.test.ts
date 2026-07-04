@@ -9,11 +9,42 @@ vi.mock('google-auth-library', () => ({
   },
 }));
 
-const { SheetsClient } = await import('@/lib/sheets/client');
+const { SheetsClient, sheetsClientFromEnv } = await import('@/lib/sheets/client');
 
 beforeEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   getAccessToken.mockClear();
+});
+
+describe('sheetsClientFromEnv', () => {
+  const CREDS = '{"client_email": "svc@x.iam", "private_key": "KEY\\\\nMORE"}';
+
+  it('builds a client from clean env values', () => {
+    vi.stubEnv('GOOGLE_SERVICE_ACCOUNT_JSON', CREDS);
+    vi.stubEnv('GOOGLE_SHEETS_SPREADSHEET_ID', 'SID');
+    expect(sheetsClientFromEnv()).not.toBeNull();
+  });
+
+  it('tolerates a value wrapped in stray quotes (dotenv-style copy-paste)', () => {
+    // Next.js strips quotes from .env.local; Vercel env vars keep them
+    // verbatim — this exact mismatch crashed production (ref 324723572).
+    vi.stubEnv('GOOGLE_SERVICE_ACCOUNT_JSON', `'${CREDS}'`);
+    vi.stubEnv('GOOGLE_SHEETS_SPREADSHEET_ID', "'SID'");
+    expect(sheetsClientFromEnv()).not.toBeNull();
+  });
+
+  it('returns null instead of throwing on malformed JSON', () => {
+    vi.stubEnv('GOOGLE_SERVICE_ACCOUNT_JSON', 'not json at all');
+    vi.stubEnv('GOOGLE_SHEETS_SPREADSHEET_ID', 'SID');
+    expect(sheetsClientFromEnv()).toBeNull();
+  });
+
+  it('returns null when unset', () => {
+    vi.stubEnv('GOOGLE_SERVICE_ACCOUNT_JSON', '');
+    vi.stubEnv('GOOGLE_SHEETS_SPREADSHEET_ID', '');
+    expect(sheetsClientFromEnv()).toBeNull();
+  });
 });
 
 describe('SheetsClient.getValues', () => {
