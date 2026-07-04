@@ -6,6 +6,7 @@
   "nav": {
     "shop": "shop",
     "about": "about",
+    "track": "track order",
     "cart": "cart",
     "dashboard": "dashboard",
     "login": "login",
@@ -80,7 +81,12 @@
     "submitting": "Searching…",
     "notFound": "We couldn’t find an order with that number and email. Please check both and try again.",
     "verifyFailed": "Verification failed — please retry.",
-    "rateLimited": "Too many attempts — please wait a moment and try again."
+    "rateLimited": "Too many attempts — please wait a moment and try again.",
+    "recoverPrompt": "Don’t know your order number?",
+    "recoverBack": "← I have my order number",
+    "recoverSubtitle": "Enter the email you used at checkout and we’ll send you links to your orders.",
+    "recoverCta": "Email me my orders",
+    "recoverSent": "If we have orders for this email, we’ve sent the links. Check your inbox (and spam folder)."
   },
   "locale": {
     "switchToOther": "TH"
@@ -257,6 +263,7 @@
     },
     "discounts": {
       "title": "Discount codes",
+      "searchPlaceholder": "Search code…",
       "newCode": "New code",
       "empty": "No discount codes yet.",
       "backLink": "← Discount codes",
@@ -281,6 +288,9 @@
     "orders": {
       "title": "Orders",
       "empty": "No orders yet.",
+      "startPreparing": "Stock arrived — start preparing",
+      "startPreparingBusy": "Updating…",
+      "startPreparingHint": "Marks the pre-order stock as arrived and emails the buyer that packing has started.",
       "filterAll": "All",
       "filterAwaitingStock": "Awaiting stock",
       "searchPlaceholder": "Search order # or email…",
@@ -349,9 +359,23 @@
       "awaitingPaymentNote": "Buyer hasn't uploaded a slip yet.",
       "noSlip": "No slip uploaded."
     },
+    "search": {
+      "title": "Search everything",
+      "placeholder": "Order #, email, product, code…",
+      "empty": "Nothing found for “{q}”.",
+      "viewAll": "View all →",
+      "sections": {
+        "orders": "Orders",
+        "products": "Products",
+        "subscribers": "Newsletter subscribers",
+        "discounts": "Discount codes",
+        "waitlists": "Waitlists"
+      }
+    },
     "dashboard": {
       "badge": "Studio",
       "welcome": "Welcome back.",
+      "searchPlaceholder": "Search orders, products, emails…",
       "intro": "Manage the shop from here. Start with <link>Products</link>.",
       "stats": {
         "heading": "Sales at a glance",
@@ -370,6 +394,7 @@
     "waitlists": {
       "title": "Waitlists",
       "description": "Fans waiting on sold-out variants. Restocking a variant queues them for the next notify-waitlist run.",
+      "searchPlaceholder": "Search product…",
       "empty": "No one is waiting right now.",
       "colProduct": "Product",
       "colWaiting": "Waiting",

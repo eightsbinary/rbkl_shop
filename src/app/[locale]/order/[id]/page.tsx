@@ -93,6 +93,19 @@ export default async function OrderPage({
               {items.map((it) => {
                 const snap = it.product_snapshot as { name?: { th?: string; en?: string } };
                 const name = snap?.name?.[locale] ?? snap?.name?.en ?? it.id;
+                const variant = Array.isArray(it.variants) ? it.variants[0] : it.variants;
+                const product = Array.isArray(variant?.products)
+                  ? variant?.products[0]
+                  : variant?.products;
+                const shipDate = product?.preorder_ship_date ?? null;
+                const shipLabel = shipDate
+                  ? tp('shipBy', {
+                      date: new Date(shipDate).toLocaleDateString(
+                        locale === 'th' ? 'th-TH' : 'en-GB',
+                        { month: 'short', year: 'numeric' },
+                      ),
+                    })
+                  : tp('shipWhenReady');
                 return (
                   <li key={it.id} className="flex items-start justify-between gap-2">
                     <span className="text-ink">
@@ -101,6 +114,9 @@ export default async function OrderPage({
                         <span className="ml-2 rounded-full border border-line px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-muted">
                           {tp('badge')}
                         </span>
+                      )}
+                      {it.is_preorder && !order.shipped_at && (
+                        <span className="mt-0.5 block text-xs text-muted">{shipLabel}</span>
                       )}
                     </span>
                     <span className="text-ink-soft">฿{it.line_total_thb.toLocaleString()}</span>

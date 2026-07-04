@@ -10,6 +10,9 @@ const { redirectMock, rateLimitMock, clientIpMock, turnstileMock, state } = vi.h
   state: { order: null as { id: string; customer_email: string } | null },
 }));
 
+// `server-only` throws when imported outside an RSC graph (pulled in via @/lib/email).
+vi.mock('server-only', () => ({}));
+vi.mock('@/lib/email', () => ({ sendEmail: vi.fn(async () => ({ ok: true, dryRun: true })) }));
 vi.mock('next/navigation', () => ({ redirect: redirectMock }));
 vi.mock('@/lib/rate-limit', () => ({ enforceRateLimit: rateLimitMock, clientIp: clientIpMock }));
 vi.mock('@/lib/turnstile', () => ({ verifyTurnstile: turnstileMock }));

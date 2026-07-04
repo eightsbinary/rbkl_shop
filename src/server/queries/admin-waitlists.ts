@@ -16,8 +16,10 @@ export interface WaitlistGroup {
 type Nested<T> = T | T[] | null;
 const one = <T>(v: Nested<T>): T | null => (Array.isArray(v) ? (v[0] ?? null) : v);
 
-/** Pending waitlist entries grouped by variant, busiest first. */
-export async function listWaitlistGroups(): Promise<WaitlistGroup[]> {
+/** Pending waitlist entries grouped by variant, busiest first, optionally
+ *  filtered by a search term (product name, option label, or slug). Filtering
+ *  happens after aggregation — the groups are built in JS anyway. */
+export async function listWaitlistGroups(search?: string): Promise<WaitlistGroup[]> {
   const supa = await createServerSupabase();
   const { data } = await supa
     .from('waitlist_entries')
@@ -50,5 +52,12 @@ export async function listWaitlistGroups(): Promise<WaitlistGroup[]> {
     });
   }
 
-  return [...groups.values()].sort((a, b) => b.count - a.count);
+  let result = [...groups.values()];
+  const q = search?.trim().toLowerCase();
+  if (q) {
+    result = result.filter((g) =>
+      [g.productName, g.optionLabel, g.slug].some((s) => s.toLowerCase().includes(q)),
+    );
+  }
+  return result.sort((a, b) => b.count - a.count);
 }

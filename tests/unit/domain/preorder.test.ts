@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lineMode, preorderCapacity } from '@/domain/preorder';
+import { lineMode, preorderCapacity, waitlistAvailability } from '@/domain/preorder';
 
 const variant = (over: Partial<Parameters<typeof lineMode>[0]> = {}) => ({
   isPreorder: false,
@@ -47,5 +47,30 @@ describe('preorderCapacity', () => {
   it('is the remaining slots for a set cap', () => {
     expect(preorderCapacity({ preorderCap: 10, preorderCount: 7 })).toBe(3);
     expect(preorderCapacity({ preorderCap: 10, preorderCount: 12 })).toBe(0);
+  });
+});
+
+describe('waitlistAvailability', () => {
+  it('reports in_stock when real stock exists', () => {
+    expect(waitlistAvailability(variant({ stockAvailable: 3 }))).toBe('in_stock');
+  });
+  it('reports preorder when sold out but pre-order capacity is open', () => {
+    expect(
+      waitlistAvailability(variant({ preorderEnabled: true, preorderCap: 5, preorderCount: 2 })),
+    ).toBe('preorder');
+    expect(waitlistAvailability(variant({ isPreorder: true }))).toBe('preorder');
+  });
+  it('reports null when sold out with pre-orders full', () => {
+    expect(
+      waitlistAvailability(variant({ preorderEnabled: true, preorderCap: 5, preorderCount: 5 })),
+    ).toBeNull();
+  });
+  it('reports null when sold out and not pre-orderable', () => {
+    expect(waitlistAvailability(variant())).toBeNull();
+  });
+  it('prefers in_stock over preorder when both apply', () => {
+    expect(waitlistAvailability(variant({ stockAvailable: 1, preorderEnabled: true }))).toBe(
+      'in_stock',
+    );
   });
 });

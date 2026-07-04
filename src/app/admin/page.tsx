@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getLocale, getTranslations } from 'next-intl/server';
+import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { getSalesDashboard } from '@/server/queries/sales-summary';
 
 export default async function AdminHome() {
@@ -46,6 +47,11 @@ export default async function AdminHome() {
             ),
           })}
         </p>
+        <AdminSearchForm
+          action="/admin/search"
+          placeholder={t('searchPlaceholder')}
+          clearHref="/admin/search"
+        />
       </header>
 
       {/* Sales at a glance — revenue by period, then operational counts. */}

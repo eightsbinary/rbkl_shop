@@ -19,6 +19,9 @@ export function Header() {
           <Link href={`/${locale}/about`} className="transition-colors hover:text-ink">
             {t('about')}
           </Link>
+          <Link href={`/${locale}/track`} className="transition-colors hover:text-ink">
+            {t('track')}
+          </Link>
         </nav>
         <Link
           href={`/${locale}`}

@@ -1,6 +1,10 @@
-import WaitlistRestock, { subject as waitlistRestockSubject } from 'emails/WaitlistRestock';
+import WaitlistRestock, {
+  type WaitlistMode,
+  subject as waitlistRestockSubject,
+} from 'emails/WaitlistRestock';
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServiceRoleSupabase } from '@/db/server';
+import { waitlistAvailability } from '@/domain/preorder';
 import { sendEmail } from '@/lib/email';
 
 const BATCH_SIZE = 20;
@@ -21,15 +25,16 @@ interface PendingEntry {
   id: string;
   email: string;
   locale: 'th' | 'en';
-  stock: number;
+  mode: WaitlistMode;
   productName: string;
   slug: string;
 }
 
 /**
- * Notify fans waiting on variants that are back in stock. Emails up to 20 oldest
- * waiters per variant per run, leaving a 4-hour gap before the next batch for the
- * same variant to avoid inbox storms.
+ * Notify fans waiting on variants that became available again — real stock OR
+ * open pre-order capacity. Emails up to 20 oldest waiters per variant per run,
+ * leaving a 4-hour gap before the next batch for the same variant to avoid
+ * inbox storms.
  */
 export async function GET(req: NextRequest) {
   if (!authorized(req)) {
@@ -39,25 +44,35 @@ export async function GET(req: NextRequest) {
   const svc = createServiceRoleSupabase();
   const { data } = await svc
     .from('waitlist_entries')
-    .select('id, email, locale, variant_id, variants(stock_available, products(name, slug))')
+    .select(
+      'id, email, locale, variant_id, variants(stock_available, preorder_enabled, preorder_cap, preorder_count, products(name, slug, is_preorder))',
+    )
     .is('notified_at', null)
     .order('created_at', { ascending: true });
 
-  // Group oldest-first pending waiters by variant (only those back in stock).
+  // Group oldest-first pending waiters by variant (only those available again).
   const byVariant = new Map<string, PendingEntry[]>();
   for (const row of data ?? []) {
     if (!row.variant_id) continue;
     const variant = one(row.variants);
-    const stock = variant?.stock_available ?? 0;
-    if (stock <= 0) continue;
     const product = one(variant?.products ?? null);
+    const availability = variant
+      ? waitlistAvailability({
+          isPreorder: product?.is_preorder ?? false,
+          preorderEnabled: variant.preorder_enabled,
+          preorderCap: variant.preorder_cap,
+          preorderCount: variant.preorder_count,
+          stockAvailable: variant.stock_available,
+        })
+      : null;
+    if (!availability) continue;
     const nameObj = (product?.name ?? {}) as { en?: string; th?: string };
     const locale = row.locale === 'th' ? 'th' : 'en';
     const entry: PendingEntry = {
       id: row.id,
       email: row.email,
       locale,
-      stock,
+      mode: availability === 'preorder' ? 'preorder' : 'restock',
       productName: nameObj[locale] ?? nameObj.en ?? nameObj.th ?? product?.slug ?? 'product',
       slug: product?.slug ?? '',
     };
@@ -84,11 +99,12 @@ export async function GET(req: NextRequest) {
       try {
         await sendEmail({
           to: entry.email,
-          subject: waitlistRestockSubject(entry.locale, entry.productName),
+          subject: waitlistRestockSubject(entry.locale, entry.productName, entry.mode),
           react: WaitlistRestock({
             locale: entry.locale,
             productName: entry.productName,
             productUrl,
+            mode: entry.mode,
           }),
         });
       } catch (err) {

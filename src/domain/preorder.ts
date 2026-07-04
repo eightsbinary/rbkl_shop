@@ -31,3 +31,11 @@ export function lineMode(v: VariantPreorderState, qty: number): LineMode {
   if (preorderActive(v) && qty <= preorderCapacity(v)) return 'preorder';
   return 'unavailable';
 }
+
+/** What a waitlisted fan can be notified about: real stock beats pre-order
+ *  capacity; null when there's nothing to announce. */
+export function waitlistAvailability(v: VariantPreorderState): 'in_stock' | 'preorder' | null {
+  if (v.stockAvailable > 0) return 'in_stock';
+  if (acceptsPreorder(v) && preorderCapacity(v) > 0) return 'preorder';
+  return null;
+}

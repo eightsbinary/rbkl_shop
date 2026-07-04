@@ -1,16 +1,19 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { AdminSearchForm } from '@/components/admin/AdminSearchForm';
 import { Button } from '@/components/ui/Button';
-import { createServerSupabase } from '@/db/server';
+import { listAdminDiscounts } from '@/server/queries/admin-discounts';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium' });
 
-export default async function AdminDiscountsPage() {
-  const supa = await createServerSupabase();
-  const { data: codes } = await supa
-    .from('discount_codes')
-    .select('id, code, kind, value, starts_at, ends_at, max_uses, uses, active')
-    .order('created_at', { ascending: false });
+export default async function AdminDiscountsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const search = q?.trim() || undefined;
+  const codes = await listAdminDiscounts(search);
 
   const t = await getTranslations('admin.discounts');
   const tc = await getTranslations('admin.common');
@@ -23,6 +26,13 @@ export default async function AdminDiscountsPage() {
           <Button variant="solid">{t('newCode')}</Button>
         </Link>
       </div>
+
+      <AdminSearchForm
+        action="/admin/discounts"
+        placeholder={t('searchPlaceholder')}
+        search={search}
+        clearHref="/admin/discounts"
+      />
 
       {(codes ?? []).length === 0 ? (
         <p className="text-muted">{t('empty')}</p>

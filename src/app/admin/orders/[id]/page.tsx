@@ -5,6 +5,7 @@ import { CancelOrderButton } from '@/components/admin/CancelOrderButton';
 import { EditTracking } from '@/components/admin/EditTracking';
 import { ShipOrderForm } from '@/components/admin/ShipOrderForm';
 import { SlipReview } from '@/components/admin/SlipReview';
+import { StartPreparingButton } from '@/components/admin/StartPreparingButton';
 import { OrderStatusPill, ShipStatusPill } from '@/components/admin/StatusPill';
 import { getAdminOrder } from '@/server/queries/admin-orders';
 import { getOrderSlipReview } from '@/server/queries/admin-payment';
@@ -156,7 +157,10 @@ export default async function AdminOrderDetailPage({
                 </div>
               </div>
             ) : order.status === 'paid' ? (
-              <div className="mt-4">
+              <div className="mt-4 space-y-6">
+                {order.ship_status === 'awaiting_stock' && (
+                  <StartPreparingButton orderId={order.id} />
+                )}
                 <ShipOrderForm orderId={order.id} />
               </div>
             ) : (

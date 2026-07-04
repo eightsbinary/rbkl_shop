@@ -153,9 +153,12 @@ export function BuyPanel({
             />
           </div>
         ) : preorderFull ? (
-          <Button variant="solid" size="lg" className="w-full" disabled>
-            {tp('full')}
-          </Button>
+          <div className="space-y-3">
+            <Button variant="solid" size="lg" className="w-full" disabled>
+              {tp('full')}
+            </Button>
+            <WaitlistButton variantId={matched?.id ?? null} />
+          </div>
         ) : (
           <WaitlistButton variantId={matched?.id ?? null} />
         )}
