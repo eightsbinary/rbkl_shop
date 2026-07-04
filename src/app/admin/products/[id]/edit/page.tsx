@@ -32,6 +32,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     status: product.status,
     name: product.name as { th: string; en: string },
     description: product.description as { th: string; en: string },
+    copy: (product.copy ?? {}) as ProductFormInitial['copy'],
     basePriceThb: product.base_price_thb,
     weightGrams: product.weight_grams,
     category: product.category ?? '',

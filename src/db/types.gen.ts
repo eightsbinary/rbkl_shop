@@ -495,6 +495,7 @@ export type Database = {
         Row: {
           base_price_thb: number
           category: string | null
+          copy: Json
           created_at: string
           description: Json
           hero_image_id: string | null
@@ -512,6 +513,7 @@ export type Database = {
         Insert: {
           base_price_thb: number
           category?: string | null
+          copy?: Json
           created_at?: string
           description?: Json
           hero_image_id?: string | null
@@ -529,6 +531,7 @@ export type Database = {
         Update: {
           base_price_thb?: number
           category?: string | null
+          copy?: Json
           created_at?: string
           description?: Json
           hero_image_id?: string | null

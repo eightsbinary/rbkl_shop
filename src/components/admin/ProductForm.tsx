@@ -42,6 +42,7 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
     status: initial.status ?? 'draft',
     name: initial.name ?? { th: '', en: '' },
     description: initial.description ?? { th: '', en: '' },
+    copy: initial.copy ?? {},
     basePriceThb: initial.basePriceThb ?? 0,
     weightGrams: initial.weightGrams ?? 0,
     category: initial.category ?? '',
@@ -250,6 +251,54 @@ export function ProductForm({ initial }: { initial: ProductFormInitial }) {
             />
           </div>
         </div>
+
+        <details className="border border-line bg-surface">
+          <summary className="cursor-pointer px-4 py-3 text-sm text-ink-soft">
+            {t('copySection')}
+          </summary>
+          <div className="space-y-4 border-t border-line p-4">
+            <p className="text-xs text-muted">{t('copySectionHint')}</p>
+            {(
+              [
+                ['detailsTitle', false],
+                ['detailsBody', true],
+                ['shippingTitle', false],
+                ['shippingBody', true],
+              ] as const
+            ).map(([field, multiline]) => (
+              <div key={field} className="grid grid-cols-2 gap-4">
+                {(['th', 'en'] as const).map((loc) => {
+                  const id = `copy-${field}-${loc}`;
+                  const value = state.copy[field]?.[loc] ?? '';
+                  const set = (next: string) =>
+                    setState({
+                      ...state,
+                      copy: {
+                        ...state.copy,
+                        [field]: {
+                          th: state.copy[field]?.th ?? '',
+                          en: state.copy[field]?.en ?? '',
+                          [loc]: next,
+                        },
+                      },
+                    });
+                  return (
+                    <div key={loc} className="space-y-2">
+                      <Label htmlFor={id}>
+                        {t(`copy_${field}`)} ({loc.toUpperCase()})
+                      </Label>
+                      {multiline ? (
+                        <Textarea id={id} value={value} onChange={(e) => set(e.target.value)} />
+                      ) : (
+                        <Input id={id} value={value} onChange={(e) => set(e.target.value)} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </details>
 
         <div className="space-y-2 max-w-xs">
           <Label htmlFor="category">{t('category')}</Label>

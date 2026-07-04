@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import * as z from 'zod';
 import { requireOwnerOrDev, stepUpGuard } from '@/db/auth';
 import { createServerSupabase } from '@/db/server';
+import { PRODUCT_COPY_FIELDS } from '@/domain/product-copy';
 import { slugify } from '@/domain/slugify';
 import { diffVariants, generateVariants, type VariantAxis } from '@/domain/variant-matrix';
 
@@ -15,6 +16,8 @@ const ProductInput = z.object({
   status: z.enum(['draft', 'active', 'archived']),
   name: I18nString,
   description: I18nString,
+  /** Optional per-product accordion copy override (details/shipping). */
+  copy: z.record(z.string(), I18nString).default({}),
   basePriceThb: z.number().int().nonnegative(),
   weightGrams: z.number().int().nonnegative().default(0),
   category: z.string().nullish(),
@@ -121,6 +124,15 @@ export async function saveProduct(raw: ProductInputT) {
     input.slug ?? slugify(input.name.en || input.name.th, { fallback: `product-${Date.now()}` });
   const nameJson = { th: input.name.th, en: input.name.en };
   const descJson = { th: input.description.th, en: input.description.en };
+  // Keep only known accordion fields with at least one non-blank locale.
+  const copyJson = Object.fromEntries(
+    PRODUCT_COPY_FIELDS.flatMap((field) => {
+      const v = input.copy[field];
+      const th = v?.th?.trim() ?? '';
+      const en = v?.en?.trim() ?? '';
+      return th || en ? [[field, { th, en }]] : [];
+    }),
+  );
 
   if (input.id) {
     const { error } = await supa
@@ -130,6 +142,7 @@ export async function saveProduct(raw: ProductInputT) {
         status: input.status,
         name: nameJson,
         description: descJson,
+        copy: copyJson,
         base_price_thb: input.basePriceThb,
         weight_grams: input.weightGrams,
         category: input.category ?? null,
@@ -152,6 +165,7 @@ export async function saveProduct(raw: ProductInputT) {
       status: input.status,
       name: nameJson,
       description: descJson,
+      copy: copyJson,
       base_price_thb: input.basePriceThb,
       weight_grams: input.weightGrams,
       category: input.category ?? null,

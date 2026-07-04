@@ -219,6 +219,12 @@
     "products": {
       "title": "Products",
       "searchPlaceholder": "Search name or slug…",
+      "copySection": "Product-page copy override (details & shipping sections)",
+      "copySectionHint": "Optional. Leave blank to use the shop-wide copy from Settings → Product copy. Filled fields replace it for this product only.",
+      "copy_detailsTitle": "Details title",
+      "copy_detailsBody": "Details body",
+      "copy_shippingTitle": "Shipping title",
+      "copy_shippingBody": "Shipping body",
       "newProduct": "New product",
       "editProduct": "Edit product",
       "colName": "Name",
