@@ -10,7 +10,9 @@
     "cart": "cart",
     "dashboard": "dashboard",
     "login": "login",
-    "theme": "toggle dark mode"
+    "theme": "toggle dark mode",
+    "menu": "menu",
+    "closeMenu": "close menu"
   },
   "landing": {
     "heroLine1": "made slowly,",
